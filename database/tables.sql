@@ -66,3 +66,53 @@ create table invoice_pos(
 	product_id int not null,
 	amount int not null
 );
+
+alter table clients
+add constraint clients_fk_user
+foreign key (user_id)
+references users(user_id);
+
+alter table warehouse
+add constraint warehouse_fk_product
+foreign key (product_id)
+references products(product_id);
+
+alter table orders
+add constraint orders_fk_client
+foreign key (client_id)
+references clients(client_id);
+
+alter table orders
+add constraint orders_fk_invoice
+foreign key (invoice_id)
+references invoices(invoice_id);
+
+alter table order_pos
+add constraint order_pos_fk_order
+foreign key (order_id)
+references orders(order_id);
+
+alter table order_pos
+add constraint order_pos_fk_product
+foreign key (product_id)
+references products(product_id);
+
+alter table order_logs
+add constraint order_logs_fk_order
+foreign key (order_id)
+references orders(order_id);
+
+alter table invoices
+add constraint invoices_fk_client
+foreign key (client_id)
+references clients(client_id);
+
+alter table invoice_pos
+add constraint invoice_pos_fk_invoice
+foreign key (invoice_id)
+references invoice(invoice_id);
+
+alter table invoice_pos
+add constraint invoice_pos_fk_product
+foreign key (product_id)
+references products(product_id);
