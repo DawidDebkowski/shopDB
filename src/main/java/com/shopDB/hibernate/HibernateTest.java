@@ -5,6 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 /**
+ * Ta klasa juz nic nie pokazuje bo korzystamy ze Spring
+ * ale na razie niech zostanie
+ *
  * Ta klasa pokazuje jak połączyć się z bazą danych.
  */
 public class HibernateTest {

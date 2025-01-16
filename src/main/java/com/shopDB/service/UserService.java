@@ -6,6 +6,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Tego typu klasy zarządzają danymi, są pośrednikiem między
+ * controllerem (widokiem) a bazą (resources)
+ *
+ * wiec tutaj wszelkie
+ * "wez wszystkich userow bez loginu"
+ * i inne kwerendy
+ */
 @Service
 public class UserService {
 

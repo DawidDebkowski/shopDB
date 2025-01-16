@@ -4,14 +4,13 @@ import com.shopDB.ShopApp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Hello world!
+ * Main GUI class
  *
  */
 public class App extends Application
@@ -30,7 +29,7 @@ public class App extends Application
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/controller/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         loader.setControllerFactory(springContext::getBean);
 
         primaryStage.setScene(new Scene(loader.load()));

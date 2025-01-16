@@ -6,6 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.springframework.stereotype.Component;
 
+/**
+ * Dla kazdej sceny bedzie .fxml
+ * kazdy .fxml bedzie mial swoj kontroler
+ */
 @Component
 public class MainController {
 
