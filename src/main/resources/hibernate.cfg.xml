@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
     <session-factory>
@@ -12,7 +12,7 @@
         <property name="hibernate.connection.password">p12</property>
 
         <!-- Dialekt Hibernate dla MariaDB -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
+<!--        <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>-->
 
         <!-- Automatyczne generowanie schematu -->
         <property name="hibernate.hbm2ddl.auto">update</property>
@@ -27,5 +27,7 @@
         <property name="hibernate.c3p0.timeout">300</property>
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
+
+        <mapping class="com.shopDB.entities.User"/>
     </session-factory>
 </hibernate-configuration>

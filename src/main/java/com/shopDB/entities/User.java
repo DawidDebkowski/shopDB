@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @Column(name = "user_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "login", nullable = false, length = 20)
