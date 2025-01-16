@@ -1,4 +1,4 @@
-package com.gui;
+package com.shopDB.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

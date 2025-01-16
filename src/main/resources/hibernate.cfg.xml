@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Połączenie z bazą danych -->
+        <property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mariadb://localhost:3306/nazwa_bazy</property>
+        <property name="hibernate.connection.username">nazwa_uzytkownika</property>
+        <property name="hibernate.connection.password">haslo</property>
+
+        <!-- Dialekt Hibernate dla MariaDB -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
+
+        <!-- Automatyczne generowanie schematu -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Opcje logowania -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Opcjonalnie: Konfiguracja poolingu -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
+    </session-factory>
+</hibernate-configuration>
