@@ -234,7 +234,7 @@ begin
 end$$
 
 -- order_log: adding logs
-create tigger AU_order_add_log
+create trigger AU_order_add_log
 after update on orders
 for each row
 begin
