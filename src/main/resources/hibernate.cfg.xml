@@ -7,9 +7,9 @@
     <session-factory>
         <!-- Połączenie z bazą danych -->
         <property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mariadb://localhost:3306/nazwa_bazy</property>
-        <property name="hibernate.connection.username">nazwa_uzytkownika</property>
-        <property name="hibernate.connection.password">haslo</property>
+        <property name="hibernate.connection.url">jdbc:mariadb://localhost:3306/shop</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">p12</property>
 
         <!-- Dialekt Hibernate dla MariaDB -->
         <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
