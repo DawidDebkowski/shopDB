@@ -28,10 +28,20 @@ create table products(
 	product_id int not null primary key auto_increment,
 	name varchar(50) not null,
 	category enum('men', 'women', 'boys', 'girls') not null,
-	type varchar(50) not null,
-	color varchar(20) not null,
+	type_id int not null,
+	color_id int not null,
 	price float not null,
 	discount int
+);
+
+create table product_types(
+    type_id int not null primary key auto_increment,
+    type varchar(50) not null
+);
+
+create table product_colors(
+    color_id int not null primary key auto_increment,
+    color varchar(20) not null
 );
 
 create table warehouse(
@@ -84,6 +94,15 @@ references users(user_id),
 add constraint clients_fk_user
 foreign key (address_id)
 references addresses(address_id)
+on update cascade;
+
+alter table products
+add constraint products_fk_type
+foreign key (type_id)
+references product_types(type_id),
+add constraint products_fk_color
+foreign key (color_id)
+references product_colors(color_id)
 on update cascade;
 
 alter table warehouse
