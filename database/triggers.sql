@@ -133,6 +133,63 @@ begin
     end if;
 end$$
 
+# TODO: Test this
+create trigger AI_order_pos_value
+    after insert on order_pos
+    for each row
+begin
+    DECLARE value int;
+    DECLARE price int;
+    SELECT o.value INTO value FROM orders o
+    WHERE new.order_id = o.order_id;
+
+    SELECT p.price INTO price FROM products p
+    WHERE new.product_id = p.product_id;
+
+    SET value = value + price * new.amount;
+
+    UPDATE orders o SET o.value = value
+    WHERE o.order_id = new.order_id;
+end $$
+
+create trigger AU_order_pos_value
+    after update on order_pos
+    for each row
+begin
+    DECLARE value int;
+    DECLARE price int;
+    if new.amount <> old.amount THEN
+        SELECT o.value INTO value FROM orders o
+        WHERE new.order_id = o.order_id;
+
+        SELECT p.price INTO price FROM products p
+        WHERE new.product_id = p.product_id;
+
+        SET value = value + price * new.amount - price * old.amount;
+
+        UPDATE orders o SET o.value = value
+        WHERE o.order_id = new.order_id;
+    end if;
+end $$
+
+create trigger AU_order_pos_value
+    after update on order_pos
+    for each row
+begin
+    DECLARE value int;
+    DECLARE price int;
+    SELECT o.value INTO value FROM orders o
+    WHERE old.order_id = o.order_id;
+
+    SELECT p.price INTO price FROM products p
+    WHERE old.product_id = p.product_id;
+
+    SET value = value + - price * old.amount;
+
+    UPDATE orders o SET o.value = value
+    WHERE o.order_id = new.order_id;
+end $$
+
 -- products: prevent price <= 0
 create trigger BI_products_price
     before insert on products
