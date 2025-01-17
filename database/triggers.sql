@@ -198,6 +198,10 @@ begin
     if new.price <= 0 then
 		signal sqlstate '45000'
 		set message_text = 'Invalid price. Has to be greater than 0.';
+    if new.discount <= 0 then
+        signal sqlstate '45000'
+            set message_text = 'Invalid discount. Has to be greater then 0.';
+    end if;
 end if;
 end$$
 
@@ -209,8 +213,14 @@ begin
 		if new.price <= 0 then
 			signal sqlstate '45000'
 			set message_text = 'Invalid price. Has to be greater then 0.';
-end if;
-end if;
+        end if;
+    end if;
+    if old.discount <> new.discount then
+        if new.discount <= 0 then
+            signal sqlstate '45000'
+                set message_text = 'Invalid discount. Has to be greater then 0.';
+        end if;
+    end if;
 end$$
 
 -- warehouse: if amount is 0 - delete row
