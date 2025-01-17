@@ -223,6 +223,17 @@ begin
     end if;
 end$$
 
+-- warehouse: if amount <= 0
+create trigger AU_warehouse_amount
+    after insert on warehouse
+    for each row
+begin
+    if new.amount <= 0 then
+        signal sqlstate '45000'
+            set message_text = 'Invalid amount. Has to be greater then 0.';
+    end if;
+end$$
+
 -- warehouse: if amount is 0 - delete row
 create trigger AU_warehouse_amount
     after update on warehouse
