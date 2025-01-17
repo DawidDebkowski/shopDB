@@ -55,7 +55,8 @@ create table orders(
 	order_id int not null primary key auto_increment,
 	client_id int not null,
 	invoice_id int,
-	status enum('not placed', 'placed', 'paid', 'completed', 'return reported', 'returned') not null
+	status enum('not placed', 'placed', 'paid', 'completed', 'return reported', 'returned') not null,
+    value int
 );
 
 create table order_pos(
