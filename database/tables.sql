@@ -75,15 +75,8 @@ create table order_logs(
 
 create table invoices(
 	invoice_id int not null primary key auto_increment,
-	client_id int not null,
+	order_id int not null,
 	status enum('not paid', 'paid')
-);
-
-create table invoice_pos(
-	pos_id int not null primary key auto_increment,
-	invoice_id int not null,
-	product_id int not null,
-	amount int not null
 );
 
 -- foreign keys
@@ -142,15 +135,9 @@ references orders(order_id)
 on update cascade;
 
 alter table invoices
-add constraint invoices_fk_client
-foreign key (client_id)
-references clients(client_id)
-on update cascade;
-
-alter table invoice_pos
-add constraint invoice_pos_fk_invoice
-foreign key (invoice_id)
-references invoices(invoice_id)
+add constraint invoices_fk_order
+foreign key (order_id)
+references orders(order_id)
 on update cascade;
 
 alter table invoice_pos
