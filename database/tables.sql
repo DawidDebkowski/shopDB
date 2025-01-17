@@ -85,7 +85,7 @@ alter table clients
 add constraint clients_fk_user
 foreign key (user_id)
 references users(user_id),
-add constraint clients_fk_user
+add constraint clients_fk_address
 foreign key (address_id)
 references addresses(address_id)
 on update cascade;
@@ -139,10 +139,4 @@ alter table invoices
 add constraint invoices_fk_order
 foreign key (order_id)
 references orders(order_id)
-on update cascade;
-
-alter table invoice_pos
-add constraint invoice_pos_fk_product
-foreign key (product_id)
-references products(product_id)
 on update cascade;

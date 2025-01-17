@@ -101,6 +101,37 @@ begin
     end if;
 end$$
 
+-- addresses: validate address
+create procedure validate_postal_code(
+    IN postal_code varchar(6),
+    OUT is_valid boolean
+) begin
+    set is_valid = postal_code regexp '^[0-9]{2}-[0-9]{3}$';
+end $$
+
+create trigger BI_addresses_postal_code
+    before insert on addresses
+    for each row
+begin
+    call validate_postal_code(new.postal_code, @is_valid);
+    if @is_valid = false then
+        signal sqlstate '45000'
+            set message_text = 'Invalid postal_code number.';
+    end if;
+end$$
+
+create trigger BU_addresses_postal_code
+    before update on addresses
+    for each row
+begin
+    if new.postal_code <> old.postal_code then
+        call validate_postal_code(new.postal_code, @is_valid);
+        if @is_valid = false then
+            signal sqlstate '45000'
+                set message_text = 'Invalid postal_code number.';
+        end if;
+    end if;
+end$$
 
 -- products: prevent price <= 0
 create trigger BI_products_price
