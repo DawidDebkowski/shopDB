@@ -10,9 +10,18 @@ create table users(
 create table clients(
 	client_id int not null primary key auto_increment,
 	user_id int not null,
-	address varchar(100),
+    address_id int not null,
 	email varchar(50),
 	phone varchar(15)
+);
+
+create table addresses (
+    address_id int not null primary key auto_increment,
+    postal_code varchar(6),
+    city varchar(30),
+    street varchar(30),
+    house_number int,
+    apartment_number int
 );
 
 create table products(
@@ -71,7 +80,10 @@ create table invoice_pos(
 alter table clients
 add constraint clients_fk_user
 foreign key (user_id)
-references users(user_id)
+references users(user_id),
+add constraint clients_fk_user
+foreign key (address_id)
+references addresses(address_id)
 on update cascade;
 
 alter table warehouse
