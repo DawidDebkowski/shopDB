@@ -65,9 +65,42 @@ begin
 		if @is_valid = false then
 			signal sqlstate '45000'
 			set message_text = 'Invalid email address.';
-end if;
-end if;
+        end if;
+    end if;
 end$$
+
+-- clients: validate phone
+create procedure validate_phone(
+    IN phone varchar(15),
+    OUT is_valid boolean
+) begin
+    set is_valid = phone regexp '^\+?[0-9]{7,15}$';
+end $$
+
+create trigger BI_clients_phone
+    before insert on clients
+    for each row
+begin
+    call validate_phone(new.phone, @is_valid);
+    if @is_valid = false then
+        signal sqlstate '45000'
+            set message_text = 'Invalid phone number.';
+    end if;
+end$$
+
+create trigger BU_clients_phone
+    before update on clients
+    for each row
+begin
+    if new.phone <> old.phone then
+        call validate_phone(new.phone, @is_valid);
+        if @is_valid = false then
+            signal sqlstate '45000'
+                set message_text = 'Invalid phone.';
+        end if;
+    end if;
+end$$
+
 
 -- products: prevent price <= 0
 create trigger BI_products_price
