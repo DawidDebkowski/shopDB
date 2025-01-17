@@ -14,7 +14,7 @@ begin
         ) is not null then
 		signal sqlstate '45000'
     set message_text = 'User with this login already exists.';
-end if;
+    end if;
 end$$
 
 create trigger BU_users_login
@@ -29,8 +29,8 @@ begin
 		) is not null then
 			signal sqlstate '45000'
 			set message_text = 'User with this login already exists.';
-end if;
-end if;
+        end if;
+    end if;
 end$$
 
 -- clients: validate email address
@@ -40,9 +40,9 @@ create procedure validate_email(
 ) begin
 	if email regexp '^[a-z0-9._-]+@[a-z0-9._-]+\.[a-z]{2,}$' then
 		set is_valid = true;
-else
+    else
 		set is_valid = false;
-end if;
+    end if;
 end$$
 
 create trigger BI_clients_email
@@ -53,7 +53,7 @@ begin
     if @is_valid = false then
 		signal sqlstate '45000'
 		set message_text = 'Invalid email address.';
-end if;
+    end if;
 end$$
 
 create trigger BU_clients_email
@@ -133,6 +133,36 @@ begin
     end if;
 end$$
 
+-- order: default starting value = 0
+create trigger AI_order_value
+    after insert on order
+    for each row 
+begin
+    set new.value = 0;
+end$$
+
+-- order: block value change after placing order
+create trigger BU_order_block
+    before update on order
+    for each row
+begin
+    if old.status = new.status AND old.status NOT LIKE '%not placed%' AND old.value <> new.value then
+        signal sqlstate '45000'
+        set message_text = 'Unable to change placed order.';
+end$$
+
+-- order: block deleting placed oreders
+create trigger BD_order_pos_block
+    before delete in order
+    for each row 
+begin
+    if old.status NOT LIKE '%not placed%' then
+        signal sqlstate '45000'
+        set message_text = 'Unable to delete placed order.';
+    end if;
+end$$
+
+-- order: automatic value calculation from order_pos
 # TODO: Test this
 create trigger AI_order_pos_value
     after insert on order_pos
@@ -165,15 +195,22 @@ begin
         SELECT p.price INTO price FROM products p
         WHERE new.product_id = p.product_id;
 
-        SET value = value + price * new.amount - price * old.amount;
+        SET value = value + price * new.amount;
+
+        if old.product_id <> new.product_id then
+            SELECT p.price INTO price FROM products p
+            WHERE old.product_id = p.product_id;
+        end if;
+
+        SET value = value - price * old.amount;
 
         UPDATE orders o SET o.value = value
         WHERE o.order_id = new.order_id;
     end if;
 end $$
 
-create trigger AU_order_pos_value
-    after update on order_pos
+create trigger AD_order_pos_value
+    after delete on order_pos
     for each row
 begin
     DECLARE value int;
@@ -184,11 +221,63 @@ begin
     SELECT p.price INTO price FROM products p
     WHERE old.product_id = p.product_id;
 
-    SET value = value + - price * old.amount;
+    SET value = value - price * old.amount;
 
     UPDATE orders o SET o.value = value
     WHERE o.order_id = new.order_id;
 end $$
+
+-- order_pos: block adding/updating/deleting positions of placed orders
+create trigger BI_order_pos_block
+    before insert on order_pos
+    for each row
+begin
+    if(
+        SELECT status
+        FROM order
+        WHERE order_id = new.order_id
+    ) NOT LIKE '%not placed%' then 
+        signal sqlstate '45000'
+        set message_text = 'Unable to add new positions to placed order.';
+    end if;
+end$$
+
+create trigger BU_order_pos_block
+    before update on order_pos
+    for each row
+begin
+    if(
+        SELECT status
+        FROM order
+        WHERE order_id = old.order_id
+    ) NOT LIKE '%not placed%' then
+        signal sqlstate '45000'
+        set message_text = 'Unable to edit positions of placed order.';
+    end if;
+
+    if old.order_id <> new.order_id AND (
+        SELECT status 
+        FROM order
+        WHERE order_id = new.order_id
+    ) NOT LIKE '%not placed%' then
+        signal sqlstate '45000'
+        set message_text = 'Unable to edit positions of placed order.';
+    end if;
+end$$
+
+create trigger BD_order_pos_block
+    before delete on order_pos
+    for each row
+begin
+    if(
+        SELECT status
+        FROM order
+        WHERE order_id = old.order_id
+    ) NOT LIKE '%not placed%' then
+        signal sqlstate '45000'
+        set message_text = 'Unable to delete positions of placed order.';
+    end if;
+end$$
 
 -- products: prevent price <= 0
 create trigger BI_products_price
