@@ -101,6 +101,27 @@ begin
     end if;
 end$$
 
+-- clients: validating nip
+create trigger BI_clients_NIP
+    before insert on client
+    for each row
+begin
+    if NOT new.NIP regexp '^[0-9]{10}$' then
+        signal sqlstate '45000'
+            set message_text = 'Invalid NIP.';
+    end if;
+end$$
+
+create trigger BU_clients_NIP
+    before update on client
+    for each row
+begin
+    if old.NIP <> new.NIP AND NOT new.NIP regexp '^[0-9]{10}$' then
+        signal sqlstate '45000'
+            set message_text = 'Invalid NIP.';
+    end if;
+end$$
+
 -- addresses: validate address
 create procedure validate_postal_code(
     IN postal_code varchar(6),
@@ -151,8 +172,8 @@ begin
         set message_text = 'Unable to change placed order.';
 end$$
 
--- order: block deleting placed oreders
-create trigger BD_order_pos_block
+-- order: block deleting placed orders
+create trigger BD_order_block
     before delete in order
     for each row 
 begin
@@ -163,7 +184,6 @@ begin
 end$$
 
 -- order: automatic value calculation from order_pos
-# TODO: Test this
 create trigger AI_order_pos_value
     after insert on order_pos
     for each row
@@ -173,8 +193,9 @@ begin
     SELECT o.value INTO value FROM orders o
     WHERE new.order_id = o.order_id;
 
-    SELECT p.price INTO price FROM products p
-    WHERE new.product_id = p.product_id;
+    SELECT p.price INTO price 
+    FROM products p JOIN warehouse w ON p.product_id = w.product_id
+    WHERE new.warehouse_id = w.warehouse_id;
 
     SET value = value + price * new.amount;
 
@@ -192,8 +213,9 @@ begin
         SELECT o.value INTO value FROM orders o
         WHERE new.order_id = o.order_id;
 
-        SELECT p.price INTO price FROM products p
-        WHERE new.product_id = p.product_id;
+        SELECT p.price INTO price 
+        FROM products p JOIN warehouse w ON p.product_id = w.product_id
+        WHERE new.warehouse_id = w.warehouse_id;
 
         SET value = value + price * new.amount;
 
@@ -218,8 +240,9 @@ begin
     SELECT o.value INTO value FROM orders o
     WHERE old.order_id = o.order_id;
 
-    SELECT p.price INTO price FROM products p
-    WHERE old.product_id = p.product_id;
+    SELECT p.price INTO price 
+    FROM products p JOIN warehouse w ON p.product_id = w.product_id
+    WHERE new.warehouse_id = w.warehouse_id;
 
     SET value = value - price * old.amount;
 
@@ -276,6 +299,35 @@ begin
     ) NOT LIKE '%not placed%' then
         signal sqlstate '45000'
         set message_text = 'Unable to delete positions of placed order.';
+    end if;
+end$$
+
+-- order_pos: block adding products we don't have in magazine
+create trigger BI_order_pos_no_products
+    before insert on order_pos
+    for each row
+begin
+    if(
+        SELECT (amount - reserved)
+        FROM warehouse
+        WHERE warehouse_id = new.warehouse_id
+    ) = 0 then
+        signal sqlstate '45000'
+            set message_text 'No products available.';
+    end if;
+end$$
+
+create trigger BU_order_pos_no_products
+    before update on order_pos
+    for each row
+begin
+    if old.warehouse_id <> new.warehouse_id AND (
+        SELECT (amount - reserved)
+        FROM warehouse
+        WHERE warehouse_id = new.warehouse_id
+    ) = 0 then
+        signal sqlstate '45000'
+            set message_text 'No products available.';
     end if;
 end$$
 
