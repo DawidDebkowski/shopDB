@@ -4,6 +4,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import io.github.palexdev.mfxcore.controls.Text?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
@@ -13,9 +14,43 @@
    <center>
       <VBox fx:id="fieldsBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
          <children>
-            <MFXTextField fx:id="usernameText" floatMode="ABOVE" floatingText="USERNAME" prefHeight="30.0" prefWidth="210.0" promptText="Username..." styleClass="test" stylesheets="@../css/app.css" />
-            <MFXPasswordField fx:id="passwordText" floatMode="ABOVE" floatingText="PASSWORD" graphicTextGap="50.0" promptText="Password..." />
-            <MFXButton fx:id="loginButton" buttonType="RAISED" onAction="#onLoginButtonClick" styleClass="test" stylesheets="@../css/app.css" text="Login" />
+            <MFXTextField fx:id="usernameText" floatMode="ABOVE" floatingText="USERNAME" prefHeight="30.0" prefWidth="210.0" promptText="Username..." stylesheets="@../css/app.css" />
+            <MFXPasswordField fx:id="passwordText" floatMode="ABOVE" floatingText="PASSWORD" prefColumnCount="10" promptText="Password..." />
+            <VBox fx:id="loginStateBox" alignment="CENTER" prefHeight="0.0" prefWidth="100.0" spacing="10.0" visible="false">
+               <children>
+                  <MFXButton fx:id="loginButton" buttonType="RAISED" onAction="#onLoginButtonClick" stylesheets="@../css/app.css" text="Login">
+                     <styleClass>
+                        <String fx:value="main-button" />
+                        <String fx:value="round-corners" />
+                     </styleClass>
+                  </MFXButton>
+                  <Text text="if you don't have an account please:" />
+                  <MFXButton fx:id="registerButton" buttonType="RAISED" onAction="#onRegisterButtonClick" stylesheets="@../css/app.css" text="Register">
+                     <styleClass>
+                        <String fx:value="white-button" />
+                        <String fx:value="round-corners" />
+                     </styleClass>
+                  </MFXButton>
+               </children>
+            </VBox>
+            <VBox fx:id="registerStateBox" alignment="CENTER" minHeight="0.0" prefHeight="0.0" prefWidth="100.0" spacing="10.0">
+               <children>
+                  <MFXPasswordField fx:id="secondPasswordText" floatMode="ABOVE" floatingText="CONFIRM PASSWORD" prefColumnCount="10" promptText="Password..." />
+                  <MFXButton fx:id="registerButton1" buttonType="RAISED" onAction="#onRegisterButtonClick" stylesheets="@../css/app.css" text="Register">
+                     <styleClass>
+                        <String fx:value="white-button" />
+                        <String fx:value="round-corners" />
+                     </styleClass>
+                  </MFXButton>
+                  <Text text="have an account? Please:" />
+                  <MFXButton fx:id="loginButton1" buttonType="RAISED" onAction="#onLoginButtonClick" stylesheets="@../css/app.css" text="Login">
+                     <styleClass>
+                        <String fx:value="main-button" />
+                        <String fx:value="round-corners" />
+                     </styleClass>
+                  </MFXButton>
+               </children>
+            </VBox>
          </children>
       </VBox>
    </center>

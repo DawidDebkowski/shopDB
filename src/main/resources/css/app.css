@@ -1,16 +1,19 @@
-.test {
-    -main-color: #1F0DDE;
-    -accent-color: #D7E817;
-
-    /*-fx-background-color: var(--main-color);*/
-    -fx-background-color: -main-color;
+.round-corners {
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-border-width: 5;
 }
 
-.test2 {
-    fx-background-color: #ff0000;
-}
-
-.mfxButton {
+.main-button {
     -fx-background-color: #1F0DDE;
-    /*-mfx-background-color: -main-color;*/
+    -fx-text-fill: white;
+}
+
+.main-button:hover {
+    -fx-background-color: #5D44F1;
+}
+
+.white-button {
+    -fx-background-color: white;
+    -fx-text-fill: #0904B0
 }
