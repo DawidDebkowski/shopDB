@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.mfxcore.controls.Text?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.controller.LoginController">
+   <center>
+      <VBox fx:id="fieldsBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
+         <children>
+            <MFXTextField fx:id="usernameText" floatMode="ABOVE" floatingText="USERNAME" prefHeight="30.0" prefWidth="210.0" promptText="Username..." styleClass="test" stylesheets="@../css/app.css" />
+            <MFXPasswordField fx:id="passwordText" floatMode="ABOVE" floatingText="PASSWORD" graphicTextGap="50.0" promptText="Password..." />
+            <MFXButton fx:id="loginButton" buttonType="RAISED" onAction="#onLoginButtonClick" styleClass="test" stylesheets="@../css/app.css" text="Login" />
+         </children>
+      </VBox>
+   </center>
+   <top>
+      <Text fx:id="titleText" text="SKLEP DB" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="50.0" />
+         </font>
+      </Text>
+   </top>
+   <padding>
+      <Insets top="20.0" />
+   </padding>
+</BorderPane>

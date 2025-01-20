@@ -1,0 +1,16 @@
+.test {
+    -main-color: #1F0DDE;
+    -accent-color: #D7E817;
+
+    /*-fx-background-color: var(--main-color);*/
+    -fx-background-color: -main-color;
+}
+
+.test2 {
+    fx-background-color: #ff0000;
+}
+
+.mfxButton {
+    -fx-background-color: #1F0DDE;
+    /*-mfx-background-color: -main-color;*/
+}
