@@ -2,6 +2,9 @@ package com.shopDB.controller;
 
 import com.shopDB.SceneType;
 import com.shopDB.ShopApp;
+import io.github.palexdev.materialfx.theming.JavaFXThemes;
+import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
+import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,10 +33,20 @@ public class App extends Application
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        UserAgentBuilder.builder()
+                .themes(JavaFXThemes.MODENA)
+                .themes(MaterialFXStylesheets.forAssemble(true))
+                .setDeploy(true)
+                .setResolveAssets(true)
+                .build()
+                .setGlobal();
+
+
         SceneManager sceneManager = springContext.getBean(SceneManager.class);
         sceneManager.initialize(primaryStage);
 
-        SceneManager.getInstance().setScene(SceneType.LOGIN);
+        SceneManager.getInstance().setScene(SceneType.CLIENT_DATA);
+        SceneManager.getInstance().setScene(SceneType.CLIENT_DATA);
         primaryStage.setTitle("Shop Application");
         primaryStage.show();
     }

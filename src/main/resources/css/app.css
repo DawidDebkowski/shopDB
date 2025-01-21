@@ -9,6 +9,14 @@
     -fx-border-radius: 7;
 }
 
+.mfx-text-field {
+    -fx-border-color: #1F0DDE;
+}
+
+.mfx-text-field .floating-text {
+    -fx-text-fill: #0904B0;
+}
+
 .main-button {
     -fx-background-color: #1F0DDE;
     -fx-text-fill: white;
@@ -23,6 +31,16 @@
     -fx-text-fill: #0904B0
 }
 
+.vibrant-background {
+    -fx-background-color: #1F0DDE;
+    -fx-text-fill: white;
+}
+
+.white-background {
+    -fx-background-color: white;
+    -fx-text-fill: #0904B0
+}
+
 .success-label {
 
 }
@@ -32,4 +50,8 @@
     -fx-text-fill: white;
     -fx-border-width: 2;
     -fx-border-color: #a61c0c;
+}
+
+.main-text {
+    -fx-text-fill: #0904B0
 }
