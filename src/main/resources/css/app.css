@@ -4,6 +4,11 @@
     -fx-border-width: 5;
 }
 
+.slight-round-corners {
+    -fx-background-radius: 7;
+    -fx-border-radius: 7;
+}
+
 .main-button {
     -fx-background-color: #1F0DDE;
     -fx-text-fill: white;
@@ -16,4 +21,15 @@
 .white-button {
     -fx-background-color: white;
     -fx-text-fill: #0904B0
+}
+
+.success-label {
+
+}
+
+.danger-label {
+    -fx-background-color: #d0210d;
+    -fx-text-fill: white;
+    -fx-border-width: 2;
+    -fx-border-color: #a61c0c;
 }
