@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * kazdy .fxml bedzie mial swoj kontroler
  */
 @Component
-public class MainController {
+public class MainController implements SceneController {
 
     private final UserService userService;
 

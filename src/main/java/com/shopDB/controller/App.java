@@ -1,5 +1,6 @@
 package com.shopDB.controller;
 
+import com.shopDB.SceneType;
 import com.shopDB.ShopApp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,10 +30,10 @@ public class App extends Application
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-        loader.setControllerFactory(springContext::getBean);
+        SceneManager sceneManager = springContext.getBean(SceneManager.class);
+        sceneManager.initialize(primaryStage);
 
-        primaryStage.setScene(new Scene(loader.load()));
+        SceneManager.getInstance().setScene(SceneType.LOGIN);
         primaryStage.setTitle("Shop Application");
         primaryStage.show();
     }
