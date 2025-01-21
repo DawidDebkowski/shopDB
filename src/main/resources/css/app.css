@@ -10,7 +10,8 @@
 }
 
 .mfx-text-field {
-    -fx-border-color: #1F0DDE;
+    /*-fx-border-color: #1F0DDE;*/
+    -fx-border-color: #be9117;
 }
 
 .mfx-text-field .floating-text {
@@ -54,4 +55,9 @@
 
 .main-text {
     -fx-text-fill: #0904B0
+}
+
+.base-text-field {
+    /*-fx-border-color: #11ffff;*/
+
 }
