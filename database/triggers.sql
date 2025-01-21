@@ -103,7 +103,7 @@ end$$
 
 -- clients: validating nip
 create trigger BI_clients_NIP
-    before insert on client
+    before insert on clients
     for each row
 begin
     if NOT new.NIP regexp '^[0-9]{10}$' then
@@ -113,7 +113,7 @@ begin
 end$$
 
 create trigger BU_clients_NIP
-    before update on client
+    before update on clients
     for each row
 begin
     if old.NIP <> new.NIP AND NOT new.NIP regexp '^[0-9]{10}$' then
@@ -155,8 +155,8 @@ begin
 end$$
 
 -- order: default starting value = 0
-create trigger AI_order_value
-    after insert on order
+create trigger BI_order_value
+    before insert on orders
     for each row 
 begin
     set new.value = 0;
@@ -164,17 +164,18 @@ end$$
 
 -- order: block value change after placing order
 create trigger BU_order_block
-    before update on order
+    before update on orders
     for each row
 begin
     if old.status = new.status AND old.status NOT LIKE '%not placed%' AND old.value <> new.value then
         signal sqlstate '45000'
         set message_text = 'Unable to change placed order.';
+    end if;
 end$$
 
 -- order: block deleting placed orders
 create trigger BD_order_block
-    before delete in order
+    before delete on orders
     for each row 
 begin
     if old.status NOT LIKE '%not placed%' then
@@ -219,9 +220,10 @@ begin
 
         SET value = value + price * new.amount;
 
-        if old.product_id <> new.product_id then
-            SELECT p.price INTO price FROM products p
-            WHERE old.product_id = p.product_id;
+        if old.warehouse_id <> new.warehouse_id then
+            SELECT p.price INTO price 
+            FROM products p JOIN warehouse w ON p.product_id = w.product_id
+            WHERE old.warehouse_id = w.warehouse_id;
         end if;
 
         SET value = value - price * old.amount;
@@ -242,12 +244,12 @@ begin
 
     SELECT p.price INTO price 
     FROM products p JOIN warehouse w ON p.product_id = w.product_id
-    WHERE new.warehouse_id = w.warehouse_id;
+    WHERE old.warehouse_id = w.warehouse_id;
 
     SET value = value - price * old.amount;
 
     UPDATE orders o SET o.value = value
-    WHERE o.order_id = new.order_id;
+    WHERE o.order_id = old.order_id;
 end $$
 
 -- order_pos: block adding/updating/deleting positions of placed orders
@@ -257,7 +259,7 @@ create trigger BI_order_pos_block
 begin
     if(
         SELECT status
-        FROM order
+        FROM orders
         WHERE order_id = new.order_id
     ) NOT LIKE '%not placed%' then 
         signal sqlstate '45000'
@@ -271,7 +273,7 @@ create trigger BU_order_pos_block
 begin
     if(
         SELECT status
-        FROM order
+        FROM orders
         WHERE order_id = old.order_id
     ) NOT LIKE '%not placed%' then
         signal sqlstate '45000'
@@ -280,7 +282,7 @@ begin
 
     if old.order_id <> new.order_id AND (
         SELECT status 
-        FROM order
+        FROM orders
         WHERE order_id = new.order_id
     ) NOT LIKE '%not placed%' then
         signal sqlstate '45000'
@@ -294,7 +296,7 @@ create trigger BD_order_pos_block
 begin
     if(
         SELECT status
-        FROM order
+        FROM orders
         WHERE order_id = old.order_id
     ) NOT LIKE '%not placed%' then
         signal sqlstate '45000'
@@ -313,7 +315,7 @@ begin
         WHERE warehouse_id = new.warehouse_id
     ) = 0 then
         signal sqlstate '45000'
-            set message_text 'No products available.';
+            set message_text = 'No products available.';
     end if;
 end$$
 
@@ -327,7 +329,7 @@ begin
         WHERE warehouse_id = new.warehouse_id
     ) = 0 then
         signal sqlstate '45000'
-            set message_text 'No products available.';
+            set message_text = 'No products available.';
     end if;
 end$$
 
@@ -365,7 +367,7 @@ begin
 end$$
 
 -- warehouse: if amount <= 0
-create trigger AU_warehouse_amount
+create trigger AU_warehouse_amount_default
     after insert on warehouse
     for each row
 begin
