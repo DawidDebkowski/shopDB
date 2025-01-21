@@ -72,7 +72,6 @@ public class LoginController implements SceneController {
     void onLoginButtonClick(ActionEvent event) {
         if(loginState){
             setMessage("can't login");
-            SceneManager.getInstance().setScene(SceneType.CLIENT_DATA);
         } else {
             changeState(true );
         }
