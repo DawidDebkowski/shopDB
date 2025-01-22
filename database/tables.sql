@@ -1,5 +1,5 @@
 delimiter ;
--- tables
+-----tables-----
 create table users(
 	user_id int not null primary key auto_increment,
 	login varchar(255) not null,
@@ -49,7 +49,8 @@ create table product_types(
 
 create table product_colors(
     color_id int not null primary key auto_increment,
-    color varchar(255) not null
+    name varchar(255) not null,
+	code varchar(255) not null
 );
 
 create table photos(
