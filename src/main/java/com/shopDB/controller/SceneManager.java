@@ -35,6 +35,7 @@ public class SceneManager {
 
         scenes.put(SceneType.LOGIN, "/fxml/login.fxml");
         scenes.put(SceneType.CLIENT_DATA, "/fxml/clientData.fxml");
+        scenes.put(SceneType.MAIN_SHOP, "/fxml/mainShop.fxml");
 
         stage.setTitle("Trylma Chinese Checkers by Ćmolud (TM)");
         stage.show();

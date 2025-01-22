@@ -9,9 +9,22 @@
     -fx-border-radius: 7;
 }
 
+.header {
+    -fx-background-color: #0995A1;
+}
+
+.header-name {
+    -fx-text-fill: white;
+}
+
+.header-linker {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+}
+
 .mfx-text-field {
-    /*-fx-border-color: #1F0DDE;*/
-    -fx-border-color: #be9117;
+    -fx-border-color: #1F0DDE;
+    /*-fx-border-color: #be9117;*/
 }
 
 .mfx-text-field .floating-text {
@@ -38,7 +51,7 @@
 }
 
 .white-background {
-    -fx-background-color: white;
+    -fx-background-color: F3F3F3;
     -fx-text-fill: #0904B0
 }
 

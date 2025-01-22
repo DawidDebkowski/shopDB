@@ -9,6 +9,7 @@ import io.github.palexdev.mfxcore.controls.Text;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -72,6 +73,7 @@ public class LoginController implements SceneController {
     void onLoginButtonClick(ActionEvent event) {
         if(loginState){
             setMessage("can't login");
+            SceneManager.getInstance().setScene(SceneType.LOGIN);
         } else {
             changeState(true );
         }
@@ -81,6 +83,8 @@ public class LoginController implements SceneController {
     void onRegisterButtonClick(ActionEvent event) {
         if(!loginState){
             setMessage("can't register");
+            SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
+
         } else {
             changeState(false);
         }
