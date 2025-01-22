@@ -4,7 +4,7 @@ create table users(
 	user_id int not null primary key auto_increment,
 	login varchar(255) not null,
 	password varchar(255) not null,
-	acc_type enum('admin', 'client', 'warehouse', 'salesman') not null
+	acc_type enum('client', 'warehouse', 'salesman') not null
 );
 
 create table clients(
@@ -16,20 +16,20 @@ create table clients(
 	company_name varchar(255),
 	email varchar(255),
 	phone varchar(15),
-    address_id int,
+	address_id int,
 	NIP char(10),
 	RODO boolean,
-	regulamin boolean,
+	terms_of_use boolean,
 	cookies boolean 
 );
 
 create table addresses (
     address_id int not null primary key auto_increment,
-    postal_code varchar(6) not null,
-    city varchar(255) not null,
     street varchar(255) not null,
     house_number int not null,
-    apartment_number int
+    apartment_number int,
+    city varchar(255) not null,
+    postal_code varchar(6) not null
 );
 
 create table products(
