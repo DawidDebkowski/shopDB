@@ -23,30 +23,45 @@
 }
 
 .mfx-text-field {
-    -fx-border-color: #1F0DDE;
+    -fx-border-color: #0995A1;
     /*-fx-border-color: #be9117;*/
 }
 
 .mfx-text-field .floating-text {
-    -fx-text-fill: #0904B0;
+    -fx-text-fill: #085d5f;
 }
 
 .main-button {
-    -fx-background-color: #1F0DDE;
+    -fx-background-color: #0995A1;
     -fx-text-fill: white;
 }
 
 .main-button:hover {
-    -fx-background-color: #5D44F1;
+    -fx-background-color: #08a9bb;
 }
 
 .white-button {
     -fx-background-color: white;
-    -fx-text-fill: #0904B0
+    -fx-text-fill: #085d5f
+}
+
+.white-button:hover {
+    -fx-background-color: #e0f7f9;
+
+}
+
+.mfx-toggle {
+    -mfx-background-color: #0995A1;
+    -fx-background-color: #a10994;
+}
+
+.mfx-toggle-button .line {
+    -mxf-color: white;
+    -fx-background-color: #08a9bb;
 }
 
 .vibrant-background {
-    -fx-background-color: #1F0DDE;
+    -fx-background-color: #0995A1;
     -fx-text-fill: white;
 }
 

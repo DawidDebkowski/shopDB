@@ -6,7 +6,7 @@ GRANT UPDATE ON shop.orders TO 'warehouse_manager'@'localhost';
 GRANT DELETE ON shop.warehouse TO 'warehouse_manager'@'localhost';
 GRANT SELECT ON shop.warehouse TO 'warehouse_manager'@'localhost';
 GRANT SELECT ON shop.orders TO 'warehouse_manager'@'localhost';
-
+-- #1F0DDE - my color
 FLUSH PRIVILEGES;
 
 CREATE USER 'client'@'localhost' IDENTIFIED BY 'client123';

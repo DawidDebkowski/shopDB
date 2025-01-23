@@ -1,9 +1,7 @@
 package com.shopDB.controller;
 
 import com.shopDB.SceneType;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXPasswordField;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.mfxcore.controls.Label;
 import io.github.palexdev.mfxcore.controls.Text;
 import javafx.event.ActionEvent;
@@ -20,13 +18,16 @@ public class LoginController implements SceneController {
     private boolean loginState = true;
 
     @FXML
-    private Label messageLabel;
+    private MFXToggleButton companyToggle;
 
     @FXML
-    private MFXTextField emailText;
+    private MFXCheckbox cookiesCheckbox;
 
     @FXML
-    private VBox fieldsBox;
+    private MFXTextField emailField;
+
+    @FXML
+    private VBox fieldsBox1;
 
     @FXML
     private MFXButton forgotButton;
@@ -38,13 +39,31 @@ public class LoginController implements SceneController {
     private MFXButton loginButton1;
 
     @FXML
+    private MFXPasswordField loginPasswordField;
+
+    @FXML
     private VBox loginStateBox;
+
+    @FXML
+    private MFXTextField loginUsernameField;
+
+    @FXML
+    private VBox loginWrapper;
 
     @FXML
     private BorderPane mainPane;
 
     @FXML
-    private MFXPasswordField passwordText;
+    private Label messageLabel;
+
+    @FXML
+    private Label messageLabel1;
+
+    @FXML
+    private MFXTextField nipField;
+
+    @FXML
+    private MFXTextField phoneField;
 
     @FXML
     private MFXButton registerButton;
@@ -53,16 +72,25 @@ public class LoginController implements SceneController {
     private MFXButton registerButton1;
 
     @FXML
+    private MFXPasswordField registerPasswordField;
+
+    @FXML
     private VBox registerStateBox;
 
     @FXML
-    private MFXPasswordField secondPasswordText;
+    private MFXTextField registerUsernameField;
 
     @FXML
-    private Text titleText;
+    private VBox registerWrapper;
 
     @FXML
-    private MFXTextField usernameText;
+    private MFXCheckbox rodoCheckbox;
+
+    @FXML
+    private MFXPasswordField secondPasswordField;
+
+    @FXML
+    private MFXCheckbox termsCheckbox;
 
     @FXML
     void onForgotButtonClicked(ActionEvent event) {
@@ -92,22 +120,34 @@ public class LoginController implements SceneController {
 
     private void changeState(boolean newState) {
         loginState = newState;
-        loginStateBox.setVisible(loginState);
-        registerStateBox.setVisible(!loginState);
-        emailText.setVisible(!loginState);
+        loginWrapper.setVisible(loginState);
+        registerWrapper.setVisible(!loginState);
         if(loginState){
-            loginStateBox.setMinHeight(Region.USE_COMPUTED_SIZE);
-            registerStateBox.setMinHeight(0);
-            emailText.setMinHeight(0);
+            loginWrapper.setMinHeight(Region.USE_COMPUTED_SIZE);
+            registerWrapper.setMinHeight(0);
         } else {
-            loginStateBox.setMinHeight(0);
-            registerStateBox.setMinHeight(Region.USE_COMPUTED_SIZE);
-            emailText.setMinHeight(Region.USE_COMPUTED_SIZE);
+            loginWrapper.setMinHeight(0);
+            registerWrapper.setMinHeight(Region.USE_COMPUTED_SIZE);
         }
     }
 
     private void setMessage(String message) {
         messageLabel.setVisible(true);
         messageLabel.setText(message);
+    }
+
+    @FXML
+    void onCookiesCheckboxClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onRodoCheckboxClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void onTermsCheckboxClicked(ActionEvent event) {
+
     }
 }

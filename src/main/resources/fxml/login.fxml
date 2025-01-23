@@ -120,9 +120,9 @@
                               <VBox alignment="CENTER" prefHeight="143.0" prefWidth="252.0">
                                  <children>
                                     <MFXToggleButton fx:id="companyToggle" text="Jestem Firmą" />
-                                    <MFXCheckbox text="Akceptuje regulamin" />
-                                    <MFXCheckbox layoutX="56.0" layoutY="51.0" text="Akceptuje RODO       " />
-                                    <MFXCheckbox text="Akceptuje ciasteczka" />
+                                    <MFXCheckbox fx:id="termsCheckbox" onAction="#onTermsCheckboxClicked" text="Akceptuje regulamin" />
+                                    <MFXCheckbox fx:id="rodoCheckbox" layoutX="56.0" layoutY="51.0" onAction="#onRodoCheckboxClicked" text="Akceptuje RODO       " />
+                                    <MFXCheckbox fx:id="cookiesCheckbox" onAction="#onCookiesCheckboxClicked" text="Akceptuje ciasteczka" />
                                  </children>
                               </VBox>
                            </children>
