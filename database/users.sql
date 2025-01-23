@@ -33,7 +33,7 @@ GRANT SELECT ON shop.products TO 'client'@'localhost';
 
 FLUSH PRIVILEGES;
 
-CREATE USER 'seller'@'localhost' IDENTIFIED BY 'seller123';
+CREATE USER 'salesman'@'localhost' IDENTIFIED BY 'seller123';
 
 GRANT INSERT ON shop.products TO 'seller'@'localhost';
 GRANT INSERT ON shop.product_types TO 'seller'@'localhost';

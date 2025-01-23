@@ -1,3 +1,3 @@
-drop database shop;
+drop database if exists shop;
 create database shop;
 use shop;
