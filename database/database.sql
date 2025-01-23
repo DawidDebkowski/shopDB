@@ -50,11 +50,17 @@ create table product_types(
     type varchar(255) not null unique
 );
 
+INSERT INTO product_types(type)
+VALUES('inne');
+
 create table product_colors(
     color_id int not null primary key auto_increment,
     name varchar(255) not null unique,
     code varchar(255) not null unique
 );
+
+INSERT INTO product_colors(name)
+VALUES('inny');
 
 create table photos(
 	photo_id int not null primary key auto_increment,

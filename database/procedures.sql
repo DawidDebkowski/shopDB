@@ -366,112 +366,126 @@ commit;
 end$$
 
 -- salesman
--- adding products from app
--- exit_code = -1: product with the same data already exists
--- exit_code = -2: price <= 0
+-- adding product
 create procedure add_products(
 	IN name varchar(255),
 	IN category enum('men', 'women', 'boys', 'girls'),
 	IN type_id int,
 	IN color_id int,
-	IN price float,
-	OUT exit_code int
+	IN price float
 )
 begin
 start transaction;
-	if (
-		SELECT p.product_id
-		FROM products p
-		WHERE p.name = name AND
-			p.category = category AND
-			p.type_id = type_id AND
-			p.color_id = color_id
-	) is not null then
-		SET exit_code = -1;
-		rollback;
-	elseif price <= 0 then
-		SET exit_code = -2;
-		rollback;
-	end if;
-
 	INSERT INTO products(category, type_id, color_id, price)
 	VALUES(category, type_id, color_id, price);
-
-	SET exit_code = 0;
 commit;
 end$$
 
--- adding new types of products from app
--- exit_code = -1: another type with same name (case insensitive) already exists
+-- adding new types of products
 create procedure add_types(
-	IN type varchar(255),
-	OUT exit_code int
+	IN type varchar(255)
 )
 begin
 start transaction;
-	if (
-		SELECT p.type
-		FROM product_types p
-		WHERE lower(p.type) LIKE lower(type)
-	) is not null then
-		SET exit_code = -1;
-		rollback;
-	end if;
-
 	INSERT INTO product_types(type)
 	VALUES(type);
-
-	SET exit_code = 0;
 commit;
 end$$
 
 -- adding new colors from app
--- exit_code = -1: color with same name (case insensitive) already exixsts
--- exit_code = -2: color with same code already exists
 create procedure add_colors(
 	IN name varchar(255),
-	IN code varchar(255),
-	OUT exit_code int
+	IN code varchar(255)
 )
 begin
 start transaction;
-	if (SELECT p.color_id FROM product_colors p WHERE p.name LIKE name) is not null then
-		SET exit_code = -1;
-		rollback;
-	elseif (SELECT p.color_id FROM product_colors p WHERE p.code LIKE code) is not null then
-		SET exit_code = -2;
-		rollback;
-	end if;
-
 	INSERT INTO product_colors(name, code)
 	VALUES(name, code);
-
-	SET exit_code = 0;
 commit;
 end$$
 
 -- adding new photos from app
--- exit_code = -1: same photo for the same product
 create procedure add_photos(
 	IN product_id int,
-	IN path varchar(255),
-	OUT exit_code int
+	IN path varchar(255)
 )
 begin
 start transaction;
-	if (
-		SELECT p.photo_id 
-		FROM photos p
-		WHERE p.product_id = product_id AND p.path LIKE path
-	) is not null then
-		SET exit_code = -1;
-		rollback;
-	end if;
-
 	INSERT INTO photos(product_id, path)
 	VALUES(product_id, path);
+commit;
+end$$
 
-	SET exit_code = 0;
+-- editing products
+create procedure edit_product(
+	IN product_id int,
+	IN name varchar(255),
+	IN category enum('men', 'women', 'boys', 'girls'),
+	IN type_id int,
+	IN color_id int
+)
+begin
+start transaction;
+	UPDATE products p
+	SET p.name = name,
+		p.category = category,
+		p.type_id = type_id,
+		p.color_id = color_id
+	WHERE p.product_id = product_id;
+commit;
+end$$
+
+-- editing types of products
+create procedure edit_type(
+	IN type_id int,
+	IN type varchar(255)
+)
+begin
+start transaction;
+	UPDATE product_types p
+	SET p.type = type
+	WHERE p.type_id = type_id;
+commit;
+end$$
+
+-- editing colors of products
+create procedure edit_color(
+	IN color_id int,
+	IN name varchar(255),
+	IN code varchar(255)
+)
+begin
+start transaction;
+	UPDATE product_colors p
+	SET p.name = name,
+		p.code = code
+	WHERE p.color_id = color_id; 
+commit;
+end$$
+
+-- remove product
+create procedure remove_product(
+	IN product_id int
+)
+begin
+start transaction;
+	DELETE FROM products p
+	WHERE p.product_id = product_id; 
+commit;
+end$$
+
+-- remove type
+create procedure remove_type(
+	IN type_id int
+)
+begin
+start transaction;
+	UPDATE products p
+	SET p.type_id = 0
+	WHERE p.type_id = type_id;
+
+	DELETE FROM product_types p
+	WHERE p.type_id = type_id;
 commit;
 end$$
 
