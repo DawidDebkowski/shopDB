@@ -33,6 +33,10 @@ alter table addresses
 alter table products
 	add constraint products_unique
 		unique(name, category, type_id, color_id),
+	add constraint products_price_check
+		check(price > 0),
+	add constraint products_discount_check
+		check(discount > 0 or discount is null),
 	add constraint products_fk_type
 		foreign key (type_id)
 		references product_types(type_id)
@@ -63,6 +67,10 @@ alter table photos
 alter table warehouse
 	add constraint warehouse_unique
 		unique(product_id, size),
+	add constraint warehouse_amount_check
+		check(amount >= 0),
+	add constraint warehouse_amount-reserved_check
+		check(amount >= reserved),
 	add constraint warehouse_fk_product
 		foreign key (product_id)
 		references products(product_id)
@@ -81,6 +89,8 @@ alter table orders
 alter table order_pos
 	add constraint order_pos_unique
 		unique(order_id, warehouse_id),
+	add constraint order_pos_amount_check
+		check(amount >= 0),
 	add constraint order_pos_fk_order
 		foreign key (order_id)
 		references orders(order_id)
