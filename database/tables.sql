@@ -14,13 +14,13 @@ create table clients(
 	name varchar(255),
 	surname varchar(255),
 	company_name varchar(255),
-	email varchar(255),
-	phone varchar(15),
+	email varchar(255) not null,
+	phone varchar(15) not null,
 	address_id int,
-	NIP char(10),
+	NIP char(10) not null,
 	RODO boolean,
 	terms_of_use boolean,
-	cookies boolean 
+	cookies boolean
 );
 
 create table addresses (
@@ -38,19 +38,19 @@ create table products(
 	category enum('men', 'women', 'boys', 'girls') not null,
 	type_id int not null,
 	color_id int not null,
-	price float not null,
+	price decimal(4,2) not null,
 	discount int
 );
 
 create table product_types(
     type_id int not null primary key auto_increment,
-    type varchar(255) not null
+    type varchar(255) not null unique
 );
 
 create table product_colors(
     color_id int not null primary key auto_increment,
-    name varchar(255) not null,
-	code varchar(255) not null
+    name varchar(255) not null unique,
+    code varchar(255) not null unique
 );
 
 create table photos(
@@ -64,7 +64,7 @@ create table warehouse(
 	product_id int not null,
 	size enum('XS', 'S', 'M', 'L', 'XL') not null,
 	amount int not null,
-	reserved int not null
+	reserved int not null default 0
 );
 
 create table orders(
@@ -72,8 +72,8 @@ create table orders(
 	client_id int not null,
 	invoice boolean not null,
 	invoice_id int,
-	status enum('not placed', 'placed', 'paid', 'completed', 'return reported', 'returned') not null,
-    value int not null
+	status enum('cart', 'placed', 'paid', 'cancelled', 'completed', 'return reported', 'returned') not null,
+	value int not null default 0
 );
 
 create table order_pos(
@@ -86,8 +86,8 @@ create table order_pos(
 create table order_logs(
 	log_id int not null primary key auto_increment,
 	order_id int not null,
-	old_status enum('not placed', 'placed', 'paid', 'completed', 'return reported', 'returned') not null,
-	new_status enum('not placed', 'placed', 'paid', 'completed', 'return reported', 'returned') not null,
+	old_status enum('cart', 'placed', 'paid', 'cancelled', 'completed', 'return reported', 'returned') not null,
+	new_status enum('cart', 'placed', 'paid', 'cancelled', 'completed', 'return reported', 'returned') not null,
 	log_date timestamp not null
 );
 
@@ -98,70 +98,3 @@ create table invoices(
 	company_name varchar(255) not null,
 	address_id int not null
 );
-
--- foreign keys
-alter table clients
-	add constraint clients_fk_user
-		foreign key (user_id)
-		references users(user_id)
-		on update cascade,
-	add constraint clients_fk_address
-		foreign key (address_id)
-		references addresses(address_id)
-		on update cascade;
-
-alter table products
-	add constraint products_fk_type
-		foreign key (type_id)
-		references product_types(type_id)
-		on update cascade,
-	add constraint products_fk_color
-		foreign key (color_id)
-		references product_colors(color_id)
-		on update cascade;
-
-alter table photos
-	add constraint photos_fk_product
-		foreign key (product_id)
-		references products(product_id)
-		on update cascade;
-
-alter table warehouse
-	add constraint warehouse_fk_product
-		foreign key (product_id)
-		references products(product_id)
-		on update cascade;
-
-alter table orders
-	add constraint orders_fk_client
-		foreign key (client_id)
-		references clients(client_id)
-		on update cascade,
-	add constraint orders_fk_invoice
-		foreign key (invoice_id)
-		references invoices(invoice_id)
-		on update cascade;
-
-alter table order_pos
-	add constraint order_pos_fk_order
-		foreign key (order_id)
-		references orders(order_id)
-		on update cascade
-		on delete cascade,
-	add constraint order_pos_fk_warehouse
-		foreign key (warehouse_id)
-		references warehouse(warehouse_id)
-		on update cascade;
-
-alter table order_logs
-	add constraint order_logs_fk_order
-		foreign key (order_id)
-		references orders(order_id)
-		on update cascade
-		on delete cascade;
-
-alter table invoices
-	add constraint invoices_fk_order
-		foreign key (order_id)
-		references orders(order_id)
-		on update cascade;
