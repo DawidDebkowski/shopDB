@@ -69,7 +69,7 @@ alter table warehouse
 		unique(product_id, size),
 	add constraint warehouse_amount_check
 		check(amount >= 0),
-	add constraint warehouse_amount-reserved_check
+	add constraint warehouse_amount_reserved_check
 		check(amount >= reserved),
 	add constraint warehouse_fk_product
 		foreign key (product_id)
