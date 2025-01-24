@@ -272,6 +272,46 @@ begin
 	end if;
 end$$
 
+-- NOT READY
+create procedure place_order(
+	IN client_id int,
+	IN invoice boolean
+)
+begin
+	declare oid int;
+
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	SELECT o.order_id INTO oid
+	FROM orders o
+	WHERE o.client_id = client_id AND o.status LIKE '%cart%';
+
+	if (
+		SELECT COUNT(COALESCE(o.pos_id, 0))
+		FROM order_pos o
+		WHERE o.order_id = oid
+	) = 0 then
+		set ready_to_commit = false;
+	end if;
+	
+	start transaction;
+		UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
+		SET w.reserved = w.reserved + o.amount
+		WHERE o.order_id = oid;
+
+		UPDATE orders o
+		SET o.invoice = invoice,
+			o.status = 'placed'
+		WHERE o.order_id = order_id; 
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
 -- salesman
 
 create procedure add_type(
@@ -492,7 +532,7 @@ end$$
 
 create procedure change_price(
 	IN product_id int,
-	IN new_price int
+	IN new_price float
 )
 begin
 	declare ready_to_commit boolean default true;
@@ -551,6 +591,10 @@ begin
 	SELECT w.warehouse_id INTO wid
 	FROM warehouse w
 	WHERE w.product_id = product_id AND w.size LIKE size;
+
+	if amount <= 0 then
+		set ready_to_commit = false;
+	end if;
 
 	start transaction;
 		if wid is null then
