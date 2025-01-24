@@ -124,17 +124,27 @@ begin
 	declare continue handler for sqlexception
 		SET ready_to_commit = false;
 
-	start transaction;
-		INSERT INTO addresses (street, house_number, apartment_number, city, postal_code)
-		VALUES(street, house_number, apartment_number, city, postal_code);
+	SELECT a.address_id INTO id
+	FROM addresses a
+	WHERE a.street LIKE street AND
+		a.house_number = house_number AND
+		(a.apartment_number = apartment_number OR (a.apartment_number IS NULL AND apartment_number IS NULL)) AND
+		a.city LIKE city AND
+		a.postal_code LIKE postal_code;
 
-		SELECT a.address_id INTO id
-		FROM addresses a
-		WHERE a.street LIKE street AND
-			a.house_number = house_number AND
-			a.apartment_number = apartment_number AND
-			a.city LIKE city AND
-			a.postal_code LIKE postal_code;
+	start transaction;
+		if id is null then
+			INSERT INTO addresses (street, house_number, apartment_number, city, postal_code)
+			VALUES (street, house_number, apartment_number, city, postal_code);
+
+			SELECT a.address_id INTO id
+			FROM addresses a
+			WHERE a.street LIKE street AND
+				a.house_number = house_number AND
+				(a.apartment_number = apartment_number OR (a.apartment_number IS NULL AND apartment_number IS NULL)) AND
+				a.city LIKE city AND
+				a.postal_code LIKE postal_code;
+		end if;
 
 		UPDATE clients c
 		SET c.address_id = id
