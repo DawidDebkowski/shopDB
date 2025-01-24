@@ -12,16 +12,38 @@ public class Client {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private com.shopDB.entities.User user;
+    private User user;
 
-    @Column(name = "address", length = 100)
-    private String address;
+    @Lob
+    @Column(name = "type", nullable = false)
+    private String type;
 
-    @Column(name = "email", length = 50)
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "company_name")
+    private String companyName;
+
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "phone", length = 15)
+    @Column(name = "phone", nullable = false, length = 15)
     private String phone;
+
+    @Column(name = "NIP", nullable = false, length = 10)
+    private String nip;
+
+    @Column(name = "RODO")
+    private Boolean rodo;
+
+    @Column(name = "terms_of_use")
+    private Boolean termsOfUse;
+
+    @Column(name = "cookies")
+    private Boolean cookies;
 
     public Integer getId() {
         return id;
@@ -31,20 +53,44 @@ public class Client {
         this.id = id;
     }
 
-    public com.shopDB.entities.User getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(com.shopDB.entities.User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public String getAddress() {
-        return address;
+    public String getType() {
+        return type;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getEmail() {
@@ -61,6 +107,38 @@ public class Client {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getNip() {
+        return nip;
+    }
+
+    public void setNip(String nip) {
+        this.nip = nip;
+    }
+
+    public Boolean getRodo() {
+        return rodo;
+    }
+
+    public void setRodo(Boolean rodo) {
+        this.rodo = rodo;
+    }
+
+    public Boolean getTermsOfUse() {
+        return termsOfUse;
+    }
+
+    public void setTermsOfUse(Boolean termsOfUse) {
+        this.termsOfUse = termsOfUse;
+    }
+
+    public Boolean getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(Boolean cookies) {
+        this.cookies = cookies;
     }
 
 }

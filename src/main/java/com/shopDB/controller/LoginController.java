@@ -123,11 +123,15 @@ public class LoginController implements SceneController {
         loginWrapper.setVisible(loginState);
         registerWrapper.setVisible(!loginState);
         if(loginState){
-            loginWrapper.setMinHeight(Region.USE_COMPUTED_SIZE);
-            registerWrapper.setMinHeight(0);
+            loginWrapper.setMinWidth(Region.USE_COMPUTED_SIZE);
+            loginWrapper.setPrefWidth(Region.USE_COMPUTED_SIZE);
+            registerWrapper.setMinWidth(0);
+            registerWrapper.setPrefWidth(0);
         } else {
-            loginWrapper.setMinHeight(0);
-            registerWrapper.setMinHeight(Region.USE_COMPUTED_SIZE);
+            loginWrapper.setMinWidth(0);
+            loginWrapper.setPrefWidth(0);
+            registerWrapper.setMinWidth(Region.USE_COMPUTED_SIZE);
+            registerWrapper.setPrefWidth(Region.USE_COMPUTED_SIZE);
         }
     }
 
