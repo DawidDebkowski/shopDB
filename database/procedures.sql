@@ -18,7 +18,7 @@ begin
 	declare user int;
 	declare cid int;
 start transaction;
-	INSERT INTO users(login, password, type)
+	INSERT INTO users(login, password, acc_type)
 	VALUES(login, password, 'client');
 
 	SELECT u.user_id INTO user
@@ -30,7 +30,7 @@ start transaction;
 
 	SELECT c.client_id INTO cid
 	FROM clients c
-	WHERE c.uder_id = user;
+	WHERE c.user_id = user;
 
 	INSERT INTO orders(client_id, status)
 	VALUES(cid, 'cart');

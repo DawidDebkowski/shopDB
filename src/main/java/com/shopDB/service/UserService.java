@@ -2,6 +2,7 @@ package com.shopDB.service;
 
 import com.shopDB.entities.User;
 import com.shopDB.repository.UserRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,15 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    private String hashPassword(String plainTextPassword){
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
+
+    public boolean authenticate(String login, String password) {
+        password = hashPassword(password);
+        return userRepository.authenticateUser(login, password);
     }
 
     public User saveUser(String login, String password, String accountType) {

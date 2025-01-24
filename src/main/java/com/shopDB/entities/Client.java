@@ -4,7 +4,18 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clients")
+//@NamedStoredProcedureQuery(name = "Client.addClient", procedureName = "add_client", parameters = {
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "login", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "password", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "type", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "email", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "phone", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "cookies", type = boolean.class),
+//})
 public class Client {
+    public static final String INDIVIDUAL_TYPE = "individual";
+    public static final String COMPANY_TYPE = "company";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "client_id", nullable = false)
