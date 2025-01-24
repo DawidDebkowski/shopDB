@@ -6,6 +6,7 @@ delimiter $$
 -- inserts new account into users
 -- creates client connected to user
 -- creates empty order (cart)
+----- READY -----
 create procedure add_client(
 	IN login varchar(255),
 	IN password varchar(255),
@@ -19,31 +20,37 @@ begin
 	declare user int;
 	declare cid int;
 	
-    declare exit handler for sqlexception
-        rollback;
-start transaction;
-	INSERT INTO users(login, password, acc_type)
-	VALUES(login, password, 'client');
+	declare ready_to_commit boolean default true;
+    declare continue handler for sqlexception
+        SET ready_to_commit = false;
 
-	SELECT u.user_id INTO user
-	FROM users u
-	WHERE u.login LIKE login;
+	start transaction;
+		INSERT INTO users(login, password, acc_type)
+		VALUES(login, password, 'client');
 
-	if type like 'individual' then
-		INSERT INTO clients(user_id, type, email, phone, RODO, terms_of_use, cookies)
-		VALUES(user, type, email, phone, true, true, cookies);
-	else
-		INSERT INTO clients(user_id, type, email, phone, NIP, RODO, terms_of_use, cookies)
-		VALUES(user, type, email, phone, NIP, true, true, cookies);
+		SELECT u.user_id INTO user
+		FROM users u
+		WHERE u.login LIKE login;
+
+		if type like 'individual' then
+			INSERT INTO clients(user_id, type, email, phone, RODO, terms_of_use, cookies)
+			VALUES(user, type, email, phone, true, true, cookies);
+		else
+			INSERT INTO clients(user_id, type, email, phone, NIP, RODO, terms_of_use, cookies)
+			VALUES(user, type, email, phone, NIP, true, true, cookies);
+		end if;
+
+		SELECT c.client_id INTO cid
+		FROM clients c
+		WHERE c.user_id = user;
+
+		INSERT INTO orders(client_id, status)
+		VALUES(cid, 'cart');
+	if ready_to_commit = true then
+		commit;
+	else 
+		rollback;
 	end if;
-
-	SELECT c.client_id INTO cid
-	FROM clients c
-	WHERE c.user_id = user;
-
-	INSERT INTO orders(client_id, status)
-	VALUES(cid, 'cart');
-commit;
 end$$
 
 -- changing account info, if individual, from app
@@ -56,18 +63,25 @@ create procedure change_acc_info_individual(
 	IN phone varchar(15)
 )
 begin
-start transaction;
-	if (SELECT type FROM clients WHERE client_id = id) not like '%individual%' then
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+	start transaction;
+		if (SELECT type FROM clients WHERE client_id = id) not like '%individual%' then
+			SET ready_to_commit = false;
+		end if;
+
+		UPDATE clients c
+		SET c.name = name,
+			c.surname = surname,
+			c.email = email,
+			c.phone = phone
+		WHERE c.client_id = id;
+	if ready_to_commit = true then
+		commit;
+	else
 		rollback;
 	end if;
-
-	UPDATE clients c
-	SET c.name = name,
-		c.surname = surname,
-		c.email = email,
-		c.phone = phone
-	WHERE c.client_id = id;
-commit;
 end$$
 
 -- changing account info, if company from app
