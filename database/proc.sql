@@ -1,8 +1,3 @@
-drop procedure if exists add_client;
-drop procedure if exists change_acc_info_individual;
-drop procedure if exists change_acc_info_company;
-drop procedure if exists change_address;
-
 delimiter $$
 
 create procedure add_client(
@@ -368,6 +363,50 @@ begin
 	if ready_to_commit then
 		commit;
 	else 
+		rollback;
+	end if;
+end$$
+
+create procedure change_price(
+	IN product_id int,
+	IN new_price int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false; 
+
+	start transaction;
+		UPDATE products p
+		SET p.price = new_price
+		WHERE p.product_id = product_id;
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure change_discount(
+	IN product_id int,
+	IN new_discount int
+) 
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		if new_discount = 0 then
+			SET new_discount = null;
+		end if;
+
+		UPDATE products p
+		SET p.discount = new_discount
+		WHERE p.product_id = product_id;
+	if ready_to_commit then
+		commit;
+	else
 		rollback;
 	end if;
 end$$

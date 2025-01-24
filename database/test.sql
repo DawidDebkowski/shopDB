@@ -47,6 +47,12 @@ call add_product('koszulka 3', 'men', 2, 1, 39.99);
 call edit_product(1, 'KOSZULKA 1', 'men', 2, 5);
 call edit_product(3, 'koszulka 2', 'women', 2, 5);
 call edit_product(3, 'spodnie', 'boys', 1, 5);
+call change_price(1, 59.99);
+call change_price(2, 59.99);
+call change_discount(1, 10);
+call change_discount(1, 0);
+call change_discount(3, 10);
+call change_discount(3, 20);
 
 -- dodawanie/usuwanie zdjec
 call add_photo(1, 'zdj1');
