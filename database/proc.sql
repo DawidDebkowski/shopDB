@@ -44,7 +44,7 @@ begin
 
 		INSERT INTO orders(client_id, status)
 		VALUES(cid, 'cart');
-	if ready_to_commit = true then
+	if ready_to_commit then
 		commit;
 	else 
 		rollback;
@@ -73,7 +73,7 @@ begin
 			c.email = email,
 			c.phone = phone
 		WHERE c.client_id = id;
-	if ready_to_commit = true then
+	if ready_to_commit then
 		commit;
 	else
 		rollback;
@@ -102,7 +102,7 @@ begin
 			c.email = email,
 			c.phone = phone
 		WHERE c.client_id = id;
-	if ready_to_commit = true then
+	if ready_to_commit then
 		commit;
 	else
 		rollback;
@@ -149,9 +149,139 @@ begin
 		UPDATE clients c
 		SET c.address_id = id
 		WHERE c.client_id = client_id;
-	if ready_to_commit = true then
+	if ready_to_commit then
 		commit;
 	else 
+		rollback;
+	end if;
+end$$
+
+create procedure add_type(
+	IN type varchar(255)
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		INSERT INTO product_types(type)
+		VALUES(type);
+	if ready_to_commit then
+		commit;
+	else 
+		rollback;
+	end if;
+end$$
+
+create procedure edit_type(
+	IN type_id int,
+	IN type varchar(255)
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		UPDATE product_types p
+		SET p.type = type
+		WHERE p.type_id = type_id;
+	if ready_to_commit then
+		commit;
+	else 
+		rollback;
+	end if;
+end$$
+
+create procedure remove_type(
+	IN type_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		if type_id = 1 then
+			SET ready_to_commit = false;
+		end if;
+
+		UPDATE products p
+		SET p.type_id = 1
+		WHERE p.type_id = type_id;
+
+		DELETE FROM product_types
+		WHERE product_types.type_id = type_id;
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure add_color(
+	IN name varchar(255),
+	IN code varchar(255)
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		INSERT INTO product_colors(name, code)
+		VALUES(name, code);
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure edit_color(
+	IN color_id int,
+	IN name varchar(255),
+	IN code varchar(255)
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		UPDATE product_colors p
+		SET p.name = name,
+			p.code = code
+		WHERE p.color_id = color_id; 
+	if ready_to_commit then
+		commit;
+	else 
+		rollback;
+	end if;
+end$$
+
+create procedure remove_color(
+	IN color_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+	start transaction;
+		if color_id = 1 then
+			SET ready_to_commit = false;
+		end if;
+
+		UPDATE products p 
+		SET p.color_id = 1
+		WHERE p.color_id = color_id;
+
+		DELETE FROM product_colors 
+		WHERE product_colors.color_id = color_id;
+	if ready_to_commit then
+		commit;
+	else
 		rollback;
 	end if;
 end$$
