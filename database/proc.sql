@@ -1,5 +1,7 @@
 delimiter $$
 
+-- client
+
 create procedure add_client(
 	IN login varchar(255),
 	IN password varchar(255),
@@ -150,6 +152,127 @@ begin
 		rollback;
 	end if;
 end$$
+
+create procedure add_order_pos(
+	IN client_id int,
+	IN warehouse_id int,
+	IN amount int
+)
+begin
+	declare oid int;
+
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	SELECT o.order_id INTO oid
+	FROM orders o
+	WHERE o.client_id = client_id AND o.status LIKE '%cart%';
+	
+	if (
+		SELECT w.amount - w.reserved
+		FROM warehouse w
+		WHERE w.warehouse_id = warehouse_id
+	) < amount then
+		SET ready_to_commit = false;
+	end if;
+
+	if amount <= 0 then
+		SET ready_to_commit = false;
+	end if;
+
+	start transaction;
+		INSERT INTO order_pos (order_id, warehouse_id, amount)
+		VALUES (oid, warehouse_id, amount);
+	if ready_to_commit then
+		commit;
+	else 
+		rollback;
+	end if;
+end$$
+
+create procedure edit_order_pos(
+	IN client_id int,
+	IN pos_id int,
+	IN new_amount int
+)
+begin
+	declare oid int;
+	declare wid int;
+
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	SELECT o.order_id INTO oid
+	FROM orders o
+	WHERE o.client_id = client_id AND o.status LIKE '%basket%';
+	
+	if (
+		SELECT o.order_id 
+		FROM order_pos o
+		WHERE o.pos_id = pos_id
+	) <> oid then 
+		SET ready_to_commit = false;
+	end if;
+
+	SELECT o.warehouse_id INTO wid
+	FROM order_pos o
+	WHERE o.pos_id = pos_id;
+
+	if (
+		SELECT w.amount - w.reserved
+		FROM warehouse w
+		WHERE w.warehouse_id = wid
+	) < new_amount then	
+		SET ready_to_commit = false;
+	end if;
+
+	start transaction;
+		UPDATE order_pos o
+		SET o.amount = new_amount
+		WHERE o.pos_id = pos_id;
+	if ready_to_commit then 
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure remove_order_pos(
+	IN client_id int,
+	IN pos_id int
+)
+begin
+	declare oid int;
+
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	SELECT o.order_id INTO oid
+	FROM orders o
+	WHERE o.client_id = client_id AND o.status LIKE '%cart%';
+
+	if (
+		SELECT o.order_id
+		FROM order_pos o
+		WHERE o.pos_id = pos_id
+	) <> oid then 
+		SET ready_to_commit = false;
+	end if;
+	
+	start transaction;
+		DELETE FROM order_pos
+		WHERE order_pos.pos_id = pos_id;
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+-- salesman
 
 create procedure add_type(
 	IN type varchar(255)
@@ -405,6 +528,60 @@ begin
 		SET p.discount = new_discount
 		WHERE p.product_id = product_id;
 	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+-- warehouse_manager
+
+create procedure add_warehouse(
+	IN product_id int,
+	IN size enum('XS', 'S', 'M', 'L', 'XL'),
+	IN amount int
+)
+begin
+	declare wid int;
+
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	SELECT w.warehouse_id INTO wid
+	FROM warehouse w
+	WHERE w.product_id = product_id AND w.size LIKE size;
+
+	start transaction;
+		if wid is null then
+			INSERT INTO warehouse (product_id, size, amount)
+			VALUES (product_id, size, amount);
+		else
+			UPDATE warehouse w
+			SET w.amount = w.amount + amount
+			WHERE w.warehouse_id = wid;
+		end if;
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure edit_warehouse(
+	IN warehouse_id int,
+	IN amount int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+	
+	start transaction;
+		UPDATE warehouse w
+		SET w.amount = w.amount + amount
+		WHERE w.warehouse_id = warehouse_id;
+	if ready_to_commit then	
 		commit;
 	else
 		rollback;

@@ -63,3 +63,32 @@ call add_photo(3, 'zdj3');
 call add_photo(3, 'zdj4');
 call remove_photo(2);
 call remove_photo(3);
+
+-- dodawanie do magazynu/edytowanie ilosci w magazynie
+call add_warehouse(1, 'S', 3);
+call add_warehouse(1, 'S', 2);
+call add_warehouse(1, 'M', 4);
+call add_warehouse(1, 'M', -5);
+call add_warehouse(1, 'L', -5);
+call add_warehouse(1, 'XL', 0);
+call add_warehouse(3, 'L', 7);
+call add_warehouse(3, 'XL', 3);
+call edit_warehouse(1, 2);
+call edit_warehouse(2, -2);
+call edit_warehouse(3, 3);
+call edit_warehouse(4, -7);
+call edit_warehouse(4, -4);
+
+-- dodawanie/edytowanie pozycji zamowienia
+call add_order_pos(1, 1, 2);
+call add_order_pos(1, 1, 1);
+call add_order_pos(1, 2, 3);
+call add_order_pos(1, 5, 0);
+call add_order_pos(1, 5, -1);
+call add_order_pos(5, 3, 1);
+call edit_order_pos(5, 5, -1);
+call edit_order_pos(5, 5, 0);
+call edit_order_pos(5, 5, 3);
+call edit_order_pos(5, 5, 4);
+call remove_order_pos(5, 5);
+call remove_order_pos(5, 1);

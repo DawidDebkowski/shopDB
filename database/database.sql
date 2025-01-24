@@ -306,18 +306,6 @@ begin
     end if;
 end$$
 
--- warehouse: if amount is 0 - delete row (DONE)
-create trigger AU_warehouse_amount
-    after update on warehouse
-    for each row
-begin
-    if old.amount <> new.amount then
-		if new.amount = 0 then
-            DELETE FROM warehouse WHERE warehouse_id = new.warehouse_id;
-        end if;
-    end if;
-end$$
-
 -- order_log: adding order status change logs (DONE)
 create trigger AU_order_add_log
     after update on orders
