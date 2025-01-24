@@ -20,7 +20,7 @@ create table clients(
 	email varchar(255) not null,
 	phone varchar(15) not null,
 	address_id int,
-	NIP char(10) not null,
+	NIP char(10),
 	RODO boolean,
 	terms_of_use boolean,
 	cookies boolean
@@ -56,7 +56,7 @@ VALUES('inne');
 create table product_colors(
     color_id int not null primary key auto_increment,
     name varchar(255) not null unique,
-    code varchar(255) not null unique
+    code varchar(255) unique
 );
 
 INSERT INTO product_colors(name)
@@ -79,7 +79,7 @@ create table warehouse(
 create table orders(
 	order_id int not null primary key auto_increment,
 	client_id int not null,
-	invoice boolean not null,
+	invoice boolean,
 	invoice_id int,
 	status enum('cart', 'placed', 'paid', 'cancelled', 'completed', 'return reported', 'returned') not null,
 	value int not null default 0
@@ -107,6 +107,7 @@ create table invoices(
 	company_name varchar(255) not null,
 	address_id int not null
 );
+
 alter table users
 	add constraint login_unique
 		unique(login);
