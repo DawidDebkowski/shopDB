@@ -1,6 +1,9 @@
 package com.shopDB.controller;
 
 import com.shopDB.SceneType;
+import com.shopDB.entities.Client;
+import com.shopDB.repository.ClientRepository;
+import com.shopDB.service.ClientService;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.mfxcore.controls.Label;
 import io.github.palexdev.mfxcore.controls.Text;
@@ -15,7 +18,12 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class LoginController implements SceneController {
+    private final ClientService clientService;
     private boolean loginState = true;
+
+    private boolean cookies = false;
+    private boolean rodo = false;
+    private boolean terms = false;
 
     @FXML
     private MFXToggleButton companyToggle;
@@ -92,6 +100,10 @@ public class LoginController implements SceneController {
     @FXML
     private MFXCheckbox termsCheckbox;
 
+    public LoginController(ClientService clientService) {
+        this.clientService = clientService;
+    }
+
     @FXML
     void onForgotButtonClicked(ActionEvent event) {
         System.out.println("to be added maybe");
@@ -101,7 +113,8 @@ public class LoginController implements SceneController {
     void onLoginButtonClick(ActionEvent event) {
         if(loginState){
             setMessage("can't login");
-            SceneManager.getInstance().setScene(SceneType.LOGIN);
+            clientService.addClient("test", "test1", "individual", "student@gmail.com", "123456789", true);
+//            SceneManager.getInstance().setScene(SceneType.LOGIN);
         } else {
             changeState(true );
         }
@@ -110,12 +123,35 @@ public class LoginController implements SceneController {
     @FXML
     void onRegisterButtonClick(ActionEvent event) {
         if(!loginState){
-            setMessage("can't register");
-            SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
+            if(!rodo || !terms) {
+                setMessage("Zaakceptuj regulamin i rodo.");
+            } else {
+                addClientFromFields();
+            }
 
         } else {
             changeState(false);
         }
+    }
+
+    private void addClientFromFields() {
+        String password = registerPasswordField.getText();
+        String type = null;
+        if(companyToggle.isSelected()) {
+            type = Client.COMPANY_TYPE;
+        } else {
+            type = Client.INDIVIDUAL_TYPE;
+        }
+        clientService.addClient(
+                registerUsernameField.getText(),
+                password,
+                type,
+                emailField.getText(),
+                phoneField.getText(),
+                cookiesCheckbox.isSelected()
+        );
+        setMessage("can't register");
+        SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
     }
 
     private void changeState(boolean newState) {
@@ -142,16 +178,16 @@ public class LoginController implements SceneController {
 
     @FXML
     void onCookiesCheckboxClicked(ActionEvent event) {
-
+        cookies = !cookies;
     }
 
     @FXML
     void onRodoCheckboxClicked(ActionEvent event) {
-
+        rodo = !rodo;
     }
 
     @FXML
     void onTermsCheckboxClicked(ActionEvent event) {
-
+        terms = !terms;
     }
 }
