@@ -1,7 +1,7 @@
 -----triggers-----
 delimiter $$
 
--- order: automatic value calculation from order_pos (DONE)
+-- order: automatic value calculation from order_pos
 create trigger AI_order_pos_value
     after insert on order_pos
     for each row
@@ -73,7 +73,7 @@ begin
     WHERE o.order_id = old.order_id;
 end $$
 
--- order_pos: if amount is 0 - delete row (DONE)
+-- order_pos: if amount is 0 - delete row
 create trigger AU_order_pos_amount
     after update on order_pos
     for each row
@@ -85,19 +85,7 @@ begin
     end if;
 end$$
 
--- warehouse: if amount is 0 - delete row (DONE)
-create trigger AU_warehouse_amount
-    after update on warehouse
-    for each row
-begin
-    if old.amount <> new.amount then
-		if new.amount = 0 then
-            DELETE FROM warehouse WHERE warehouse_id = new.warehouse_id;
-        end if;
-    end if;
-end$$
-
--- order_log: adding order status change logs (DONE)
+-- order_log: adding order status change log
 create trigger AU_order_add_log
     after update on orders
     for each row

@@ -268,6 +268,7 @@ begin
 	declare ready_to_commit boolean default true;
 	declare continue handler for sqlexception
 		SET ready_to_commit = false;
+
 	start transaction;
 		if color_id = 1 then
 			SET ready_to_commit = false;
@@ -282,6 +283,91 @@ begin
 	if ready_to_commit then
 		commit;
 	else
+		rollback;
+	end if;
+end$$
+
+create procedure add_product(
+	IN name varchar(255),
+	IN category enum('men', 'women', 'boys', 'girls'),
+	IN type_id int,
+	IN color_id int,
+	IN price float
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		INSERT INTO products(name, category, type_id, color_id, price)
+		VALUES(name, category, type_id, color_id, price);
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure edit_product(
+	IN product_id int,
+	IN name varchar(255),
+	IN category enum('men', 'women', 'boys', 'girls'),
+	IN type_id int,
+	IN color_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		UPDATE products p
+		SET p.name = name,
+			p.category = category,
+			p.type_id = type_id,
+			p.color_id = color_id
+		WHERE p.product_id = product_id;
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure add_photo(
+	IN product_id int,
+	IN path varchar(255)
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		INSERT INTO photos(product_id, path)
+		VALUES(product_id, path);
+	if ready_to_commit then	
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure remove_photo(
+	IN photo_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	start transaction;
+		DELETE FROM photos
+		WHERE photos.photo_id = photo_id;
+	if ready_to_commit then
+		commit;
+	else 
 		rollback;
 	end if;
 end$$

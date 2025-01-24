@@ -38,3 +38,22 @@ call edit_color(2, 'CZERWONY', 'FF0001');
 call remove_color(1);
 call remove_color(2);
 call remove_color(3);
+
+-- dodawanie/edytowanie produktow
+call add_product('koszulka 1', 'men', 2, 5, 49.99);
+call add_product('koszulka 1', 'men', 2, 5, 39.99);
+call add_product('koszulka 2', 'men', 2, 5, 39.99);
+call add_product('koszulka 3', 'men', 2, 1, 39.99);
+call edit_product(1, 'KOSZULKA 1', 'men', 2, 5);
+call edit_product(3, 'koszulka 2', 'women', 2, 5);
+call edit_product(3, 'spodnie', 'boys', 1, 5);
+
+-- dodawanie/usuwanie zdjec
+call add_photo(1, 'zdj1');
+call add_photo(1, 'zdj1');
+call add_photo(1, 'zdj2');
+call add_photo(1, 'zdj3');
+call add_photo(3, 'zdj3');
+call add_photo(3, 'zdj4');
+call remove_photo(2);
+call remove_photo(3);
