@@ -1,3 +1,5 @@
+@import "colors.css";
+
 .round-corners {
     -fx-background-radius: 25;
     -fx-border-radius: 25;
@@ -23,30 +25,71 @@
 }
 
 .mfx-text-field {
-    -fx-border-color: #1F0DDE;
+    -mfx-purple: white;
+}
+
+.mfx-text-field:default {
+    -fx-border-color: -main-color;
     /*-fx-border-color: #be9117;*/
 }
 
-.mfx-text-field .floating-text {
-    -fx-text-fill: #0904B0;
+.mfx-text-field:focused {
+    -fx-border-color: -main-color;
+    /*-fx-border-color: #be9117;*/
+}
+
+.mfx-text-field:armed {
+    -fx-border-color: -main-color;
+    /*-fx-border-color: #be9117;*/
+}
+
+.mfx-text-field:hover {
+    -fx-border-color: -secondary-color;
+    /*-fx-border-color: #be9117;*/
+}
+
+.mfx-text-field:focused .floating-text {
+    -fx-text-fill: #085d5f;
 }
 
 .main-button {
-    -fx-background-color: #1F0DDE;
+    -fx-background-color: -main-color;
     -fx-text-fill: white;
 }
 
 .main-button:hover {
-    -fx-background-color: #5D44F1;
+    -fx-background-color: #08a9bb;
 }
 
 .white-button {
     -fx-background-color: white;
-    -fx-text-fill: #0904B0
+    -fx-text-fill: #085d5f
+}
+
+.white-button:hover {
+    -fx-background-color: #e0f7f9;
+
+}
+
+.mfx-toggle-button {
+    -mfx-main: -main-color;
+    /*-mfx-secondary: #a10994;*/
+}
+
+.mfx-checkbox {
+    -mfx-main: -main-color;
+}
+
+.mfx-checkbox:hover {
+    -fx-border-color: -secondary-color;
+}
+
+.mfx-checkbox .mfx-ripple-generator{
+    -mfx-ripple-color: -main-color;
 }
 
 .vibrant-background {
-    -fx-background-color: #1F0DDE;
+    -fx-background-color: #0995A1;
     -fx-text-fill: white;
 }
 

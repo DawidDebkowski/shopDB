@@ -1,106 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXCheckbox?>
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXToggleButton?>
 <?import io.github.palexdev.mfxcore.controls.Label?>
 <?import io.github.palexdev.mfxcore.controls.Text?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="600.0" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.controller.LoginController">
-   <center>
-      <VBox fx:id="fieldsBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="573.0" prefWidth="600.0" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.controller.LoginController">
+   <top>
+      <HBox alignment="CENTER" prefHeight="90.0" prefWidth="600.0" styleClass="header" BorderPane.alignment="CENTER">
          <children>
-            <MFXTextField fx:id="emailText" floatMode="BORDER" floatingText="EMAIL" layoutX="205.0" layoutY="54.0" minHeight="0.0" prefHeight="0.0" prefWidth="210.0" promptText="Email..." stylesheets="@../css/app.css" visible="false">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin>
-            </MFXTextField>
-            <MFXTextField fx:id="usernameText" floatMode="BORDER" floatingText="USERNAME" prefHeight="30.0" prefWidth="210.0" promptText="Username..." stylesheets="@../css/app.css">
-               <VBox.margin>
-                  <Insets bottom="20.0" />
-               </VBox.margin></MFXTextField>
-            <VBox alignment="CENTER" prefHeight="0.0" prefWidth="100.0">
-               <children>
-                  <MFXPasswordField fx:id="passwordText" floatMode="BORDER" floatingText="PASSWORD" graphicTextGap="15.0" prefColumnCount="10" promptText="Password..." />
-                  <MFXButton fx:id="forgotButton" alignment="CENTER_RIGHT" depthLevel="LEVEL0" onAction="#onForgotButtonClicked" style="-fx-background-color: transparent;" text="Forgot Password?" textAlignment="RIGHT">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                     <padding>
-                        <Insets left="80.0" />
-                     </padding>
-                  </MFXButton>
-               </children>
-            </VBox>
-            <VBox fx:id="loginStateBox" alignment="CENTER" prefHeight="0.0" prefWidth="100.0" spacing="10.0">
-               <children>
-                  <MFXButton fx:id="loginButton" buttonType="RAISED" onAction="#onLoginButtonClick" stylesheets="@../css/app.css" text="Login">
-                     <styleClass>
-                        <String fx:value="main-button" />
-                        <String fx:value="round-corners" />
-                     </styleClass>
-                  </MFXButton>
-                  <Text text="if you don't have an account please:" />
-                  <MFXButton fx:id="registerButton" buttonType="RAISED" onAction="#onRegisterButtonClick" stylesheets="@../css/app.css" text="Register">
-                     <styleClass>
-                        <String fx:value="white-button" />
-                        <String fx:value="round-corners" />
-                     </styleClass>
-                  </MFXButton>
-               </children>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </VBox>
-            <VBox fx:id="registerStateBox" alignment="CENTER" minHeight="0.0" prefHeight="0.0" prefWidth="600.0" spacing="10.0" visible="false">
-               <children>
-                  <MFXPasswordField fx:id="secondPasswordText" floatMode="BORDER" floatingText="CONFIRM PASSWORD" graphicTextGap="15.0" prefColumnCount="10" promptText="Password..." />
-                  <MFXButton fx:id="registerButton1" buttonType="RAISED" onAction="#onRegisterButtonClick" stylesheets="@../css/app.css" text="Register">
-                     <styleClass>
-                        <String fx:value="main-button" />
-                        <String fx:value="round-corners" />
-                     </styleClass>
-                  </MFXButton>
-                  <Text text="have an account? Please:" />
-                  <MFXButton fx:id="loginButton1" buttonType="RAISED" onAction="#onLoginButtonClick" stylesheets="@../css/app.css" text="Login">
-                     <styleClass>
-                        <String fx:value="white-button" />
-                        <String fx:value="round-corners" />
-                     </styleClass>
-                  </MFXButton>
-               </children>
-            </VBox>
-            <Label fx:id="messageLabel" text="Incorrect email or password" visible="false">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
-               </padding>
-               <styleClass>
-                  <String fx:value="danger-label" />
-                  <String fx:value="slight-round-corners" />
-               </styleClass>
+            <Label styleClass="header-name" text="SHOP DB">
+               <font>
+                  <Font size="48.0" />
+               </font>
             </Label>
          </children>
-         <padding>
-            <Insets top="10.0" />
-         </padding>
-      </VBox>
-   </center>
-   <top>
-      <Text fx:id="titleText" text="SKLEP DB" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="50.0" />
-         </font>
-      </Text>
+      </HBox>
    </top>
-   <padding>
-      <Insets top="20.0" />
-   </padding>
+   <center>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox fx:id="loginWrapper" alignment="CENTER" prefHeight="407.0" prefWidth="454.0" spacing="30.0" stylesheets="@../css/app.css">
+               <children>
+                  <MFXTextField fx:id="loginUsernameField" floatingText="Login" prefHeight="64.0" prefWidth="223.0" stylesheets="@../css/app.css">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </MFXTextField>
+                  <VBox alignment="CENTER" prefHeight="73.0" prefWidth="454.0">
+                     <children>
+                        <MFXPasswordField fx:id="loginPasswordField" floatingText="Hasło" graphicTextGap="15.0" prefColumnCount="10" prefHeight="81.0" prefWidth="177.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font></MFXPasswordField>
+                        <MFXButton fx:id="forgotButton" alignment="CENTER_RIGHT" depthLevel="LEVEL0" onAction="#onForgotButtonClicked" style="-fx-background-color: transparent;" text="Zapomniałeś hasła?" textAlignment="RIGHT">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                           <padding>
+                              <Insets left="80.0" />
+                           </padding>
+                        </MFXButton>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="loginStateBox" alignment="CENTER" prefHeight="130.0" prefWidth="454.0" spacing="10.0">
+                     <children>
+                        <MFXButton fx:id="loginButton" alignment="CENTER" buttonType="RAISED" onAction="#onLoginButtonClick" prefHeight="45.0" prefWidth="124.0" stylesheets="@../css/app.css" text="Zaloguj">
+                           <styleClass>
+                              <String fx:value="main-button" />
+                              <String fx:value="round-corners" />
+                           </styleClass>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </MFXButton>
+                        <Text text="lub jeżeli nie masz konta:">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Text>
+                        <MFXButton fx:id="registerButton" alignment="CENTER" buttonType="RAISED" onAction="#onRegisterButtonClick" prefHeight="36.0" prefWidth="92.0" stylesheets="@../css/app.css" text="Zarejestruj">
+                           <styleClass>
+                              <String fx:value="white-button" />
+                              <String fx:value="round-corners" />
+                           </styleClass>
+                        </MFXButton>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </VBox>
+            <VBox fx:id="registerWrapper" alignment="CENTER" minWidth="0.0" prefHeight="324.0" prefWidth="0.0" visible="false">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="330.0" prefWidth="469.0">
+                     <children>
+                        <VBox fx:id="fieldsBox1" alignment="TOP_CENTER" prefHeight="187.0" prefWidth="340.0" spacing="30.0" stylesheets="@../css/app.css">
+                           <children>
+                              <MFXTextField fx:id="emailField" floatingText="Email" prefColumnCount="10" prefWidth="200.0" promptText="279@student.pwr.edu.pl" stylesheets="@../css/app.css" />
+                              <MFXTextField fx:id="registerUsernameField" floatingText="Login" prefColumnCount="10" prefWidth="200.0" promptText="admin1" stylesheets="@../css/app.css">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </MFXTextField>
+                              <MFXPasswordField fx:id="registerPasswordField" floatingText="Hasło" graphicTextGap="15.0" prefColumnCount="10" prefWidth="200.0" promptText="admin123" />
+                              <MFXPasswordField fx:id="secondPasswordField" floatingText="Powtórz hasło" graphicTextGap="15.0" prefColumnCount="10" prefWidth="200.0" promptText="admin123" />
+                           </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </VBox>
+                        <VBox fx:id="registerStateBox" alignment="TOP_CENTER" minHeight="0.0" prefHeight="227.0" prefWidth="374.0">
+                           <children>
+                              <MFXTextField fx:id="phoneField" floatingText="Telefon" prefColumnCount="10" prefWidth="200.0" promptText="333 333 333" stylesheets="@../css/app.css">
+                                 <VBox.margin>
+                                    <Insets bottom="30.0" />
+                                 </VBox.margin>
+                              </MFXTextField>
+                              <MFXTextField fx:id="nipField" disable="true" floatingText="NIP" layoutX="41.0" layoutY="93.0" prefColumnCount="10" prefWidth="200.0" promptText="Email..." stylesheets="@../css/app.css">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </MFXTextField>
+                              <VBox alignment="CENTER" prefHeight="143.0" prefWidth="252.0">
+                                 <children>
+                                    <MFXToggleButton fx:id="companyToggle" text="Jestem Firmą" />
+                                    <MFXCheckbox fx:id="termsCheckbox" onAction="#onTermsCheckboxClicked" text="Akceptuje regulamin" />
+                                    <MFXCheckbox fx:id="rodoCheckbox" layoutX="56.0" layoutY="51.0" onAction="#onRodoCheckboxClicked" text="Akceptuje RODO       " />
+                                    <MFXCheckbox fx:id="cookiesCheckbox" onAction="#onCookiesCheckboxClicked" text="Akceptuje ciasteczka" />
+                                 </children>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox alignment="CENTER" prefHeight="264.0" prefWidth="469.0" spacing="5.0">
+                     <children>
+                        <MFXButton fx:id="registerButton1" buttonType="RAISED" onAction="#onRegisterButtonClick" stylesheets="@../css/app.css" text="Zarejestruj">
+                           <styleClass>
+                              <String fx:value="main-button" />
+                              <String fx:value="round-corners" />
+                           </styleClass>
+                        </MFXButton>
+                        <Text text="lub jeżeli masz już konto:" />
+                        <MFXButton fx:id="loginButton1" buttonType="RAISED" onAction="#onLoginButtonClick" stylesheets="@../css/app.css" text="Zaloguj">
+                           <styleClass>
+                              <String fx:value="white-button" />
+                              <String fx:value="round-corners" />
+                           </styleClass>
+                        </MFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+   </center>
+   <bottom>
+      <Label fx:id="messageLabel" text="Incorrect email or password" visible="false" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="7.0" left="15.0" right="15.0" top="7.0" />
+         </padding>
+         <styleClass>
+            <String fx:value="danger-label" />
+            <String fx:value="slight-round-corners" />
+         </styleClass>
+      </Label>
+   </bottom>
 </BorderPane>

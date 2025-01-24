@@ -45,7 +45,7 @@ public class App extends Application
         SceneManager sceneManager = springContext.getBean(SceneManager.class);
         sceneManager.initialize(primaryStage);
 
-        SceneManager.getInstance().setScene(SceneType.CLIENT_DATA);
+        SceneManager.getInstance().setScene(SceneType.LOGIN);
         primaryStage.setTitle("Shop Application");
         primaryStage.show();
     }
