@@ -17,7 +17,7 @@ create table clients(
 	email varchar(255) not null,
 	phone varchar(15) not null,
 	address_id int,
-	NIP char(10) not null,
+	NIP char(10),
 	RODO boolean,
 	terms_of_use boolean,
 	cookies boolean
@@ -76,7 +76,7 @@ create table warehouse(
 create table orders(
 	order_id int not null primary key auto_increment,
 	client_id int not null,
-	invoice boolean not null,
+	invoice boolean,
 	invoice_id int,
 	status enum('cart', 'placed', 'paid', 'cancelled', 'completed', 'return reported', 'returned') not null,
 	value int not null default 0

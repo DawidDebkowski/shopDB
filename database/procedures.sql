@@ -6,35 +6,51 @@ delimiter $$
 -- inserts new account into users
 -- creates client connected to user
 -- creates empty order (cart)
+----- READY -----
 create procedure add_client(
 	IN login varchar(255),
 	IN password varchar(255),
 	IN type enum('individual', 'company'),
 	IN email varchar(255),
 	IN phone varchar(15),
+	IN NIP char(10),
 	IN cookies boolean
 )
 begin
 	declare user int;
 	declare cid int;
-start transaction;
-	INSERT INTO users(login, password, acc_type)
-	VALUES(login, password, 'client');
+	
+	declare ready_to_commit boolean default true;
+    declare continue handler for sqlexception
+        SET ready_to_commit = false;
 
-	SELECT u.user_id INTO user
-	FROM users u
-	WHERE u.login LIKE login;
+	start transaction;
+		INSERT INTO users(login, password, acc_type)
+		VALUES(login, password, 'client');
 
-	INSERT INTO clients(user_id, type, email, phone, RODO, terms_of_use, cookies)
-	VALUES(user, type, email, phone, true, true, cookies);
+		SELECT u.user_id INTO user
+		FROM users u
+		WHERE u.login LIKE login;
 
-	SELECT c.client_id INTO cid
-	FROM clients c
-	WHERE c.user_id = user;
+		if type like 'individual' then
+			INSERT INTO clients(user_id, type, email, phone, RODO, terms_of_use, cookies)
+			VALUES(user, type, email, phone, true, true, cookies);
+		else
+			INSERT INTO clients(user_id, type, email, phone, NIP, RODO, terms_of_use, cookies)
+			VALUES(user, type, email, phone, NIP, true, true, cookies);
+		end if;
 
-	INSERT INTO orders(client_id, status)
-	VALUES(cid, 'cart');
-commit;
+		SELECT c.client_id INTO cid
+		FROM clients c
+		WHERE c.user_id = user;
+
+		INSERT INTO orders(client_id, status)
+		VALUES(cid, 'cart');
+	if ready_to_commit = true then
+		commit;
+	else 
+		rollback;
+	end if;
 end$$
 
 -- changing account info, if individual, from app
@@ -47,18 +63,25 @@ create procedure change_acc_info_individual(
 	IN phone varchar(15)
 )
 begin
-start transaction;
-	if (SELECT type FROM clients WHERE client_id = id) not like '%individual%' then
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+	start transaction;
+		if (SELECT type FROM clients WHERE client_id = id) not like '%individual%' then
+			SET ready_to_commit = false;
+		end if;
+
+		UPDATE clients c
+		SET c.name = name,
+			c.surname = surname,
+			c.email = email,
+			c.phone = phone
+		WHERE c.client_id = id;
+	if ready_to_commit = true then
+		commit;
+	else
 		rollback;
 	end if;
-
-	UPDATE clients c
-	SET c.name = name,
-		c.surname = surname,
-		c.email = email,
-		c.phone = phone
-	WHERE c.client_id = id;
-commit;
 end$$
 
 -- changing account info, if company from app
@@ -469,8 +492,8 @@ create procedure remove_product(
 )
 begin
 start transaction;
-	DELETE FROM products p
-	WHERE p.product_id = product_id; 
+	DELETE FROM products
+	WHERE products.product_id = product_id; 
 commit;
 end$$
 
@@ -480,61 +503,76 @@ create procedure remove_type(
 )
 begin
 start transaction;
+	if type_id = 0 then
+		rollback;
+	end if;
+
 	UPDATE products p
 	SET p.type_id = 0
 	WHERE p.type_id = type_id;
 
-	DELETE FROM product_types p
-	WHERE p.type_id = type_id;
+	DELETE FROM product_types
+	WHERE product_types.type_id = type_id;
 commit;
 end$$
 
--- adding discount from app
--- if given discount is null or equals 0, removes discount
--- exit_code = -1: discount < 0
-create procedure add_discount(
-	IN product_id int,
-	IN discount int,
-	OUT exit_code int
+-- remove color
+create procedure remove_color(
+	IN color_id int
 )
 begin
 start transaction;
-	if discount = 0 then
-		UPDATE products p
-		SET p.discount = null
-		WHERE p.product_id = product_id;
-	elseif discount < 0 then
-		SET exit_code = -1;
-		rollback;
-	else
-		UPDATE products p
-		SET p.discount = discount
-		WHERE p.product_id = product_id;
-	end if;
-
-	SET exit_code = 0;
-commit;
-end$$
-
--- changing product price from app
--- exit_code = -1: price <= 0
-create procedure change_price(
-	IN product_id int,
-	IN price float,
-	OUT exit_code int
-)
-begin
-start transaction;
-	if price <= 0 then
-		SET exit_code = -1;
+	if color_id = 0 then
 		rollback;
 	end if;
 
 	UPDATE products p 
-	SET p.price = price
-	WHERE p.product_id = product_id;
+	SET p.color_id = 0
+	WHERE p.color_id = color_id;
 
-	SET exit_code = 0;
+	DELETE FROM product_colors 
+	WHERE product_colors.color_id = color_id;
+commit;
+end$$
+
+-- removing photos
+create procedure remove_photo(
+	IN photo_id int
+)
+begin
+start transaction;
+	DELETE FROM photos
+	WHERE photos.photo_id = photo_id;
+commit;
+end$$
+
+-- changing price
+create procedure change_price(
+	IN product_id int,
+	IN new_price int
+)
+begin
+start transaction;
+	UPDATE products p
+	SET p.price = new_price
+	WHERE p.product_id = product_id;
+commit;
+end$$
+
+-- changing discount
+create procedure change_discount(
+	IN product_id int,
+	IN new_discount int
+) 
+begin
+start transaction;
+	if new_discount = 0 then
+		SET new_discount = null;
+	end if;
+
+	UPDATE products p
+	SET p.discount = new_discount
+	WHERE p.product_id = product_id;
 commit;
 end$$
 
