@@ -9,15 +9,22 @@ create procedure add_client(
 	IN email varchar(255),
 	IN phone varchar(15),
 	IN NIP char(10),
-	IN cookies boolean
+	IN cookies boolean,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare user int;
 	declare cid int;
 	
 	declare ready_to_commit boolean default true;
+	declare error_msg varchar(255);
     declare continue handler for sqlexception
+	begin
         SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		INSERT INTO users(login, password, acc_type)
@@ -39,13 +46,27 @@ begin
 		FROM clients c
 		WHERE c.user_id = user;
 
-		INSERT INTO orders(client_id, status)
-		VALUES(cid, 'cart');
+		if cid is not null then
+			INSERT INTO orders(client_id, status)
+			VALUES(cid, 'cart');
+		end if;
 	if ready_to_commit then
 		commit;
 	else 
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('login_unique', error_msg) > 0 then 'Uzytkownik z takim loginem juz istnieje.'
+		when locate('clients_email_unique', error_msg) > 0 then 'Ten email jest juz zarejestrowany na innego uzytkownika.'
+		when locate('clients_phone_unique', error_msg) > 0 then 'Ten numer telefonu jest juz zarejestrowany na innego uzytkownika'
+		when locate('clients_NIP_unique', error_msg) > 0 then 'Ten NIP jest juz zarejestrowany na innego uzytkownika'
+		when locate('clients_email_check', error_msg) > 0 then 'Niepoprawny adres email'
+		when locate('clients_phone_check', error_msg) > 0 then 'Niepoprawny numer telefonu'
+		when locate('clients_NIP_check', error_msg) > 0 then 'Niepoprawny NIP'
+		when error_msg is not null then error_msg
+		else CONCAT('Dodano nowego klienta: ', login, '.')
+ 	end;
 end$$
 
 create procedure change_acc_info_individual(
@@ -53,15 +74,23 @@ create procedure change_acc_info_individual(
 	IN name varchar(255),
 	IN surname varchar(255),
 	IN email varchar(255),
-	IN phone varchar(15)
+	IN phone varchar(15),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 	start transaction;
 		if (SELECT type FROM clients WHERE client_id = id) not like '%individual%' then
 			SET ready_to_commit = false;
+			SET error_msg = 'wrong type';
 		end if;
 
 		UPDATE clients c
@@ -75,6 +104,17 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('clients_email_unique', error_msg) > 0 then 'Ten email jest juz zarejestrowany na innego uzytkownika.'
+		when locate('clients_phone_unique', error_msg) > 0 then 'Ten numer telefonu jest juz zarejestrowany na innego uzytkownika'
+		when locate('clients_NIP_unique', error_msg) > 0 then 'Ten NIP jest juz zarejestrowany na innego uzytkownika'
+		when locate('clients_email_check', error_msg) > 0 then 'Niepoprawny adres email'
+		when locate('clients_phone_check', error_msg) > 0 then 'Niepoprawny numer telefonu'
+		when locate('clients_NIP_check', error_msg) > 0 then 'Niepoprawny NIP'
+		when error_msg is not null then error_msg
+		else 'Zmieniono dane.'
+ 	end;
 end$$
 
 create procedure change_acc_info_company(
@@ -82,12 +122,19 @@ create procedure change_acc_info_company(
 	IN company_name varchar(255),
 	IN NIP varchar(255),
 	IN email varchar(255),
-	IN phone varchar(15)
+	IN phone varchar(15),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 	start transaction;
 		if (SELECT type FROM clients WHERE client_id = id) not like '%company%' then
 			SET ready_to_commit = false;
@@ -104,6 +151,17 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('clients_email_unique', error_msg) > 0 then 'Ten email jest juz zarejestrowany na innego uzytkownika.'
+		when locate('clients_phone_unique', error_msg) > 0 then 'Ten numer telefonu jest juz zarejestrowany na innego uzytkownika'
+		when locate('clients_NIP_unique', error_msg) > 0 then 'Ten NIP jest juz zarejestrowany na innego uzytkownika'
+		when locate('clients_email_check', error_msg) > 0 then 'Niepoprawny adres email'
+		when locate('clients_phone_check', error_msg) > 0 then 'Niepoprawny numer telefonu'
+		when locate('clients_NIP_check', error_msg) > 0 then 'Niepoprawny NIP'
+		when error_msg is not null then error_msg
+		else 'Zmieniono dane.'
+ 	end;
 end$$
 
 create procedure change_address(
@@ -112,14 +170,21 @@ create procedure change_address(
 	IN house_number int,
 	IN apartment_number int,
 	IN city varchar(255),
-	IN postal_code varchar(6)
+	IN postal_code varchar(6),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare id int;
 
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	SELECT a.address_id INTO id
 	FROM addresses a
@@ -151,19 +216,32 @@ begin
 	else 
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('addresses_postal_code_check', error_msg) > 0 then 'Niepoprawny kod pocztowy.'
+		when error_msg is not null then error_msg
+		else 'Zmieniono adres.'
+ 	end;
 end$$
 
 create procedure add_order_pos(
 	IN client_id int,
 	IN warehouse_id int,
-	IN amount int
+	IN amount int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare oid int;
 
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	SELECT o.order_id INTO oid
 	FROM orders o
@@ -175,10 +253,7 @@ begin
 		WHERE w.warehouse_id = warehouse_id
 	) < amount then
 		SET ready_to_commit = false;
-	end if;
-
-	if amount <= 0 then
-		SET ready_to_commit = false;
+		SET error_msg = 'Produkt w danej ilosci nie jest obecnie dostepny.';
 	end if;
 
 	start transaction;
@@ -189,20 +264,34 @@ begin
 	else 
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('order_pos_unique', error_msg) then 'Ten produkt jest juz w koszyku.'
+		when locate('order_pos_amount_check', error_msg) then 'Niepoprawna liczba produktow.'
+		when error_msg is not null then error_msg
+		else 'Dodano nowa pozycje do koszyka.'
+	end;
 end$$
 
 create procedure edit_order_pos(
 	IN client_id int,
 	IN pos_id int,
-	IN new_amount int
+	IN new_amount int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare oid int;
 	declare wid int;
 
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	SELECT o.order_id INTO oid
 	FROM orders o
@@ -214,6 +303,7 @@ begin
 		WHERE o.pos_id = pos_id
 	) <> oid then 
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie mozna zmienic ilosci produktow ze zlozonego zamowienia.';
 	end if;
 
 	SELECT o.warehouse_id INTO wid
@@ -226,6 +316,7 @@ begin
 		WHERE w.warehouse_id = wid
 	) < new_amount then	
 		SET ready_to_commit = false;
+		SET error_msg = 'Produkt w danej ilosci nie jest obecnie dostepny.';
 	end if;
 
 	start transaction;
@@ -237,18 +328,32 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('order_pos_unique', error_msg) then 'Ten produkt jest juz w koszyku.'
+		when locate('order_pos_amount_check', error_msg) then 'Niepoprawna liczba produktow.'
+		when error_msg is not null then error_msg
+		else 'Edytowno ilosc pozycji z koszyka.'
+	end;
 end$$
 
 create procedure remove_order_pos(
 	IN client_id int,
-	IN pos_id int
+	IN pos_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare oid int;
 
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	SELECT o.order_id INTO oid
 	FROM orders o
@@ -260,6 +365,7 @@ begin
 		WHERE o.pos_id = pos_id
 	) <> oid then 
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie mozna usunac pozycji ze zlozonego zamowienia.';
 	end if;
 	
 	start transaction;
@@ -270,18 +376,30 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case 
+		when error_msg is not null then error_msg
+		else 'Usunieto pozycje z koszyka.'
+	end;
 end$$
 
 create procedure place_order(
 	IN client_id int,
-	IN invoice boolean
+	IN invoice boolean,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare oid int;
 
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	SELECT o.order_id INTO oid
 	FROM orders o
@@ -293,6 +411,7 @@ begin
 		WHERE o.order_id = oid
 	) = 0 then
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie mozna zlozyc pustego zamowienia.';
 	end if;
 
 	if (SELECT c.type FROM clients c WHERE c.client_id = client_id) like '%individual%' AND (
@@ -302,6 +421,7 @@ begin
 		invoice = true
 	) then
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie znamy wszystkich danych niezbednych do zlozenia zamowienia';
 	end if;
 
 	if (SELECT c.type FROM clients c WHERE c.client_id = client_id) like '%company%' AND (
@@ -311,6 +431,7 @@ begin
 		invoice = false
 	) then
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie znamy wszystkich danych niezbednych do zlozenia zamowienia';
 	end if;
 	
 	start transaction;
@@ -319,7 +440,8 @@ begin
 			FROM order_pos o JOIN warehouse w ON o.warehouse_id = w.warehouse_id
 			WHERE w.reserved + o.amount > w.amount AND o.order_id = oid
 		) > 0 then
-			set ready_to_commit = false;
+			SET ready_to_commit = false;
+			SET error_msg = 'Niektore pozycje z koszyka nie sa juz dostepne';
 		else 
 			UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
 			SET w.reserved = w.reserved + o.amount
@@ -338,15 +460,27 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Zlozono zamowienie'
+	end;
 end$$
 
 create procedure pay_order(
-	IN order_id int
+	IN order_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	if (
 		SELECT o.status
@@ -354,6 +488,7 @@ begin
 		WHERE o.order_id = order_id
 	) not like '%placed%' then
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie mozna oplacic niezlozonego zamowienia.';
 	end if;
 
 	start transaction;
@@ -365,15 +500,27 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Oplacono zamowienie.'
+	end;
 end$$
 
 create procedure cancel_order(
-	IN order_id int
+	IN order_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 		
 	if (
 		SELECT o.status
@@ -385,6 +532,7 @@ begin
 		WHERE o.order_id = order_id
 	) not like '%paid%' then
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie mozna anulowac zamowienia.';
 	end if;
 	
 	start transaction;
@@ -400,15 +548,27 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET error_msg = case
+		when error_msg is not null then error_msg
+		else 'Anulowano zamowienie.'
+	end;
 end$$
 
 create procedure report_return(
-	IN order_id int
+	IN order_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 	
 	if (
 		SELECT o.status
@@ -416,6 +576,7 @@ begin
 		WHERE o.order_id = order_id
 	) not like '%completed%' then
 		SET ready_to_commit = false;
+		SET error_msg = 'Nie mozna zwrocic zamowienia, ktore nie zostalo dostarczone.';
 	end if;
 
 	start transaction;
@@ -427,17 +588,29 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Zgloszono zwrot.'
+	end;
 end$$
 
 -- salesman
 
 create procedure add_type(
-	IN type varchar(255)
+	IN type varchar(255),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		INSERT INTO product_types(type)
@@ -447,18 +620,36 @@ begin
 	else 
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('product_types_unique', error_msg) > 0 then 'Taki typ jest juz w bazie.'
+		when error_msg is not null then error_msg
+		else 'Dodano nowy typ produktow.'
+	end;
 end$$
 
 create procedure edit_type(
 	IN type_id int,
-	IN type varchar(255)
+	IN type varchar(255),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
+		if type_id = 1 then
+			SET ready_to_commit = false;
+			SET error_msg = 'Nie mozna edytowac tego typu.';
+		end if;
+
 		UPDATE product_types p
 		SET p.type = type
 		WHERE p.type_id = type_id;
@@ -467,19 +658,33 @@ begin
 	else 
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('product_types_unique', error_msg) > 0 then 'Taki typ jest juz w bazie.'
+		when error_msg is not null then error_msg
+		else 'Edytowano typ produktow.'
+	end;
 end$$
 
 create procedure remove_type(
-	IN type_id int
+	IN type_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		if type_id = 1 then
 			SET ready_to_commit = false;
+			SET error_msg = 'Nie mozna usunac tego typu.';
 		end if;
 
 		UPDATE products p
@@ -493,16 +698,28 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Usunieto typ produktow.'
+	end;
 end$$
 
 create procedure add_color(
 	IN name varchar(255),
-	IN code varchar(255)
+	IN code varchar(255),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		INSERT INTO product_colors(name, code)
@@ -512,19 +729,38 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('product_colors_name_unique', error_msg) > 0 then 'Kolor o takiej nazwie jest juz w bazie.'
+		when locate('product_colors_code_unique', error_msg) > 0 then 'Ten kolor jest juz w bazie.'
+		when error_msg is not null then error_msg
+		else 'Dodano nowy kolor.'
+	end;
 end$$
 
 create procedure edit_color(
 	IN color_id int,
 	IN name varchar(255),
-	IN code varchar(255)
+	IN code varchar(255),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
+		if color_id = 1 then
+			SET ready_to_commit = false;
+			SET error_msg = 'Nie mozna edytowac tego koloru.';
+		end if;
+
 		UPDATE product_colors p
 		SET p.name = name,
 			p.code = code
@@ -534,19 +770,34 @@ begin
 	else 
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('product_colors_name_unique', error_msg) > 0 then 'Kolor o takiej nazwie jest juz w bazie.'
+		when locate('product_colors_code_unique', error_msg) > 0 then 'Ten kolor jest juz w bazie.'
+		when error_msg is not null then error_msg
+		else 'Edytowano kolor.'
+	end;
 end$$
 
 create procedure remove_color(
-	IN color_id int
+	IN color_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		if color_id = 1 then
 			SET ready_to_commit = false;
+			SET error_msg = 'Nie mozna usunac tego koloru.';
 		end if;
 
 		UPDATE products p 
@@ -560,6 +811,11 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Usunieto kolor.'
+	end;
 end$$
 
 create procedure add_product(
@@ -567,12 +823,19 @@ create procedure add_product(
 	IN category enum('men', 'women', 'boys', 'girls'),
 	IN type_id int,
 	IN color_id int,
-	IN price decimal(4, 2)
+	IN price decimal(4, 2),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		INSERT INTO products(name, category, type_id, color_id, price)
@@ -582,6 +845,13 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('products_unique', error_msg) > 0 then 'Taki produkt jest juz w bazie.'
+		when locate('products_price_check', error_msg) > 0 then 'Nieprawidlowa cena.'
+		when error_msg is not null then error_msg
+		else 'Dodano nowy produkt.'
+	end;
 end$$
 
 create procedure edit_product(
@@ -589,12 +859,19 @@ create procedure edit_product(
 	IN name varchar(255),
 	IN category enum('men', 'women', 'boys', 'girls'),
 	IN type_id int,
-	IN color_id int
+	IN color_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		UPDATE products p
@@ -608,16 +885,29 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('products_unique', error_msg) > 0 then 'Taki produkt jest juz w bazie.'
+		when error_msg is not null then error_msg
+		else 'Edytowano produkt.'
+	end;
 end$$
 
 create procedure add_photo(
 	IN product_id int,
-	IN path varchar(255)
+	IN path varchar(255),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		INSERT INTO photos(product_id, path)
@@ -627,15 +917,28 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('photos_unique', error_msg) > 0 then 'To zdjecie juz zostalo dodane.'
+		when error_msg is not null then error_msg
+		else 'Dodano zdjecie.'
+	end;
 end$$
 
 create procedure remove_photo(
-	IN photo_id int
+	IN photo_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		DELETE FROM photos
@@ -645,16 +948,28 @@ begin
 	else 
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Usunieto zdjecie.'
+	end;
 end$$
 
 create procedure change_price(
 	IN product_id int,
-	IN new_price decimal(4, 2)
+	IN new_price decimal(4, 2),
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false; 
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end; 
 
 	start transaction;
 		UPDATE products p
@@ -671,22 +986,35 @@ begin
 			WHERE OP.order_id = o.order_id
 			GROUP BY OP.order_id
 		)
-		WHERE p.product_id = product_id;
+		WHERE p.product_id = product_id AND o.status LIKE '%cart%';
 	if ready_to_commit then
 		commit;
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('products_price_check', error_msg) > 0 then 'Nieprawidlowa cena.'
+		when error_msg is not null then error_msg
+		else 'Zmieniono cene.'
+	end;
 end$$
 
 create procedure change_discount(
 	IN product_id int,
-	IN new_discount int
+	IN new_discount int,
+	OUT exit_msg varchar(255)
 ) 
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	start transaction;
 		if new_discount = 0 then
@@ -707,12 +1035,18 @@ begin
 			WHERE OP.order_id = o.order_id
 			GROUP BY OP.order_id
 		)
-		WHERE p.product_id = product_id;
+		WHERE p.product_id = product_id AND o.status LIKE '%cart%';
 	if ready_to_commit then
 		commit;
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when locate('products_discount_check', error_msg) > 0 then 'Nieprawidlowa znizka.'
+		when error_msg is not null then error_msg
+		else 'Zmieniono znizke.'
+	end;
 end$$
 
 -- warehouse_manager
@@ -720,21 +1054,29 @@ end$$
 create procedure add_warehouse(
 	IN product_id int,
 	IN size enum('XS', 'S', 'M', 'L', 'XL'),
-	IN amount int
+	IN amount int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare wid int;
 
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	SELECT w.warehouse_id INTO wid
 	FROM warehouse w
 	WHERE w.product_id = product_id AND w.size LIKE size;
 
 	if amount <= 0 then
-		set ready_to_commit = false;
+		SET ready_to_commit = false;
+		SET error_msg = 'Nieprawidlowa ilosc.';
 	end if;
 
 	start transaction;
@@ -751,16 +1093,28 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET error_msg = case
+		when error_msg is not null then error_msg
+		else 'Dodano produkty do magazynu.'
+	end;
 end$$
 
 create procedure edit_warehouse(
 	IN warehouse_id int,
-	IN amount int
+	IN amount int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 	
 	start transaction;
 		UPDATE warehouse w
@@ -771,17 +1125,30 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET error_msg = case
+		when locate('warehouse_amount_check', error_msg) > 0 then 'Nieprawidlowa ilosc koncowa.'
+		when error_msg is not null then error_msg
+		else 'Dodano produkty do magazynu.'
+	end;
 end$$
 
 create procedure complete_order(
-	IN order_id int
+	IN order_id int,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare cid int;
 
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 
 	SELECT o.client_id INTO cid
 	FROM orders o
@@ -801,7 +1168,8 @@ begin
 			FROM order_pos o JOIN warehouse w ON o.warehouse_id = w.warehouse_id
 			WHERE w.amount - o.amount < 0 AND o.order_id = order_id
 		) > 0 then
-			set ready_to_commit = false;
+			SET ready_to_commit = false;
+			SET error_msg = 'Niektore pozycje nie sa obecnie dostepne.';
 		else 
 			UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
 			SET w.reserved = w.reserved - o.amount,
@@ -829,16 +1197,28 @@ begin
 	else
 		rollback;
 	end if;
+
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Zamowienie wykonane.'
+	end;
 end$$
 
 create procedure consider_return(
 	IN order_id int,
-	IN accept boolean
+	IN accept boolean,
+	OUT exit_msg varchar(255)
 )
 begin
 	declare ready_to_commit boolean default true;
-	declare continue handler for sqlexception
-		SET ready_to_commit = false;
+	declare error_msg varchar(255);
+    declare continue handler for sqlexception
+	begin
+        SET ready_to_commit = false;
+		if error_msg is null then
+			get diagnostics condition 1 error_msg = message_text;
+		end if;
+	end;
 	
 	start transaction;
 		if accept then
@@ -859,6 +1239,11 @@ begin
 	else
 		rollback;
 	end if;
+	
+	SET exit_msg = case
+		when error_msg is not null then error_msg
+		else 'Zwrot rozpatrzony.'
+	end;
 end$$
 
 delimiter ;
