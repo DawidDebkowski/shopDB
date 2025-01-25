@@ -141,3 +141,12 @@ call cancel_order(1);
 call add_order_pos(1, 4, 1);
 -- bledne
 call cancel_order(13);
+call place_order(1, true);
+
+call place_order(1, false);
+call pay_order(13);
+call complete_order(13);
+-- bledne
+call complete_order(1);
+call complete_order(2);
+call complete_order(3);

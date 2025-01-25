@@ -736,4 +736,44 @@ begin
 	end if;
 end$$
 
+create procedure complete_order(
+	IN order_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+	
+	if (
+		SELECT o.status
+		FROM orders o
+		WHERE o.order_id = order_id
+	) not like '%paid%' then
+		SET ready_to_commit = false;
+	end if;
+
+	start transaction;
+		if (
+			SELECT COALESCE(COUNT(o.warehouse_id), 0)
+			FROM order_pos o JOIN warehouse w ON o.warehouse_id = w.warehouse_id
+			WHERE w.amount - o.amount < 0 AND o.order_id = order_id
+		) > 0 then
+			set ready_to_commit = false;
+		else 
+			UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
+			SET w.reserved = w.reserved - o.amount,
+				w.amount = w.amount - o.amount
+			WHERE o.order_id = order_id;
+		end if;
+
+		UPDATE orders o
+		SET o.status = 'completed'
+		WHERE o.order_id = order_id;
+	if ready_to_commit then	
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
 delimiter ;
