@@ -402,6 +402,33 @@ begin
 	end if;
 end$$
 
+create procedure report_return(
+	IN order_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+	
+	if (
+		SELECT o.status
+		FROM orders o
+		WHERE o.order_id = order_id
+	) not like '%completed%' then
+		SET ready_to_commit = false;
+	end if;
+
+	start transaction;
+		UPDATE orders o
+		SET o.status = 'return reported'
+		WHERE o.order_id = order_id; 
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
 -- salesman
 
 create procedure add_type(
@@ -796,6 +823,36 @@ begin
 					(SELECT c.NIP FROM clients c WHERE c.client_id = cid),
 					(SELECT c.company_name FROM clients c WHERE c.client_id = cid),
 					(SELECT c.address_id FROM clients c WHERE c.client_id = cid));
+		end if;
+	if ready_to_commit then	
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure consider_return(
+	IN order_id int,
+	IN accept boolean
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+	
+	start transaction;
+		if accept then
+			UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
+			SET w.amount = w.amount + o.amount
+			WHERE o.order_id = order_id;
+
+			UPDATE orders o
+			SET o.status = 'returned'
+			WHERE o.order_id = order_id;
+		else
+			UPDATE orders o
+			SET o.status = 'completed'
+			WHERE o.order_id = order_id;
 		end if;
 	if ready_to_commit then	
 		commit;

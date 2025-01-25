@@ -155,3 +155,9 @@ call add_order_pos(6, 5, 3);
 call place_order(6, true);
 call pay_order(6);
 call complete_order(6);
+
+call report_return(6);
+call report_return(13);
+
+call consider_return(6, true);
+call consider_return(13, false);
