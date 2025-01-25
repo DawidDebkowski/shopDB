@@ -1,6 +1,5 @@
 -- reset bazy danych
 source database.sql;
-source proc.sql;
 
 -- typy produktow
 call add_type('koszulka');
