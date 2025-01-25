@@ -129,3 +129,15 @@ call add_order_pos(1, 5, 1);
 call edit_order_pos(1, 4, 7);
 call place_order(3, false);
 -- wynik: 2 zlozone zamowienia, 1 zamowienie z produktami
+
+call pay_order(1);
+-- bledne
+call pay_order(9);
+-- wynik: 1 zlozone, 1 oplacone, 1 koszyk
+
+call place_order(1, false);
+call cancel_order(9);
+call cancel_order(1);
+call add_order_pos(1, 4, 1);
+-- bledne
+call cancel_order(13);

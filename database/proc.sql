@@ -292,7 +292,15 @@ begin
 		FROM order_pos o
 		WHERE o.order_id = oid
 	) = 0 then
-		set ready_to_commit = false;
+		SET ready_to_commit = false;
+	end if;
+
+	if ((
+		SELECT c.type
+		FROM clients c
+		WHERE c.client_id = client_id
+	) like '%individual%') = invoice then
+		SET ready_to_commit = false;
 	end if;
 	
 	start transaction;
@@ -315,6 +323,68 @@ begin
 
 		INSERT INTO orders (client_id, status)
 		VALUES (client_id, 'cart');
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure pay_order(
+	IN order_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+
+	if (
+		SELECT o.status
+		FROM orders o
+		WHERE o.order_id = order_id
+	) not like '%placed%' then
+		SET ready_to_commit = false;
+	end if;
+
+	start transaction;
+		UPDATE orders o
+		SET o.status = 'paid'
+		WHERE o.order_id = order_id;
+	if ready_to_commit then
+		commit;
+	else
+		rollback;
+	end if;
+end$$
+
+create procedure cancel_order(
+	IN order_id int
+)
+begin
+	declare ready_to_commit boolean default true;
+	declare continue handler for sqlexception
+		SET ready_to_commit = false;
+		
+	if (
+		SELECT o.status
+		FROM orders o
+		WHERE o.order_id = order_id
+	) not like '%placed%' and (
+		SELECT o.status
+		FROM orders o
+		WHERE o.order_id = order_id
+	) not like '%paid%' then
+		SET ready_to_commit = false;
+	end if;
+	
+	start transaction;
+		UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
+		SET w.reserved = w.reserved - o.amount
+		WHERE o.order_id = order_id;
+
+		UPDATE orders o
+		SET o.status = 'cancelled'
+		WHERE o.order_id = order_id;
 	if ready_to_commit then
 		commit;
 	else
