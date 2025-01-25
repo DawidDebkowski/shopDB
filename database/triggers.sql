@@ -6,20 +6,14 @@ create trigger AI_order_pos_value
     after insert on order_pos
     for each row
 begin
-    declare value int;
-    declare price int;
-
-    SELECT o.value INTO value 
-    FROM orders o
-    WHERE new.order_id = o.order_id;
-
-    SELECT p.price INTO price 
-    FROM products p JOIN warehouse w ON p.product_id = w.product_id
-    WHERE new.warehouse_id = w.warehouse_id;
-
-    SET value = value + price * new.amount;
-
-    UPDATE orders o SET o.value = value
+    UPDATE orders o
+    SET o.value = (
+        SELECT SUM(p.price * (100 - COALESCE(p.discount, 0)) / 100 * op.amount)
+        FROM products p JOIN warehouse w ON p.product_id = w.product_id
+            JOIN order_pos op ON w.warehouse_id = op.warehouse_id
+        WHERE op.order_id = new.order_id
+        GROUP BY op.order_id
+    )
     WHERE o.order_id = new.order_id;
 end $$
 
@@ -27,49 +21,39 @@ create trigger AU_order_pos_value
     after update on order_pos
     for each row
 begin
-    declare value int;
-    declare price int;
-
-    if new.amount <> old.amount THEN
-        SELECT o.value INTO value FROM orders o
-        WHERE new.order_id = o.order_id;
-
-        SELECT p.price INTO price 
+    UPDATE orders o
+    SET o.value = (
+        SELECT SUM(p.price * (100 - COALESCE(p.discount, 0)) / 100 * op.amount)
         FROM products p JOIN warehouse w ON p.product_id = w.product_id
-        WHERE new.warehouse_id = w.warehouse_id;
+            JOIN order_pos op ON w.warehouse_id = op.warehouse_id
+        WHERE op.order_id = old.order_id
+        GROUP BY op.order_id
+    )
+    WHERE o.order_id = old.order_id;
 
-        SET value = value + price * new.amount;
-
-        if old.warehouse_id <> new.warehouse_id then
-            SELECT p.price INTO price 
-            FROM products p JOIN warehouse w ON p.product_id = w.product_id
-            WHERE old.warehouse_id = w.warehouse_id;
-        end if;
-
-        SET value = value - price * old.amount;
-
-        UPDATE orders o SET o.value = value
-        WHERE o.order_id = new.order_id;
-    end if;
+    UPDATE orders o
+    SET o.value = (
+        SELECT SUM(p.price * (100 - COALESCE(p.discount, 0)) / 100 * op.amount)
+        FROM products p JOIN warehouse w ON p.product_id = w.product_id
+            JOIN order_pos op ON w.warehouse_id = op.warehouse_id
+        WHERE op.order_id = new.order_id
+        GROUP BY op.order_id
+    )
+    WHERE o.order_id = new.order_id;
 end $$
 
 create trigger AD_order_pos_value
     after delete on order_pos
     for each row
 begin
-    declare value int;
-    declare price int;
-    
-    SELECT o.value INTO value FROM orders o
-    WHERE old.order_id = o.order_id;
-
-    SELECT p.price INTO price 
-    FROM products p JOIN warehouse w ON p.product_id = w.product_id
-    WHERE old.warehouse_id = w.warehouse_id;
-
-    SET value = value - price * old.amount;
-
-    UPDATE orders o SET o.value = value
+    UPDATE orders o
+    SET o.value = (
+        SELECT SUM(p.price * (100 - COALESCE(p.discount, 0)) / 100 * op.amount)
+        FROM products p JOIN warehouse w ON p.product_id = w.product_id
+            JOIN order_pos op ON w.warehouse_id = op.warehouse_id
+        WHERE op.order_id = old.order_id
+        GROUP BY op.order_id
+    )
     WHERE o.order_id = old.order_id;
 end $$
 

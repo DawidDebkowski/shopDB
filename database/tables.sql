@@ -79,7 +79,7 @@ create table orders(
 	invoice boolean,
 	invoice_id int,
 	status enum('cart', 'placed', 'paid', 'cancelled', 'completed', 'return reported', 'returned') not null,
-	value int not null default 0
+	value decimal(10, 2) not null default 0
 );
 
 create table order_pos(

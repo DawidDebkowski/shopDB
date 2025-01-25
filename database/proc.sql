@@ -272,7 +272,6 @@ begin
 	end if;
 end$$
 
--- NOT READY
 create procedure place_order(
 	IN client_id int,
 	IN invoice boolean
@@ -297,14 +296,25 @@ begin
 	end if;
 	
 	start transaction;
-		UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
-		SET w.reserved = w.reserved + o.amount
-		WHERE o.order_id = oid;
+		if (
+			SELECT COALESCE(COUNT(o.warehouse_id), 0)
+			FROM order_pos o JOIN warehouse w ON o.warehouse_id = w.warehouse_id
+			WHERE w.reserved + o.amount > w.amount AND o.order_id = oid
+		) > 0 then
+			set ready_to_commit = false;
+		else 
+			UPDATE warehouse w JOIN order_pos o ON w.warehouse_id = o.warehouse_id
+			SET w.reserved = w.reserved + o.amount
+			WHERE o.order_id = oid;
+		end if;
 
 		UPDATE orders o
 		SET o.invoice = invoice,
 			o.status = 'placed'
-		WHERE o.order_id = order_id; 
+		WHERE o.order_id = oid; 
+
+		INSERT INTO orders (client_id, status)
+		VALUES (client_id, 'cart');
 	if ready_to_commit then
 		commit;
 	else
@@ -450,7 +460,7 @@ create procedure add_product(
 	IN category enum('men', 'women', 'boys', 'girls'),
 	IN type_id int,
 	IN color_id int,
-	IN price float
+	IN price decimal(4, 2)
 )
 begin
 	declare ready_to_commit boolean default true;
@@ -532,7 +542,7 @@ end$$
 
 create procedure change_price(
 	IN product_id int,
-	IN new_price float
+	IN new_price decimal(4, 2)
 )
 begin
 	declare ready_to_commit boolean default true;
@@ -542,6 +552,18 @@ begin
 	start transaction;
 		UPDATE products p
 		SET p.price = new_price
+		WHERE p.product_id = product_id;
+
+		UPDATE orders o JOIN order_pos op ON o.order_id = op.order_id
+			JOIN warehouse w ON w.warehouse_id = op.warehouse_id
+			JOIN products p ON p.product_id = w.product_id
+		SET o.value = (
+			SELECT SUM(P.price * (100 - COALESCE(P.discount, 0)) / 100 * op.amount)
+			FROM products P JOIN warehouse W ON P.product_id = W.product_id
+				JOIN order_pos OP ON W.warehouse_id = OP.warehouse_id
+			WHERE OP.order_id = o.order_id
+			GROUP BY OP.order_id
+		)
 		WHERE p.product_id = product_id;
 	if ready_to_commit then
 		commit;
@@ -566,6 +588,18 @@ begin
 
 		UPDATE products p
 		SET p.discount = new_discount
+		WHERE p.product_id = product_id;
+
+		UPDATE orders o JOIN order_pos op ON o.order_id = op.order_id
+			JOIN warehouse w ON w.warehouse_id = op.warehouse_id
+			JOIN products p ON p.product_id = w.product_id
+		SET o.value = (
+			SELECT SUM(P.price * (100 - COALESCE(P.discount, 0)) / 100 * op.amount)
+			FROM products P JOIN warehouse W ON P.product_id = W.product_id
+				JOIN order_pos OP ON W.warehouse_id = OP.warehouse_id
+			WHERE OP.order_id = o.order_id
+			GROUP BY OP.order_id
+		)
 		WHERE p.product_id = product_id;
 	if ready_to_commit then
 		commit;

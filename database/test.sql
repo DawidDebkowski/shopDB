@@ -110,3 +110,22 @@ call change_address(4, 'ulica3', 3, 2, 'miasto3', '33-333');
 call change_address(6, 'ulica4', 4, null, 'miasto4', '44-444');
 call change_address(6, 'ulica1', 1, null, 'miasto1', '11-111');
 -- wynik (4 adresy, klienci 1, 2, 3, 4, 6 maja adresy, w tym 1, 2, 6 taki sam)
+
+-- zamowienia
+call add_order_pos(1, 2, 1);
+call add_order_pos(2, 2, 2);
+call change_price(1, 39.99);
+call change_discount(1, 0);
+call place_order(1, false);
+call add_order_pos(1, 4, 1);
+-- bledne
+call place_order(2, false);
+-- wynik: 1 zlozone zamowienie, 1 zamowienie z produktami
+
+call edit_order_pos(2, 2, 1);
+call place_order(2, false);
+call add_order_pos(1, 5, 1);
+-- bledne
+call edit_order_pos(1, 4, 7);
+call place_order(3, false);
+-- wynik: 2 zlozone zamowienia, 1 zamowienie z produktami
