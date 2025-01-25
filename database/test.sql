@@ -150,3 +150,8 @@ call complete_order(13);
 call complete_order(1);
 call complete_order(2);
 call complete_order(3);
+
+call add_order_pos(6, 5, 3);
+call place_order(6, true);
+call pay_order(6);
+call complete_order(6);

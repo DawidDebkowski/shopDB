@@ -295,11 +295,21 @@ begin
 		SET ready_to_commit = false;
 	end if;
 
-	if ((
-		SELECT c.type
-		FROM clients c
-		WHERE c.client_id = client_id
-	) like '%individual%') = invoice then
+	if (SELECT c.type FROM clients c WHERE c.client_id = client_id) like '%individual%' AND (
+		(SELECT c.name FROM clients c WHERE c.client_id = client_id) is null OR
+		(SELECT c.surname FROM clients c WHERE c.client_id = client_id) is null OR
+		(SELECT c.address_id FROM clients c WHERE c.client_id = client_id) is null OR 
+		invoice = true
+	) then
+		SET ready_to_commit = false;
+	end if;
+
+	if (SELECT c.type FROM clients c WHERE c.client_id = client_id) like '%company%' AND (
+		(SELECT c.company_name FROM clients c WHERE c.client_id = client_id) is null OR
+		(SELECT c.NIP FROM clients c WHERE c.client_id = client_id) is null OR
+		(SELECT c.address_id FROM clients c WHERE c.client_id = client_id) is null OR 
+		invoice = false
+	) then
 		SET ready_to_commit = false;
 	end if;
 	
@@ -740,9 +750,15 @@ create procedure complete_order(
 	IN order_id int
 )
 begin
+	declare cid int;
+
 	declare ready_to_commit boolean default true;
 	declare continue handler for sqlexception
 		SET ready_to_commit = false;
+
+	SELECT o.client_id INTO cid
+	FROM orders o
+	WHERE o.order_id = order_id;
 	
 	if (
 		SELECT o.status
@@ -765,10 +781,22 @@ begin
 				w.amount = w.amount - o.amount
 			WHERE o.order_id = order_id;
 		end if;
-
+		
 		UPDATE orders o
 		SET o.status = 'completed'
 		WHERE o.order_id = order_id;
+		
+		if (
+			SELECT o.invoice
+			FROM orders o
+			WHERE o.order_id = order_id
+		) then
+			INSERT INTO invoices (order_id, NIP, company_name, address_id)
+			VALUES (order_id, 
+					(SELECT c.NIP FROM clients c WHERE c.client_id = cid),
+					(SELECT c.company_name FROM clients c WHERE c.client_id = cid),
+					(SELECT c.address_id FROM clients c WHERE c.client_id = cid));
+		end if;
 	if ready_to_commit then	
 		commit;
 	else
