@@ -33,7 +33,15 @@ create view invoice_view as (
 );
 
 create view product_view as (
-	SELECT p.name, p.category, t.type, c.name AS color, p.price, COALESCE(p.discount, 0) AS discount
+	SELECT p.product_id, p.name, p.category, t.type, c.name AS color, p.price, COALESCE(p.discount, 0) AS discount
 	FROM products p JOIN product_types t ON p.type_id = t.type_id
 		JOIN product_colors c ON p.color_id = c.color_id
+);
+
+create view product_detailed_view as (
+	SELECT p.product_id, p.name, p.category, t.type, c.name AS color, p.price, 
+		COALESCE(p.discount, 0) AS discount, w.size, (w.amount - w.reserved) AS available
+	FROM products p JOIN product_types t ON p.type_id = t.type_id
+		JOIN product_colors c ON p.color_id = c.color_id
+		JOIN warehouse w ON p.product_id = w.product_id
 );

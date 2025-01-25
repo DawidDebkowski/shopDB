@@ -80,4 +80,75 @@ begin
 	deallocate prepare statement;
 end$$
 
+create procedure show_products(
+	IN category enum('men', 'women', 'boys', 'girls'),
+	IN type varchar(255),
+	IN color varchar(255),
+	IN min_price decimal(4, 2),
+	IN max_price decimal(4, 2),
+	IN order_by int
+)
+begin
+	declare query text;
+	declare order_text varchar(255);
+
+	SET order_text = CASE
+		WHEN order_by = 1 THEN 'product_id DESC'
+		WHEN order_by = 2 THEN 'price ASC'
+		WHEN order_by = 3 THEN 'price DESC'
+		WHEN order_by = 4 THEN 'name ASC'
+		ELSE 'product_id ASC'
+	END;
+
+	SET query = CONCAT(
+		'SELECT name, category, type, color, price, discount ',
+		'FROM product_view ',
+		'WHERE category like ? ',
+		'AND type like ? ',
+		'AND color like ? ',
+		'AND price >= ? ',
+		'AND price <= ? ',
+		'ORDER BY ',
+		order_text
+	);
+
+	prepare statement from query;
+
+	execute statement using 
+		COALESCE(category, '%'),
+		COALESCE(type, '%'),
+		COALESCE(color, '%'),
+		COALESCE(min_price, 0),
+		COALESCE(max_price, 10000);
+	deallocate prepare statement;
+end$$
+
+create procedure show_product_details(
+	IN product_id int
+)
+begin
+	prepare statement from CONCAT(
+		'SELECT size, available ',
+		'FROM product_detailed_view ',
+		'WHERE product_id = ?'
+	);
+
+	execute statement using product_id;
+	deallocate prepare statement;
+end$$
+
+create procedure show_paid_orders()
+begin
+	SELECT order_id
+	FROM orders
+	WHERE status LIKE '%paid%';
+end$$
+
+create procedure show_reported_returns()
+begin
+	SELECT order_id
+	FROM orders
+	WHERE status LIKE '%return reported%';
+end$$
+
 delimiter ;
