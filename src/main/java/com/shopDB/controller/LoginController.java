@@ -2,19 +2,27 @@ package com.shopDB.controller;
 
 import com.shopDB.SceneType;
 import com.shopDB.entities.Client;
-import com.shopDB.repository.ClientRepository;
 import com.shopDB.service.ClientService;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.mfxcore.controls.Label;
-import io.github.palexdev.mfxcore.controls.Text;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
+
+//@NamedStoredProcedureQuery(name = "Client.addClient", procedureName = "add_client", parameters = {
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "login", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "password", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "type", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "email", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "phone", type = String.class),
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "cookies", type = boolean.class),
+//})
+//public class Client {
+//    public static final String INDIVIDUAL_TYPE = "individual";
+//    public static final String COMPANY_TYPE = "company";
 
 @Controller
 public class LoginController implements SceneController {
@@ -112,8 +120,9 @@ public class LoginController implements SceneController {
     @FXML
     void onLoginButtonClick(ActionEvent event) {
         if(loginState){
-            setMessage("can't login");
-            clientService.addClient("test", "test1", "individual", "student@gmail.com", "123456789", true);
+//            setMessage("can't login");
+            String mess = clientService.addClient("test", "test1", "individual", "student@gmail.com", "123456789", "0", true);
+            setMessage(mess);
 //            SceneManager.getInstance().setScene(SceneType.LOGIN);
         } else {
             changeState(true );
@@ -148,7 +157,8 @@ public class LoginController implements SceneController {
                 type,
                 emailField.getText(),
                 phoneField.getText(),
-                cookiesCheckbox.isSelected()
+                nipField.getText(),
+                cookies
         );
         setMessage("can't register");
         SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);

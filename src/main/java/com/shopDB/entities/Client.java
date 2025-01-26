@@ -15,7 +15,6 @@ import jakarta.persistence.*;
 public class Client {
     public static final String INDIVIDUAL_TYPE = "individual";
     public static final String COMPANY_TYPE = "company";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "client_id", nullable = false)
@@ -44,7 +43,11 @@ public class Client {
     @Column(name = "phone", nullable = false, length = 15)
     private String phone;
 
-    @Column(name = "NIP", nullable = false, length = 10)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @Column(name = "NIP", length = 10)
     private String nip;
 
     @Column(name = "RODO")
@@ -118,6 +121,14 @@ public class Client {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getNip() {

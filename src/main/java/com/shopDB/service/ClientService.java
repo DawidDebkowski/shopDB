@@ -36,8 +36,8 @@ public class ClientService {
         return BCrypt.checkpw(plainPassword, hashedPassword);
     }
 
-    public void addClient(String login, String password, String accountType, String email, String phone, boolean cookies) {
+    public String addClient(String login, String password, String accountType, String email, String phone, String nip, boolean cookies) {
         password = hashPassword(password);
-        clientRepository.addClient(login, password, accountType, email, phone, cookies);
+        return clientRepository.addClient(login, password, accountType, email, phone, nip, cookies);
     }
 }
