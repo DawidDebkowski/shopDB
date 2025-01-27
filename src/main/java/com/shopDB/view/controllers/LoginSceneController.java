@@ -1,9 +1,10 @@
-package com.shopDB.controller;
+package com.shopDB.view.controllers;
 
 import com.shopDB.SceneType;
 import com.shopDB.entities.Client;
 import com.shopDB.service.ClientService;
 import com.shopDB.service.UserService;
+import com.shopDB.view.SceneManager;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.mfxcore.controls.Label;
 import javafx.event.ActionEvent;

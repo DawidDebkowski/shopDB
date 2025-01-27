@@ -1,6 +1,7 @@
-package com.shopDB.controller;
+package com.shopDB.view;
 
 import com.shopDB.SceneType;
+import com.shopDB.view.controllers.SceneController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

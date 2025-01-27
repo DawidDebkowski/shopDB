@@ -1,4 +1,4 @@
-package com.shopDB.controller;
+package com.shopDB.view.controllers;
 
 import org.springframework.stereotype.Controller;
 import io.github.palexdev.materialfx.controls.MFXTextField;
