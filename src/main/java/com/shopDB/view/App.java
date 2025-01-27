@@ -1,4 +1,4 @@
-package com.shopDB.controller;
+package com.shopDB.view;
 
 import com.shopDB.SceneType;
 import com.shopDB.ShopApp;
@@ -6,8 +6,6 @@ import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

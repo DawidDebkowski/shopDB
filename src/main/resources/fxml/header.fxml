@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER_LEFT" maxHeight="90.0" prefHeight="90.0" prefWidth="1200.0" spacing="150.0" styleClass="header" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.controller.HeaderController">
+<HBox alignment="CENTER_LEFT" maxHeight="90.0" prefHeight="90.0" prefWidth="1200.0" spacing="150.0" styleClass="header" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.view.controllers.HeaderController">
    <children>
       <MFXButton contentDisplay="TEXT_ONLY" depthLevel="LEVEL0" maxHeight="90.0" onAction="#goToTitle" prefHeight="87.0" prefWidth="302.0" styleClass="header-linker" text="SHOP DB " HBox.hgrow="NEVER">
          <font>

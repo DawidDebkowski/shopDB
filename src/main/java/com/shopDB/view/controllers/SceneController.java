@@ -1,4 +1,4 @@
-package com.shopDB.controller;
+package com.shopDB.view.controllers;
 
 public interface SceneController {
 }
