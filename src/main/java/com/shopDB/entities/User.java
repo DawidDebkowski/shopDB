@@ -6,14 +6,14 @@ import jakarta.persistence.*;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(name = "user_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false)
     private Integer id;
 
-    @Column(name = "login", nullable = false, length = 20)
+    @Column(name = "login", nullable = false)
     private String login;
 
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Lob

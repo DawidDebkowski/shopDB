@@ -6,9 +6,13 @@ create procedure auth_user(
 	OUT acc_type enum('client', 'warehouse', 'salesman')
 )
 begin
-	SELECT u.acc_type INTO acc_type, u.password INTO password
+	SELECT u.acc_type INTO acc_type
 	FROM users u
-	WHERE u.login LIKE login; 
+	WHERE u.login LIKE login;
+
+	SELECT u.password INTO password
+    FROM users u
+    WHERE u.login LIKE login;
 end$$
 
 -- client

@@ -64,6 +64,9 @@ public class ClientService {
         // Rejestrujemy parametr wyjściowy (OUT)
         query.registerStoredProcedureParameter("exit_msg", String.class, ParameterMode.OUT);
 
+        password = hashPassword(password);
+        System.out.println("hashed password: " + password);
+
         // Ustawiamy wartości dla parametrów wejściowych
         query.setParameter("login", login);
         query.setParameter("password", password);

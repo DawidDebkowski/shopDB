@@ -3,6 +3,7 @@ package com.shopDB.controller;
 import com.shopDB.SceneType;
 import com.shopDB.entities.Client;
 import com.shopDB.service.ClientService;
+import com.shopDB.service.UserService;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.mfxcore.controls.Label;
 import javafx.event.ActionEvent;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class LoginController implements SceneController {
     private final ClientService clientService;
+    private final UserService userService;
     private boolean loginState = true;
 
     private boolean cookies = false;
@@ -108,8 +110,9 @@ public class LoginController implements SceneController {
     @FXML
     private MFXCheckbox termsCheckbox;
 
-    public LoginController(ClientService clientService) {
+    public LoginController(ClientService clientService, UserService userService) {
         this.clientService = clientService;
+        this.userService = userService;
     }
 
     public void initialize() {
@@ -126,11 +129,15 @@ public class LoginController implements SceneController {
     @FXML
     void onLoginButtonClick(ActionEvent event) {
         if(loginState){
-//            setMessage("can't login");
-//            String mess = clientService.testClient("test");
-            String mess = clientService.addClient("test", "test1", "individual", "student@gmail.com", "123456789", "0", true);
-            setMessage(mess);
-//            SceneManager.getInstance().setScene(SceneType.LOGIN);
+            String login, password;
+            login = loginUsernameField.getText();
+            password = loginPasswordField.getText();
+            String accType = userService.authenticateUser(login, password);
+            if(accType == null) {
+                setMessage("Login failed");
+            } else {
+                setMessage("Login successful");
+            }
         } else {
             changeState(true );
         }
@@ -158,6 +165,7 @@ public class LoginController implements SceneController {
         } else {
             type = Client.INDIVIDUAL_TYPE;
         }
+        System.out.println("PAS: " + password);
         String response = clientService.addClient(
                 registerUsernameField.getText(),
                 password,

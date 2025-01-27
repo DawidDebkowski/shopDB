@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
  * generuje sam spring w tym JpaRepository
  */
 public interface ClientRepository extends JpaRepository<Client, Long> {
+
+
 //    @Procedure(procedureName="add_client", outputParameterName = "exit_msg")
 //    @Transactional
 //    String addClient(String login, String password, String type, String email, String phone, String nip, boolean cookies);
