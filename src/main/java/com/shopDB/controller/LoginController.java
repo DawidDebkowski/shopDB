@@ -112,6 +112,12 @@ public class LoginController implements SceneController {
         this.clientService = clientService;
     }
 
+    public void initialize() {
+        companyToggle.setOnAction(event -> {
+            nipField.disableProperty().set(!companyToggle.isSelected());
+        });
+    }
+
     @FXML
     void onForgotButtonClicked(ActionEvent event) {
         System.out.println("to be added maybe");
@@ -121,6 +127,7 @@ public class LoginController implements SceneController {
     void onLoginButtonClick(ActionEvent event) {
         if(loginState){
 //            setMessage("can't login");
+//            String mess = clientService.testClient("test");
             String mess = clientService.addClient("test", "test1", "individual", "student@gmail.com", "123456789", "0", true);
             setMessage(mess);
 //            SceneManager.getInstance().setScene(SceneType.LOGIN);
@@ -151,7 +158,7 @@ public class LoginController implements SceneController {
         } else {
             type = Client.INDIVIDUAL_TYPE;
         }
-        clientService.addClient(
+        String response = clientService.addClient(
                 registerUsernameField.getText(),
                 password,
                 type,
@@ -160,8 +167,8 @@ public class LoginController implements SceneController {
                 nipField.getText(),
                 cookies
         );
-        setMessage("can't register");
-        SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
+        setMessage(response);
+//        SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
     }
 
     private void changeState(boolean newState) {

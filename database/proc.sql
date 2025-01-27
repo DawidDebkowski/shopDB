@@ -2,6 +2,15 @@ delimiter $$
 
 -- client
 
+create procedure test_client(
+    IN arg varchar(255),
+    IN arg1 varchar(255),
+    OUT res varchar(255)
+)
+begin
+    set res = 'okej';
+end $$
+
 create procedure add_client(
 	IN login varchar(255),
 	IN password varchar(255),

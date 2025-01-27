@@ -95,14 +95,14 @@
                      <children>
                         <VBox fx:id="fieldsBox1" alignment="TOP_CENTER" prefHeight="187.0" prefWidth="340.0" spacing="30.0" stylesheets="@../css/app.css">
                            <children>
-                              <MFXTextField fx:id="emailField" floatingText="Email" prefColumnCount="10" prefWidth="200.0" promptText="279@student.pwr.edu.pl" stylesheets="@../css/app.css" />
-                              <MFXTextField fx:id="registerUsernameField" floatingText="Login" prefColumnCount="10" prefWidth="200.0" promptText="admin1" stylesheets="@../css/app.css">
+                              <MFXTextField fx:id="emailField" floatingText="Email" prefColumnCount="10" prefWidth="200.0" stylesheets="@../css/app.css" />
+                              <MFXTextField fx:id="registerUsernameField" floatingText="Login" prefColumnCount="10" prefWidth="200.0" stylesheets="@../css/app.css">
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
                               </MFXTextField>
-                              <MFXPasswordField fx:id="registerPasswordField" floatingText="Hasło" graphicTextGap="15.0" prefColumnCount="10" prefWidth="200.0" promptText="admin123" />
-                              <MFXPasswordField fx:id="secondPasswordField" floatingText="Powtórz hasło" graphicTextGap="15.0" prefColumnCount="10" prefWidth="200.0" promptText="admin123" />
+                              <MFXPasswordField fx:id="registerPasswordField" floatingText="Hasło" graphicTextGap="15.0" prefColumnCount="10" prefWidth="200.0" />
+                              <MFXPasswordField fx:id="secondPasswordField" floatingText="Powtórz hasło" graphicTextGap="15.0" prefColumnCount="10" prefWidth="200.0" />
                            </children>
                            <padding>
                               <Insets top="10.0" />
@@ -110,12 +110,12 @@
                         </VBox>
                         <VBox fx:id="registerStateBox" alignment="TOP_CENTER" minHeight="0.0" prefHeight="227.0" prefWidth="374.0">
                            <children>
-                              <MFXTextField fx:id="phoneField" floatingText="Telefon" prefColumnCount="10" prefWidth="200.0" promptText="333 333 333" stylesheets="@../css/app.css">
+                              <MFXTextField fx:id="phoneField" floatingText="Telefon" prefColumnCount="10" prefWidth="200.0" stylesheets="@../css/app.css">
                                  <VBox.margin>
                                     <Insets bottom="30.0" />
                                  </VBox.margin>
                               </MFXTextField>
-                              <MFXTextField fx:id="nipField" disable="true" floatingText="NIP" layoutX="41.0" layoutY="93.0" prefColumnCount="10" prefWidth="200.0" promptText="Email..." stylesheets="@../css/app.css">
+                              <MFXTextField fx:id="nipField" disable="true" floatingText="NIP" layoutX="41.0" layoutY="93.0" prefColumnCount="10" prefWidth="200.0" stylesheets="@../css/app.css">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
