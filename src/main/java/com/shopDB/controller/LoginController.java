@@ -137,6 +137,7 @@ public class LoginController implements SceneController {
                 setMessage("Login failed");
             } else {
                 setMessage("Login successful");
+                SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
             }
         } else {
             changeState(true );
@@ -149,15 +150,24 @@ public class LoginController implements SceneController {
             if(!rodo || !terms) {
                 setMessage("Zaakceptuj regulamin i rodo.");
             } else {
-                addClientFromFields();
+                if(registerPasswordField.getText() != secondPasswordField.getText()) {
+                    setMessage("Hasła się nie zgadzają.");
+                    return;
+                }
+                String response = addClientFromFields();
+                if(response.startsWith("Dodano")) {
+                    SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
+                }
             }
-
         } else {
             changeState(false);
         }
     }
 
-    private void addClientFromFields() {
+    /**
+     * Próbuje dodać klienta na bazie pól z tekstem.
+     */
+    private String addClientFromFields() {
         String password = registerPasswordField.getText();
         String type = null;
         if(companyToggle.isSelected()) {
@@ -176,7 +186,7 @@ public class LoginController implements SceneController {
                 cookies
         );
         setMessage(response);
-//        SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
+        return response;
     }
 
     private void changeState(boolean newState) {
