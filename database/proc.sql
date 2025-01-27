@@ -1,15 +1,18 @@
 delimiter $$
 
--- client
-
-create procedure test_client(
-    IN arg varchar(255),
-    IN arg1 varchar(255),
-    OUT res varchar(255)
+create procedure auth_user(
+	IN login varchar(255),
+	IN password varchar(255),
+	OUT acc_type enum('client', 'warehouse', 'salesman')
 )
 begin
-    set res = 'okej';
-end $$
+	SELECT u.acc_type INTO acc_type
+	FROM users u
+	WHERE u.login LIKE login
+		AND u.password LIKE password; 
+end$$
+
+-- client
 
 create procedure add_client(
 	IN login varchar(255),
