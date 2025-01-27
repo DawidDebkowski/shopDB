@@ -38,48 +38,25 @@ public class UserService {
     private EntityManager entityManager;
 
     public String authenticateUser(String login, String plainPassword) {
-        // Tworzymy zapytanie dla procedury
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery("auth_user");
 
-        // Rejestrujemy parametr wejściowy (IN)
         query.registerStoredProcedureParameter("login", String.class, ParameterMode.IN);
 
-        // Rejestrujemy parametry wyjściowe (OUT)
         query.registerStoredProcedureParameter("password", String.class, ParameterMode.OUT);
         query.registerStoredProcedureParameter("acc_type", String.class, ParameterMode.OUT);
 
-        // Ustawiamy wartość parametru wejściowego
         query.setParameter("login", login);
 
-        // Wykonujemy procedurę
         query.execute();
 
-        // Pobieramy wartości parametrów wyjściowych
         String password = (String) query.getOutputParameterValue("password");
         String accType = (String) query.getOutputParameterValue("acc_type");
 
-        if(accType == null) return null;
+        if (accType == null) return null;
 
-        if(BCrypt.checkpw(plainPassword, password)) {
+        if (BCrypt.checkpw(plainPassword, password)) {
             return accType;
         }
         return null;
-    }
-
-    private String hashPassword(String plainTextPassword){
-        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
-    }
-
-    public boolean authenticate(String login, String password) {
-        password = hashPassword(password);
-        return userRepository.authenticateUser(login, password);
-    }
-
-    public User saveUser(String login, String password, String accountType) {
-        User user = new User();
-        user.setLogin(login);
-        user.setPassword(password);
-        user.setAccType(accountType);
-        return userRepository.save(user);
     }
 }
