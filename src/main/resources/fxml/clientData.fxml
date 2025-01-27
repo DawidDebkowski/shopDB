@@ -11,15 +11,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #B5B5BA;" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #B5B5BA;" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.controller.ClientDataController">
    <center>
       <HBox alignment="CENTER" prefHeight="506.0" prefWidth="600.0" spacing="50.0" style="-fx-background-color: white;" styleClass="slight-round-corners" stylesheets="@../css/app.css" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="TOP_CENTER" minHeight="349.0" prefHeight="519.0" prefWidth="620.0" spacing="10.0" stylesheets="@../css/app.css">
+            <VBox alignment="TOP_CENTER" minHeight="349.0" prefHeight="519.0" prefWidth="620.0" spacing="11.0" stylesheets="@../css/app.css">
                <children>
-                  <Text text="Contact">
+                  <Text text="Kontakt">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="48.0" />
                      </font>
                      <VBox.margin>
                         <Insets />
@@ -27,50 +27,85 @@
                   </Text>
                   <StackPane prefWidth="108.0" stylesheets="@../css/app.css">
                      <children>
-                        <MFXTextField fx:id="nameField1" floatingText="Name" prefHeight="27.0" prefWidth="151.0" promptText="Name..." styleClass="base-text-field" stylesheets="@../css/app.css" />
-                        <MFXTextField fx:id="companyNameField1" floatingText="Company name" promptText="Name..." styleClass="base-text-field" stylesheets="@../css/app.css" />
+                        <MFXTextField fx:id="nameField" floatingText="Imię" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                           <font>
+                              <Font size="18.0" />
+                           </font></MFXTextField>
+                        <MFXTextField fx:id="companyNameField" floatingText="Nazwa firmy" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                           <font>
+                              <Font size="18.0" />
+                           </font></MFXTextField>
                      </children>
                   </StackPane>
                   <StackPane prefWidth="200.0" stylesheets="@../css/app.css">
                      <children>
-                        <MFXTextField fx:id="lastNameField1" floatingText="Last name" prefHeight="27.0" prefWidth="151.0" promptText="Name..." styleClass="base-text-field" stylesheets="@../css/app.css" />
-                        <MFXTextField fx:id="nipField1" floatingText="NIP" prefHeight="27.0" prefWidth="151.0" promptText="12 18239 1281" styleClass="base-text-field" stylesheets="@../css/app.css" />
+                        <MFXTextField fx:id="lastNameField" floatingText="Nazwisko" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                           <font>
+                              <Font size="18.0" />
+                           </font></MFXTextField>
+                        <MFXTextField fx:id="nipField" floatingText="NIP" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                           <font>
+                              <Font size="18.0" />
+                           </font></MFXTextField>
                      </children></StackPane>
-                  <MFXTextField fx:id="emailField1" floatingText="Email" prefHeight="27.0" prefWidth="151.0" promptText="example@mail.com" styleClass="base-text-field" stylesheets="@../css/app.css" />
-                  <MFXTextField fx:id="phoneField1" floatingText="Phone" prefHeight="27.0" prefWidth="151.0" promptText="333 333 333" styleClass="base-text-field" stylesheets="@../css/app.css" />
+                  <MFXTextField fx:id="emailField" floatingText="Email" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                     <font>
+                        <Font size="18.0" />
+                     </font></MFXTextField>
+                  <MFXTextField fx:id="phoneField" floatingText="Telefon" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                     <font>
+                        <Font size="18.0" />
+                     </font></MFXTextField>
+                  <MFXButton onAction="#onSaveClientDataClicked" prefHeight="59.0" prefWidth="156.0" styleClass="main-button" stylesheets="@../css/app.css" text="Zapisz" />
                </children>
                <padding>
-                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                </padding>
                <styleClass>
                   <String fx:value="slight-round-corners" />
                   <String fx:value="white-background" />
                </styleClass>
             </VBox>
-            <VBox alignment="TOP_CENTER" layoutX="176.0" layoutY="30.0" minHeight="400.0" prefHeight="499.0" prefWidth="720.0" spacing="10.0" stylesheets="@../css/app.css">
+            <VBox alignment="TOP_CENTER" layoutX="176.0" layoutY="30.0" minHeight="400.0" prefHeight="499.0" prefWidth="720.0" spacing="11.0" stylesheets="@../css/app.css">
                <padding>
-                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                </padding>
                <styleClass>
                   <String fx:value="slight-round-corners" />
                   <String fx:value="white-background" />
                </styleClass>
                <children>
-                  <Text text="Adress">
+                  <Text text="Adres">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="48.0" />
                      </font>
                   </Text>
-                  <MFXTextField fx:id="cityField1" floatingText="City" prefHeight="27.0" prefWidth="151.0" promptText="Name..." styleClass="base-text-field" stylesheets="@../css/app.css" />
-                  <MFXTextField fx:id="streetField1" floatingText="Street" prefHeight="27.0" prefWidth="151.0" promptText="Name..." styleClass="base-text-field" stylesheets="@../css/app.css" />
-                  <MFXTextField fx:id="houseNumberField1" floatingText="House number" prefHeight="27.0" prefWidth="151.0" promptText="Number..." styleClass="base-text-field" stylesheets="@../css/app.css" />
-                  <MFXTextField fx:id="apartmentNumberField1" floatingText="Apartment number" prefHeight="27.0" prefWidth="151.0" promptText="Number..." styleClass="base-text-field" stylesheets="@../css/app.css" />
-                  <MFXTextField fx:id="postalCodeField1" floatingText="Postal code" prefHeight="27.0" prefWidth="151.0" promptText="Number..." styleClass="base-text-field" stylesheets="@../css/app.css" />
+                  <MFXTextField fx:id="cityField" floatingText="Miasto" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                     <font>
+                        <Font size="18.0" />
+                     </font></MFXTextField>
+                  <MFXTextField fx:id="streetField" floatingText="Ulica" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                     <font>
+                        <Font size="18.0" />
+                     </font></MFXTextField>
+                  <MFXTextField fx:id="houseNumberField" floatingText="Numer domu" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                     <font>
+                        <Font size="18.0" />
+                     </font></MFXTextField>
+                  <MFXTextField fx:id="apartmentNumberField" floatingText="Numer mieszkania" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                     <font>
+                        <Font size="18.0" />
+                     </font></MFXTextField>
+                  <MFXTextField fx:id="postalCodeField" floatingText="Kod pocztowy" prefHeight="50.0" prefWidth="350.0" styleClass="base-text-field" stylesheets="@../css/app.css">
+                     <font>
+                        <Font size="18.0" />
+                     </font></MFXTextField>
+                  <MFXButton onAction="#onSaveAddressClicked" prefHeight="59.0" prefWidth="156.0" styleClass="main-button" stylesheets="@../css/app.css" text="Zapisz" />
                </children>
             </VBox>
          </children>
          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />
          </padding>
       </HBox>
    </center>
