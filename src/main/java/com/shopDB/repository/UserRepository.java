@@ -9,7 +9,5 @@ import org.springframework.data.jpa.repository.query.Procedure;
  * generuje sam spring w tym JpaRepository
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Procedure("authenticate_user")
-    public boolean authenticateUser(String login, String password);
 }
 

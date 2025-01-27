@@ -12,12 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Tego typu klasy zarządzają danymi, są pośrednikiem między
- * controllerem (widokiem) a bazą (resources)
- *
- * wiec tutaj wszelkie
- * "wez wszystkich userow bez loginu"
- * i inne kwerendy
+ * Klasa zarządza procedurami gdy aplikacji używa klient.
  */
 @Service
 public class ClientService {
@@ -28,31 +23,16 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public List<Client> getAllClients() {
-        return clientRepository.findAll();
-    }
-
-    private String hashPassword(String plainTextPassword){
+    private String hashPassword(String plainTextPassword) {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
-    }
-
-    private boolean checkPass(String plainPassword, String hashedPassword) {
-        return BCrypt.checkpw(plainPassword, hashedPassword);
-    }
-
-    public String testClient(String in) {
-        String mes = clientRepository.testClient(in, "hej");
-        return mes;
     }
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public String addClient(String login, String password, String type, String email, String phone, String NIP, Boolean cookies) {
-        // Tworzymy zapytanie dla procedury
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery("add_client");
 
-        // Rejestrujemy parametry wejściowe (IN)
         query.registerStoredProcedureParameter("login", String.class, ParameterMode.IN);
         query.registerStoredProcedureParameter("password", String.class, ParameterMode.IN);
         query.registerStoredProcedureParameter("type", String.class, ParameterMode.IN);
@@ -61,10 +41,11 @@ public class ClientService {
         query.registerStoredProcedureParameter("NIP", String.class, ParameterMode.IN);
         query.registerStoredProcedureParameter("cookies", Boolean.class, ParameterMode.IN);
 
-        // Rejestrujemy parametr wyjściowy (OUT)
         query.registerStoredProcedureParameter("exit_msg", String.class, ParameterMode.OUT);
 
-        // Ustawiamy wartości dla parametrów wejściowych
+        password = hashPassword(password);
+        System.out.println("hashed password: " + password);
+
         query.setParameter("login", login);
         query.setParameter("password", password);
         query.setParameter("type", type);
@@ -73,21 +54,8 @@ public class ClientService {
         query.setParameter("NIP", NIP);
         query.setParameter("cookies", cookies);
 
-        // Wykonujemy procedurę
         query.execute();
 
-        // Pobieramy wartość z parametru wyjściowego (OUT)
         return (String) query.getOutputParameterValue("exit_msg");
     }
-
-//    public String addClient(String login, String password, String accountType, String email, String phone, String nip, boolean cookies) {
-//        password = hashPassword(password);
-//        String[] mes = new String[5];
-//        clientRepository.addClient(login, password, accountType, email, phone, nip, cookies, mes);
-//        System.out.println(mes[0]);
-//        System.out.println(mes[1]);
-//        System.out.println(mes[2]);
-//        System.out.println(mes[3]);
-//        return login;
-//    }
 }
