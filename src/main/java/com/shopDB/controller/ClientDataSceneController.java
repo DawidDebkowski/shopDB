@@ -7,7 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.event.ActionEvent;
 
 @Controller
-public class ClientDataController implements SceneController {
+public class ClientDataSceneController implements SceneController {
 
     @FXML
     private MFXTextField apartmentNumberField;
