@@ -26,7 +26,7 @@ import org.springframework.stereotype.Controller;
 //    public static final String COMPANY_TYPE = "company";
 
 @Controller
-public class LoginController implements SceneController {
+public class LoginSceneController implements SceneController {
     private final ClientService clientService;
     private final UserService userService;
     private boolean loginState = true;
@@ -110,7 +110,7 @@ public class LoginController implements SceneController {
     @FXML
     private MFXCheckbox termsCheckbox;
 
-    public LoginController(ClientService clientService, UserService userService) {
+    public LoginSceneController(ClientService clientService, UserService userService) {
         this.clientService = clientService;
         this.userService = userService;
     }

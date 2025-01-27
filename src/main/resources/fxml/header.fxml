@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="CENTER_LEFT" maxHeight="90.0" prefHeight="90.0" prefWidth="1200.0" spacing="150.0" styleClass="header" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.controller.HeaderController">
+   <children>
+      <MFXButton contentDisplay="TEXT_ONLY" depthLevel="LEVEL0" maxHeight="90.0" onAction="#goToTitle" prefHeight="87.0" prefWidth="302.0" styleClass="header-linker" text="SHOP DB " HBox.hgrow="NEVER">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </MFXButton>
+      <HBox alignment="CENTER_RIGHT" prefHeight="92.0" prefWidth="741.0">
+         <children>
+            <MFXButton contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="244.0" layoutY="10.0" onAction="#goToMainShop" prefHeight="92.0" prefWidth="111.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Sklep" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </MFXButton>
+            <MFXButton contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="355.0" layoutY="10.0" onAction="#goToCart" prefHeight="92.0" prefWidth="111.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Koszyk" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </MFXButton>
+            <MFXButton contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="449.0" layoutY="10.0" onAction="#goToClientData" prefHeight="92.0" prefWidth="94.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Dane" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </MFXButton>
+            <MFXButton contentDisplay="BOTTOM" graphicTextGap="8.0" onAction="#goToOrderHistory" prefHeight="92.0" prefWidth="176.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Zamówienia" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </MFXButton>
+            <MFXButton contentDisplay="BOTTOM" ellipsisString="" graphicTextGap="8.0" onAction="#onLogoutButtonClicked" prefHeight="92.0" prefWidth="126.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Wyloguj" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </MFXButton>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</HBox>
