@@ -2,14 +2,13 @@ delimiter $$
 
 create procedure auth_user(
 	IN login varchar(255),
-	IN password varchar(255),
+	OUT password varchar(255),
 	OUT acc_type enum('client', 'warehouse', 'salesman')
 )
 begin
-	SELECT u.acc_type INTO acc_type
+	SELECT u.acc_type INTO acc_type, u.password INTO password
 	FROM users u
-	WHERE u.login LIKE login
-		AND u.password LIKE password; 
+	WHERE u.login LIKE login; 
 end$$
 
 -- client
