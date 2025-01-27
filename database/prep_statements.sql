@@ -101,7 +101,7 @@ begin
 	END;
 
 	SET query = CONCAT(
-		'SELECT name, category, type, color, price, discount ',
+		'SELECT product_id, name, category, type, color, price, discount ',
 		'FROM product_view ',
 		'WHERE category like ? ',
 		'AND type like ? ',
