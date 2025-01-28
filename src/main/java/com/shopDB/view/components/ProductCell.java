@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
@@ -14,26 +15,30 @@ import org.springframework.stereotype.Controller;
  * To nie do końca jest komponent.
  * Aby go dodać jako dziecko trzeba posłużyć się productCellWrapper.
  */
-public class ProductCell {
-    @FXML
-    private VBox productCellWrapper;
-
-    public VBox getProductCellWrapper() {return productCellWrapper;}
-
-    @FXML
+public class ProductCell extends VBox {
     private ImageView imageBox;
-
-    @FXML
     private Label priceText;
-
-    @FXML
     private Label titleText;
 
     private ProductDTO product;
 
     public ProductCell(ProductDTO product) {
         this.product = product;
-//        imageBox.setImage(new Image(ProductCell.class.getResource("kurtkasuper1.png").toString()));
+        this.setPrefWidth(370);
+        this.setMaxWidth(370);
+        this.setSpacing(5);
+        this.setPrefWidth(370);
+        this.setHeight(475);
+        this.setMaxHeight(475);
+        imageBox = new ImageView();
+        priceText = new Label();
+        imageBox.setFitHeight(400);
+        imageBox.setFitWidth(370);
+        titleText = new Label();
+        imageBox.setImage(new Image(String.valueOf(ProductCell.class.getResource("/kurtkasuper1.png"))));
+        this.getChildren().addAll(imageBox, titleText, priceText);
+        priceText.setFont(new Font("Arial", 18));
+        titleText.setFont(new Font("Arial", 18));
     }
 
     public void updateTexts() {
@@ -48,12 +53,12 @@ public class ProductCell {
 
     @FXML
     void onMouseEnter(MouseEvent event) {
-        productCellWrapper.setOpacity(0.5);
+        this.setOpacity(0.5);
     }
 
     @FXML
     void onMouseExit(MouseEvent event) {
-        productCellWrapper.setOpacity(1);
+        this.setOpacity(1);
     }
 
 }

@@ -93,6 +93,12 @@ public class MainShopSceneController implements SceneController {
     public void refresh() {
         Collection<ProductDTO> products = Arrays.asList(
                 ProductDTO.getMockWithName("kurtka super", 9.99),
+                ProductDTO.getMockWithName("mniej super kurtka", 19.99),
+                ProductDTO.getMockWithName("kurtka super", 9.99),
+                ProductDTO.getMockWithName("mniej super kurtka", 19.99),
+                ProductDTO.getMockWithName("kurtka super", 9.99),
+                ProductDTO.getMockWithName("mniej super kurtka", 19.99),
+                ProductDTO.getMockWithName("kurtka super", 9.99),
                 ProductDTO.getMockWithName("mniej super kurtka", 19.99));
 
         System.out.println("refresh");

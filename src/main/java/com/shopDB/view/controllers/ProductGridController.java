@@ -4,6 +4,7 @@ import com.shopDB.dto.ProductDTO;
 import com.shopDB.view.components.ProductCell;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import org.springframework.stereotype.Controller;
 
@@ -33,14 +34,19 @@ public class ProductGridController {
         System.out.println("ProductGridController showProducts");
         productGridPane.getChildren().clear();
         int productsCount = products.size();
+
+        productGridPane.setPadding(new Insets(5, 0, 0, 0));
+        productGridPane.setMinHeight(productsCount/3 * 775);
+        productGridPane.setVgap(200);
+
         while (productGridPane.getRowCount() < productsCount/3+1) {
             productGridPane.addRow(productGridPane.getRowCount()-1);
         }
         int i=0;
         for (ProductDTO product : products) {
-            System.out.println("ProductGridController showProducts " + i);
+            System.out.println("ProductGridController showProducts " + i + " i%3 " + i%3 + " " + i/3);
             ProductCell productCell = new ProductCell(product);
-            productGridPane.add(productCell.getProductCellWrapper(), i%3, i/3);
+            productGridPane.add(productCell, i%3, i/3);
             productCell.updateTexts();
             i++;
         }
