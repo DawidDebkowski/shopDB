@@ -9,9 +9,7 @@ import jakarta.persistence.StoredProcedureQuery;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Tego typu klasy zarządzają danymi, są pośrednikiem między
@@ -56,6 +54,22 @@ public class UserService {
 
         if (BCrypt.checkpw(plainPassword, password)) {
             return accType;
+        }
+        return null;
+    }
+
+    public Integer getUserIdByLogin(String login) {
+        User user = userRepository.findByLogin(login);
+        if (user != null) {
+            return user.getId();
+        }
+        return null;
+    }
+
+    public String getTypeIdByLogin(String login) {
+        User user = userRepository.findByLogin(login);
+        if (user != null) {
+            return user.getAccType();
         }
         return null;
     }

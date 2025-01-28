@@ -17,6 +17,9 @@ import org.springframework.context.ApplicationContext;
  */
 public class App extends Application
 {
+    public static int userId;
+    public static String userType;
+
     public static void main( String[] args )
     {
         launch(args);

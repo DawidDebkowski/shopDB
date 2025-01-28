@@ -4,6 +4,7 @@ import com.shopDB.SceneType;
 import com.shopDB.entities.Client;
 import com.shopDB.service.ClientService;
 import com.shopDB.service.UserService;
+import com.shopDB.view.App;
 import com.shopDB.view.SceneManager;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.mfxcore.controls.Label;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+
 import org.springframework.stereotype.Controller;
 
 //@NamedStoredProcedureQuery(name = "Client.addClient", procedureName = "add_client", parameters = {
@@ -139,6 +141,8 @@ public class LoginSceneController implements SceneController {
             } else {
                 setMessage("Login successful");
                 SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
+                App.userId = userService.getUserIdByLogin(login);
+                App.userType = userService.getTypeIdByLogin(login);
             }
         } else {
             changeState(true );
@@ -151,13 +155,17 @@ public class LoginSceneController implements SceneController {
             if(!rodo || !terms) {
                 setMessage("Zaakceptuj regulamin i rodo.");
             } else {
-                if(registerPasswordField.getText() != secondPasswordField.getText()) {
+                if(!registerPasswordField.getText().equals(secondPasswordField.getText())) {
                     setMessage("Hasła się nie zgadzają.");
                     return;
                 }
                 String response = addClientFromFields();
                 if(response.startsWith("Dodano")) {
                     SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
+
+                    String login = loginUsernameField.getText();
+                    App.userId = userService.getUserIdByLogin(login);
+                    App.userType = userService.getTypeIdByLogin(login);
                 }
             }
         } else {
