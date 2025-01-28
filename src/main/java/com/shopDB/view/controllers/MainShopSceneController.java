@@ -1,23 +1,27 @@
 package com.shopDB.view.controllers;
 
-import com.shopDB.view.components.SelectTypeLabel;
+import com.shopDB.view.components.SelectLabel;
 import org.springframework.stereotype.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 @Controller
 public class MainShopSceneController implements SceneController {
     @FXML
     private VBox typesWrapper;
 
-    private Collection<SelectTypeLabel> selectTypeLabels;
+    @FXML
+    private VBox categoriesWrapper;
+
+    private Collection<SelectLabel> selectTypeLabels;
+    private Collection<SelectLabel> selectCategoryLabels;
     private String selectedType;
     private String selectedCategory;
     private String selectedColor;
@@ -30,7 +34,10 @@ public class MainShopSceneController implements SceneController {
 
         // przykładowa lista z bazy
         List<String> types = Arrays.asList("spodnie", "koszulka", "bluza", "sukienka");
-        setupTypeLabels(types);
+        selectTypeLabels = setupSelectLabels(types, this::setSelectedType);
+        selectCategoryLabels = setupSelectLabels(Arrays.asList("mężczyzna", "kobieta", "dziecko"), this::setSelectedCategory);
+        displayLabels(selectTypeLabels, typesWrapper);
+        displayLabels(selectCategoryLabels, categoriesWrapper);
     }
 
     /**
@@ -38,24 +45,39 @@ public class MainShopSceneController implements SceneController {
      * Logika wybierania, tylko 1 możliwe na raz
      * Utworzenie wszystkich wymaganych label
      */
-    private void setupTypeLabels(List<String> types) {
-        selectTypeLabels = new ArrayList<>();
-        for (String type : types) {
-            SelectTypeLabel label = new SelectTypeLabel(type);
-            selectTypeLabels.add(label);
-            typesWrapper.getChildren().add(label);
+    private List<SelectLabel> setupSelectLabels(List<String> values, Function<String, Void> valueSetter) {
+        List<SelectLabel> selectLabels = new ArrayList<>();
+        for (String value : values) {
+            SelectLabel label = new SelectLabel(value);
+            selectLabels.add(label);
         }
 
-        for (SelectTypeLabel selectTypeLabel : selectTypeLabels) {
-            selectTypeLabel.setOnMouseClicked(event -> {
-                System.out.println("Clicked on type: " + selectTypeLabel.getText());
-                selectedType = selectTypeLabel.getType();
-                for (SelectTypeLabel otherSelectTypeLabel : selectTypeLabels) {
-                    otherSelectTypeLabel.select(false);
+        for (SelectLabel selectLabel : selectLabels) {
+            selectLabel.setOnMouseClicked(event -> {
+                System.out.println("Clicked on value: " + selectLabel.getText());
+                valueSetter.apply(selectLabel.getText());
+                for (SelectLabel other : selectLabels) {
+                    other.select(false);
                 }
-                selectTypeLabel.select(true);
+                selectLabel.select(true);
             });
         }
+        return selectLabels;
+    }
+
+    private void displayLabels(Collection<SelectLabel> labels, VBox root) {
+        for (SelectLabel label : labels) {
+            root.getChildren().add(label);
+        }
+    }
+
+    public Void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
+        return null;
+    }
+    public Void setSelectedCategory(String selectedCategory) {
+        this.selectedCategory = selectedCategory;
+        return null;
     }
 
     @FXML

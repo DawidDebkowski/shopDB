@@ -1,13 +1,12 @@
 package com.shopDB.view.components;
 
 import io.github.palexdev.mfxcore.controls.Label;
-import javafx.geometry.Insets;
 
-public class SelectTypeLabel extends Label {
+public class SelectLabel extends Label {
     private final String type;
     private boolean selected;
 
-    public SelectTypeLabel(String type) {
+    public SelectLabel(String type) {
         this.type = type;
         this.setText(type);
         selected = false;
