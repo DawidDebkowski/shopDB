@@ -25,7 +25,7 @@
                      <font>
                         <Font size="18.0" />
                      </font></Label>
-                  <VBox spacing="7.0">
+                  <VBox fx:id="categoriesWrapper" prefHeight="107.0" prefWidth="90.0" spacing="7.0">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
