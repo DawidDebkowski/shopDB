@@ -77,7 +77,7 @@ public class MainShopSceneController implements SceneController {
         // przykładowa lista z bazy
         List<String> types = Arrays.asList("spodnie", "koszulka", "bluza", "sukienka");
         selectTypeLabels = setupSelectLabels(types, this::setSelectedType);
-        selectCategoryLabels = setupSelectLabels(Arrays.asList("mężczyzna", "kobieta", "dziecko"), this::setSelectedCategory);
+        selectCategoryLabels = setupSelectLabels(Arrays.asList("mężczyzna", "kobieta", "chłopiec", "dziewczynka"), this::setSelectedCategory);
         displayLabels(selectTypeLabels, typesWrapper);
         displayLabels(selectCategoryLabels, categoriesWrapper);
 
