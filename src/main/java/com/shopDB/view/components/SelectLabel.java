@@ -1,6 +1,7 @@
 package com.shopDB.view.components;
 
 import io.github.palexdev.mfxcore.controls.Label;
+import org.springframework.stereotype.Component;
 
 public class SelectLabel extends Label {
     private final String type;
