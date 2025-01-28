@@ -33,9 +33,12 @@ public class ProductCell {
 
     public ProductCell(ProductDTO product) {
         this.product = product;
+//        imageBox.setImage(new Image(ProductCell.class.getResource("kurtkasuper1.png").toString()));
+    }
+
+    public void updateTexts() {
         priceText.setText(Double.toString(product.getPrice()));
         titleText.setText(product.getName());
-        imageBox.setImage(new Image(ProductCell.class.getResource("kurtkasuper1.png").toString()));
     }
 
     @FXML

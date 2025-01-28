@@ -1,5 +1,7 @@
 package com.shopDB.dto;
 
+import com.shopDB.entities.Product;
+
 public class ProductDTO {
     private int productId;
     private String name;
@@ -8,6 +10,14 @@ public class ProductDTO {
     private String color;
     private double price;
     private Integer discount;
+
+    public static ProductDTO getMockWithName(String name, Double price) {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductId(1);
+        productDTO.setName(name);
+        productDTO.setPrice(price);
+        return productDTO;
+    }
 
     // Getters and setters
     public int getProductId() {

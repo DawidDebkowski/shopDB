@@ -63,4 +63,9 @@ public class ClientDataSceneController implements SceneController {
     void onSaveClientDataClicked(ActionEvent event) {
         // zapisanie danych klienta do bazy
     }
+
+    @Override
+    public void refresh() {
+
+    }
 }

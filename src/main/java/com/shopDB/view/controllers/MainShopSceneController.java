@@ -2,6 +2,7 @@ package com.shopDB.view.controllers;
 
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.entities.Product;
+import com.shopDB.view.components.ProductCell;
 import com.shopDB.view.components.SelectLabel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,14 +35,7 @@ public class MainShopSceneController implements SceneController {
 
     private ProductGridController productGridController;
 
-    @Autowired
-    public MainShopSceneController(ProductGridController productGridController) {
-        this.productGridController = productGridController;
-    }
-
     public void initialize() {
-
-
         // przykładowa lista z bazy
         List<String> types = Arrays.asList("spodnie", "koszulka", "bluza", "sukienka");
         selectTypeLabels = setupSelectLabels(types, this::setSelectedType);
@@ -93,5 +87,17 @@ public class MainShopSceneController implements SceneController {
     @FXML
     void displaySortMethods(ActionEvent event) {
         // sortuj combo box
+    }
+
+    @Override
+    public void refresh() {
+        Collection<ProductDTO> products = Arrays.asList(
+                ProductDTO.getMockWithName("kurtka super", 9.99),
+                ProductDTO.getMockWithName("mniej super kurtka", 19.99));
+
+        System.out.println("refresh");
+
+        productGridController = ProductGridController.instance;
+        productGridController.showProducts(products);
     }
 }

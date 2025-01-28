@@ -226,4 +226,9 @@ public class LoginSceneController implements SceneController {
     void onTermsCheckboxClicked(ActionEvent event) {
         terms = !terms;
     }
+
+    @Override
+    public void refresh() {
+
+    }
 }
