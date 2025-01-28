@@ -1,6 +1,9 @@
 package com.shopDB.view.controllers;
 
+import com.shopDB.dto.ProductDTO;
+import com.shopDB.entities.Product;
 import com.shopDB.view.components.SelectLabel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +31,13 @@ public class MainShopSceneController implements SceneController {
     private int sortingMethod;
     private int minPrice;
     private int maxPrice;
+
+    private ProductGridController productGridController;
+
+    @Autowired
+    public MainShopSceneController(ProductGridController productGridController) {
+        this.productGridController = productGridController;
+    }
 
     public void initialize() {
 
