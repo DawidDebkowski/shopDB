@@ -1,12 +1,16 @@
 package com.shopDB.dto;
 
-public class ClientInfoDTO {
+import java.io.Serializable;
+
+public class ClientInfoDTO implements Serializable {
     private String name;
     private String surname;
+    private String companyName;
     private String email;
     private String phone;
+    private String NIP;
     private String street;
-    private int houseNumber;
+    private Integer houseNumber;
     private Integer apartmentNumber;
     private String city;
     private String postalCode;
@@ -28,6 +32,14 @@ public class ClientInfoDTO {
         this.surname = surname;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -44,6 +56,14 @@ public class ClientInfoDTO {
         this.phone = phone;
     }
 
+    public String getNIP() {
+        return NIP;
+    }
+
+    public void setNIP(String NIP) {
+        this.NIP = NIP;
+    }
+
     public String getStreet() {
         return street;
     }
@@ -52,7 +72,7 @@ public class ClientInfoDTO {
         this.street = street;
     }
 
-    public int getHouseNumber() {
+    public Integer getHouseNumber() {
         return houseNumber;
     }
 

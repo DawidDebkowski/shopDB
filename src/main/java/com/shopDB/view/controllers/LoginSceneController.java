@@ -161,11 +161,11 @@ public class LoginSceneController implements SceneController {
                 }
                 String response = addClientFromFields();
                 if(response.startsWith("Dodano")) {
-                    SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
-
-                    String login = loginUsernameField.getText();
+                    String login = registerUsernameField.getText();
                     App.userId = userService.getUserIdByLogin(login);
                     App.userType = userService.getTypeIdByLogin(login);
+
+                    SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
                 }
             }
         } else {

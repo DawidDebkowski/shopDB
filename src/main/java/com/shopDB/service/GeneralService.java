@@ -1,9 +1,11 @@
 package com.shopDB.service;
 
 import com.shopDB.dto.*;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.StoredProcedureQuery;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,24 @@ public class GeneralService {
     private EntityManager entityManager;
 
     public ClientInfoDTO showClientInfo(int clientId) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_client_info", ClientInfoDTO.class);
-        query.registerStoredProcedureParameter("client_id", Integer.class, ParameterMode.IN);
-
+        Query query = entityManager.createNativeQuery("CALL show_client_info(:client_id)");
         query.setParameter("client_id", clientId);
 
-        return (ClientInfoDTO) query.getSingleResult();
+        Object[] object = (Object[]) query.getSingleResult();
+        ClientInfoDTO result = new ClientInfoDTO();
+        try {result.setName((String) object[0]);} catch(Exception e) {}
+        try {result.setSurname((String) object[1]);} catch(Exception e) {}
+        try {result.setCompanyName((String) object[2]);} catch(Exception e) {}
+        try {result.setEmail((String) object[3]);} catch(Exception e) {}
+        try {result.setPhone((String) object[4]);} catch(Exception e) {}
+        try {result.setNIP((String) object[5]);} catch(Exception e) {}
+        try {result.setStreet((String) object[6]);} catch(Exception e) {}
+        try {result.setHouseNumber((Integer) object[7]);} catch(Exception e) {}
+        try {result.setApartmentNumber((Integer) object[8]);} catch(Exception e) {}
+        try {result.setCity((String) object[9]);} catch(Exception e) {}
+        try {result.setPostalCode((String) object[10]);} catch(Exception e) {}
+
+        return result;
     }
 
     public List<ClientOrderDTO> showClientOrders(int clientId) {

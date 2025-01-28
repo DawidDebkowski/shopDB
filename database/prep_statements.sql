@@ -12,18 +12,10 @@ begin
 	FROM clients c
 	WHERE c.client_id = client_id;
 
-
-	if ctype like 'individual' then
-		prepare statement from CONCAT(
-			'SELECT name, surname, email, phone, street, house_number, apartment_number, city, postal_code ',
-			'FROM ind_client_view WHERE client_id = ?'
+	prepare statement from CONCAT(
+			'SELECT c.name, c.surname, c.company_name, c.email, c.phone, c.NIP, a.street, a.house_number, a.apartment_number, a.city, a.postal_code ',
+			'FROM clients c LEFT JOIN addresses a ON c.address_id = a.address_id WHERE client_id = ?'
 		);
-	else
-		prepare statement from CONCAT(
-			'SELECT company_name, email, phone, NIP, street, house_number, apartment_number, city, postal_code ',
-			'FROM com_client_view WHERE client_id = ?'
-		);
-	end if;
 
 	execute statement using client_id;
 	deallocate prepare statement;

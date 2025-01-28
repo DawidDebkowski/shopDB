@@ -1,6 +1,7 @@
 package com.shopDB.service;
 
 import com.shopDB.entities.Client;
+import com.shopDB.entities.User;
 import com.shopDB.repository.ClientRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
@@ -207,5 +208,21 @@ public class ClientService {
 
         query.execute();
         return (String) query.getOutputParameterValue("exit_msg");
+    }
+
+    public String getTypebyUser(User user) {
+        Client client = clientRepository.findByUser(user);
+        if (client != null) {
+            return client.getType();
+        }
+        return null;
+    }
+
+    public Integer getIdbyUser(User user) {
+        Client client = clientRepository.findByUser(user);
+        if (client != null) {
+            return client.getId();
+        }
+        return null;
     }
 }
