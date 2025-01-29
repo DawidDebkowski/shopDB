@@ -1,12 +1,19 @@
 package com.shopDB.service;
 
 import com.shopDB.dto.*;
+import com.shopDB.entities.*;
+import com.shopDB.repository.*;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -15,6 +22,12 @@ public class GeneralService {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private ProductColorRepository productColorRepository;
+
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
 
     public ClientInfoDTO showClientInfo(int clientId) {
         Query query = entityManager.createNativeQuery("CALL show_client_info(:client_id)");
@@ -101,7 +114,7 @@ public class GeneralService {
         return null;
     }
 
-    public List<ProductDTO> showProducts(String category, String type, String color, double minPrice, double maxPrice, int orderBy) {
+    public List<ProductDTO> showProducts(String category, String type, String color, Double minPrice, Double maxPrice, int orderBy) {
         Query query = entityManager.createNativeQuery("CALL show_products(:category, :type, :color, :min_price, :max_price, :order_by)");
         query.setParameter("category", category);
         query.setParameter("type", type);
@@ -110,8 +123,8 @@ public class GeneralService {
         query.setParameter("max_price", maxPrice);
         query.setParameter("order_by", orderBy);
 
-        List<Object[]> results = query.getResultList();
-        return results.stream().map(object -> {
+        List<Object[]> queryResult = query.getResultList();
+        return queryResult.stream().map(object -> {
             ProductDTO dto = new ProductDTO();
             try {dto.setProductId((Integer) object[0]);} catch(Exception e) {}
             try {dto.setName((String) object[1]);} catch(Exception e) {}
@@ -122,6 +135,15 @@ public class GeneralService {
             try {dto.setDiscount((Integer) object[6]);} catch(Exception e) {}
             return dto;
         }).toList();
+
+        // List<ProductDTO> results  = new ArrayList<ProductDTO>();
+
+        // System.out.println("wypisz w procedurze");
+        // for (Object[] o : queryResult) {
+        //     System.out.println("A");
+        // }
+
+        // return results;
     }
 
     public List<ProductDetailDTO> showProductDetails(int productId) {
@@ -157,5 +179,21 @@ public class GeneralService {
             try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
             return dto;
         }).toList();
+    }
+
+    public ObservableList<String> getAllColors() {
+        List<ProductColor> list = productColorRepository.findAll();
+        ObservableList<String> result = FXCollections.observableArrayList();
+
+        for (ProductColor color : list) result.add(color.getName());
+        return result;
+    }
+
+    public List<String> getAllTypes() {
+        List<ProductType> list = productTypeRepository.findAll();
+        List<String> result = new ArrayList<String>();
+
+        for (ProductType type : list) result.add(type.getType());
+        return result;
     }
 }

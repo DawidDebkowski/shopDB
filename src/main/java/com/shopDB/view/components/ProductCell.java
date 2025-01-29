@@ -54,17 +54,13 @@ public class ProductCell extends VBox {
     }
 
     void onMouseClicked(MouseEvent event) {
-        System.out.println("onMouseClicked");
         App.lastChosenProduct = product;
         SceneManager.getInstance().setScene(SceneType.SINGLE_PRODUCT);
     }
 
     void onMouseEnter(MouseEvent event) {
-        System.out.println("onMouseClicked1");
-
         imageBox.setScaleX(1.2);
         imageBox.setScaleY(1.2);
-
     }
 
     void onMouseExit(MouseEvent event) {

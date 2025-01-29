@@ -1,22 +1,20 @@
 package com.shopDB.view.controllers;
 
 import com.shopDB.dto.ProductDTO;
+import com.shopDB.service.GeneralService;
 import com.shopDB.view.components.SelectLabel;
-import com.shopDB.view.components.SizeComboBox;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.util.Pair;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +36,7 @@ public class MainShopSceneController implements SceneController {
     private MFXComboBox<String> colorComboBox;
 
     @FXML
-    private MFXComboBox<MyPair<Integer, Integer>> priceComboBox;
+    private MFXComboBox<MyPair<Double, Double>> priceComboBox;
 
     @FXML
     private MFXComboBox<String> sizeComboBox;
@@ -46,15 +44,18 @@ public class MainShopSceneController implements SceneController {
     @FXML
     private MFXComboBox<Pair<String, Integer>> sortComboBox;
 
+    @Autowired
+    private GeneralService generalService;
+
     private Collection<SelectLabel> selectTypeLabels;
     private Collection<SelectLabel> selectCategoryLabels;
-    private String selectedType;
-    private String selectedCategory;
-    private String selectedSize;
-    private String selectedColor;
-    private int sortingMethod;
-    private int minPrice;
-    private int maxPrice;
+    private String selectedType = null;
+    private String selectedCategory = null;
+    private String selectedSize = null;
+    private String selectedColor = null;
+    private int sortingMethod = 0;
+    private Double minPrice = null;
+    private Double maxPrice = null;
 
     private ProductGridController productGridController;
 
@@ -79,23 +80,25 @@ public class MainShopSceneController implements SceneController {
     }
 
     public void initialize() {
-        // pobrac produkty z bazy i wrzucic w refresh
-        // potem uzywac refresh i wartosci na gorze do wziecia produktów
-
-        // przykładowa lista z bazy
-        List<String> types = Arrays.asList("spodnie", "koszulka", "bluza", "sukienka");
-        selectTypeLabels = setupSelectLabels(types, this::setSelectedType);
+        //filtr kategorii
         selectCategoryLabels = setupSelectLabels(Arrays.asList("mężczyzna", "kobieta", "chłopiec", "dziewczynka"), this::setSelectedCategory);
-        displayLabels(selectTypeLabels, typesWrapper);
         displayLabels(selectCategoryLabels, categoriesWrapper);
 
+        // filtr typow
+        List<String> types = generalService.getAllTypes();
+        selectTypeLabels = setupSelectLabels(types, this::setSelectedType);
+        displayLabels(selectTypeLabels, typesWrapper);
+
+        // sortowanie
         ObservableList<Pair<String, Integer>> sortMethods = FXCollections.observableArrayList();
-        sortMethods.add(new MyPair<String,Integer>("Brak", 1,null));
+        sortMethods.add(new MyPair<String,Integer>("Od najstarszego", 0,null));
+        sortMethods.add(new MyPair<String,Integer>("Od najnowszego", 1,null));
         sortMethods.add(new MyPair<String,Integer>("Cena malejąco", 2, null));
         sortMethods.add(new MyPair<String,Integer>("Cena rosnąco", 3, null));
-        sortMethods.add(new MyPair<String,Integer>("Nazwa", 4, null));
+        sortMethods.add(new MyPair<String,Integer>("Nazwa alfabetycznie", 4, null));
         sortComboBox.setItems(sortMethods);
 
+        // filtr rozmiarow
         ObservableList<String> sizes = FXCollections.observableArrayList();
         sizes.add("XS");
         sizes.add("S");
@@ -104,24 +107,21 @@ public class MainShopSceneController implements SceneController {
         sizes.add("XL");
         sizeComboBox.setItems(sizes);
 
-        // TODO: wziąć z bazy danych
-        ObservableList<String> colors = FXCollections.observableArrayList();
-        colors.add("Czerwony");
-        colors.add("Niebieski");
+        // filtr kolorow
+        ObservableList<String> colors = generalService.getAllColors();
         colorComboBox.setItems(colors);
 
-        ObservableList<MyPair<Integer, Integer>> prices = FXCollections.observableArrayList();
-        prices.add(new MyPair<Integer, Integer>(0, 25, "0 - 25"));
-        prices.add(new MyPair<Integer, Integer>(0, 50, "0 - 50"));
-        prices.add(new MyPair<Integer, Integer>(25, 75, "25 - 75"));
-        prices.add(new MyPair<Integer, Integer>(100, 1000, "<100"));
-        prices.add(new MyPair<Integer, Integer>(50, 1000, ">50"));
-        prices.add(new MyPair<Integer, Integer>(75, 1000, ">75"));
-        prices.add(new MyPair<Integer, Integer>(100, 1000, ">100"));
+        // filtr cenowy
+        ObservableList<MyPair<Double, Double>> prices = FXCollections.observableArrayList();
+        prices.add(new MyPair<Double, Double>(0., 25., "0 - 25"));
+        prices.add(new MyPair<Double, Double>(0., 50., "0 - 50"));
+        prices.add(new MyPair<Double, Double>(25., 75., "25 - 75"));
+        prices.add(new MyPair<Double, Double>(100., 1000., "<100"));
+        prices.add(new MyPair<Double, Double>(50., 1000., ">50"));
+        prices.add(new MyPair<Double, Double>(75., 1000., ">75"));
+        prices.add(new MyPair<Double, Double>(100., 1000., ">100"));
 
         priceComboBox.setItems(prices);
-
-
     }
 
     /**
@@ -156,52 +156,52 @@ public class MainShopSceneController implements SceneController {
     }
 
     public Void setSelectedType(String selectedType) {
-        this.selectedType = selectedType;
+        this.selectedType = selectedType.equals("") ? null : selectedType;
         return null;
     }
     public Void setSelectedCategory(String selectedCategory) {
-        this.selectedCategory = selectedCategory;
+        this.selectedCategory = selectedCategory.equals("") ? null : selectedCategory;
         return null;
     }
 
     @FXML
     void displaySortMethods(ActionEvent event) {
         sortingMethod = sortComboBox.getSelectionModel().getSelectedItem().getValue();
+        showProducts();
     }
 
     @FXML
     void onColorConfirm(ActionEvent event) {
         selectedColor = colorComboBox.getSelectionModel().getSelectedItem();
+        showProducts();
     }
 
     @FXML
     void onPriceConfirm(ActionEvent event) {
-        Pair<Integer, Integer> p = priceComboBox.getSelectionModel().getSelectedItem();
+        Pair<Double, Double> p = priceComboBox.getSelectionModel().getSelectedItem();
         minPrice = p.getKey();
         maxPrice = p.getValue();
         System.out.println("Min price: " + minPrice + " Max price: " + maxPrice);
+        showProducts();
     }
 
     @FXML
     void onSizeConfirm(ActionEvent event) {
         selectedSize = sizeComboBox.getSelectionModel().getSelectedItem();
+        showProducts();
     }
 
     @Override
     public void refresh() {
-        Collection<ProductDTO> products = Arrays.asList(
-                ProductDTO.getMockWithName("kurtka super", 9.99),
-                ProductDTO.getMockWithName("mniej super kurtka", 19.99),
-                ProductDTO.getMockWithName("kurtka super", 9.99),
-                ProductDTO.getMockWithName("mniej super kurtka", 19.99),
-                ProductDTO.getMockWithName("kurtka super", 9.99),
-                ProductDTO.getMockWithName("mniej super kurtka", 19.99),
-                ProductDTO.getMockWithName("kurtka super", 9.99),
-                ProductDTO.getMockWithName("mniej super kurtka", 19.99));
-
-        System.out.println("refresh");
+        // List<ProductDTO> list = generalService.showProducts(null, null, null, null, null, 0);
 
         productGridController = ProductGridController.instance;
-        productGridController.showProducts(products);
+        // productGridController.showProducts(list);
+        showProducts();
+    }
+
+    public void showProducts() {
+        List<ProductDTO> list = generalService.showProducts(selectedCategory, selectedType, selectedColor, minPrice, maxPrice, sortingMethod);
+        productGridController.showProducts(list);
     }
 }
