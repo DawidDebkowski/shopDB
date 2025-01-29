@@ -9,6 +9,10 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class HeaderController {
 
+    public HeaderController() {
+        System.out.println("HeaderController()");
+    }
+
     @FXML
     void goToCart(ActionEvent event) {
         SceneManager.getInstance().setScene(SceneType.CART);

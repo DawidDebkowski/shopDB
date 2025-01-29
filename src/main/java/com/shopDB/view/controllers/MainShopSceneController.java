@@ -6,12 +6,16 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Pair;
 import org.springframework.stereotype.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +24,9 @@ import java.util.function.Function;
 
 @Controller
 public class MainShopSceneController implements SceneController {
+    @FXML
+    private BorderPane mainPane;
+
     @FXML
     private VBox typesWrapper;
 
@@ -112,6 +119,8 @@ public class MainShopSceneController implements SceneController {
         prices.add(new MyPair<Integer, Integer>(100, 1000, ">100"));
 
         priceComboBox.setItems(prices);
+
+
     }
 
     /**

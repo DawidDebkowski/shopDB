@@ -1,6 +1,9 @@
 package com.shopDB.view.components;
+import com.shopDB.SceneType;
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.entities.Product;
+import com.shopDB.view.App;
+import com.shopDB.view.SceneManager;
 import io.github.palexdev.mfxcore.controls.Label;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -39,6 +42,10 @@ public class ProductCell extends VBox {
         this.getChildren().addAll(imageBox, titleText, priceText);
         priceText.setFont(new Font("Arial", 18));
         titleText.setFont(new Font("Arial", 18));
+
+        this.setOnMouseClicked(this::onMouseClicked);
+        this.setOnMouseEntered(this::onMouseEnter);
+        this.setOnMouseExited(this::onMouseExit);
     }
 
     public void updateTexts() {
@@ -46,19 +53,23 @@ public class ProductCell extends VBox {
         titleText.setText(product.getName());
     }
 
-    @FXML
     void onMouseClicked(MouseEvent event) {
-
+        System.out.println("onMouseClicked");
+        App.lastChosenProduct = product;
+        SceneManager.getInstance().setScene(SceneType.SINGLE_PRODUCT);
     }
 
-    @FXML
     void onMouseEnter(MouseEvent event) {
-        this.setOpacity(0.5);
+        System.out.println("onMouseClicked1");
+
+        imageBox.setScaleX(1.2);
+        imageBox.setScaleY(1.2);
+
     }
 
-    @FXML
     void onMouseExit(MouseEvent event) {
-        this.setOpacity(1);
+        imageBox.setScaleX(1.0);
+        imageBox.setScaleY(1.0);
     }
 
 }

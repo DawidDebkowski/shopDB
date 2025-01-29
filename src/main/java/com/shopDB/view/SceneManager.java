@@ -37,8 +37,11 @@ public class SceneManager {
         scenes.put(SceneType.LOGIN, "/fxml/login.fxml");
         scenes.put(SceneType.CLIENT_DATA, "/fxml/clientData.fxml");
         scenes.put(SceneType.MAIN_SHOP, "/fxml/mainShop.fxml");
+        scenes.put(SceneType.SINGLE_PRODUCT, "/fxml/singleProduct.fxml");
+        scenes.put(SceneType.CART, "/fxml/cart.fxml");
+        scenes.put(SceneType.ORDER_HISTORY, "/fxml/orderHistory.fxml");
 
-        stage.setTitle("Trylma Chinese Checkers by Ćmolud (TM)");
+        stage.setTitle("Trylma Chinesisches Dame von Ćmolud (TM)");
         stage.show();
     }
 
