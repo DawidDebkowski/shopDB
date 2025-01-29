@@ -9,6 +9,14 @@ public class ProductDTO {
     private double price;
     private Integer discount;
 
+    public static ProductDTO getMockWithName(String mniejSuperKurtka, double v) {
+        ProductDTO dto = new ProductDTO();
+        dto.setProductId(1);
+        dto.setName(mniejSuperKurtka);
+        dto.setPrice(v);
+        return dto;
+    }
+
     // Getters and setters
     public int getProductId() {
         return productId;
