@@ -16,6 +16,9 @@ public class ProductDTO implements Serializable {
         dto.setProductId(1);
         dto.setName(mniejSuperKurtka);
         dto.setPrice(v);
+        dto.setCategory("brak");
+        dto.setType("brak typu");
+        dto.setDiscount(2);
         return dto;
     }
 

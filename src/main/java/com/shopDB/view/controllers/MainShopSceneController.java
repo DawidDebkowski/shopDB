@@ -2,6 +2,7 @@ package com.shopDB.view.controllers;
 
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.view.components.SelectLabel;
+import com.shopDB.view.components.SizeComboBox;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import javafx.collections.FXCollections;
