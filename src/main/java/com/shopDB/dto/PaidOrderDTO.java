@@ -1,6 +1,8 @@
 package com.shopDB.dto;
 
-public class PaidOrderDTO {
+import java.io.Serializable;
+
+public class PaidOrderDTO implements Serializable {
     private int orderId;
 
     // Getters and setters

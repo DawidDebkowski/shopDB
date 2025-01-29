@@ -1,10 +1,11 @@
 package com.shopDB.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class OrderLogDTO {
+public class OrderLogDTO implements Serializable {
     private String newStatus;
-    private Date date;
+    private String date;
 
     // Getters and setters
     public String getNewStatus() {
@@ -15,11 +16,11 @@ public class OrderLogDTO {
         this.newStatus = newStatus;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }

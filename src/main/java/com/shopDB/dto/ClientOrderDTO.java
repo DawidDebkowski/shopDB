@@ -1,6 +1,8 @@
 package com.shopDB.dto;
 
-public class ClientOrderDTO {
+import java.io.Serializable;
+
+public class ClientOrderDTO implements Serializable {
     private int orderId;
     private String status;
     private double value;

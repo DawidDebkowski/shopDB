@@ -1,6 +1,8 @@
 package com.shopDB.dto;
 
-public class InvoiceDTO {
+import java.io.Serializable;
+
+public class InvoiceDTO implements Serializable {
     private int orderId;
     private String NIP;
     private String companyName;

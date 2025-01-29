@@ -3,10 +3,8 @@ package com.shopDB.service;
 import com.shopDB.dto.*;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.ParameterMode;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import jakarta.persistence.StoredProcedureQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,50 +38,71 @@ public class GeneralService {
     }
 
     public List<ClientOrderDTO> showClientOrders(int clientId) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_client_orders", ClientOrderDTO.class);
-        query.registerStoredProcedureParameter("client_id", Integer.class, ParameterMode.IN);
-
+        Query query = entityManager.createNativeQuery("CALL show_client_orders(:client_id)");
         query.setParameter("client_id", clientId);
 
-        return (List<ClientOrderDTO>) query.getResultList();
+        List<Object[]> results = query.getResultList();
+        return results.stream().map(object -> {
+            ClientOrderDTO dto = new ClientOrderDTO();
+            try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
+            try {dto.setStatus((String) object[1]);} catch(Exception e) {}
+            try {dto.setValue((Double) object[2]);} catch(Exception e) {}
+            return dto;
+        }).toList();
     }
 
     public List<OrderDetailDTO> showOrderDetails(int orderId) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_order_details", OrderDetailDTO.class);
-        query.registerStoredProcedureParameter("order_id", Integer.class, ParameterMode.IN);
-
+        Query query = entityManager.createNativeQuery("CALL show_order_details(:order_id)");
         query.setParameter("order_id", orderId);
 
-        return (List<OrderDetailDTO>) query.getResultList();
+        List<Object[]> results = query.getResultList();
+        return results.stream().map(object -> {
+            OrderDetailDTO dto = new OrderDetailDTO();
+            try {dto.setName((String) object[0]);} catch(Exception e) {}
+            try {dto.setSize((String) object[1]);} catch(Exception e) {}
+            try {dto.setPrice((Double) object[2]);} catch(Exception e) {}
+            try {dto.setDiscount((Integer) object[3]);} catch(Exception e) {}
+            try {dto.setAmount((Integer) object[4]);} catch(Exception e) {}
+            try {dto.setPriceForOne((Double) object[5]);} catch(Exception e) {}
+            try {dto.setPriceForAll((Double) object[6]);} catch(Exception e) {}
+            return dto;
+        }).toList();
     }
 
     public List<OrderLogDTO> showOrderLogs(int orderId) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_order_logs", OrderLogDTO.class);
-        query.registerStoredProcedureParameter("order_id", Integer.class, ParameterMode.IN);
-
+        Query query = entityManager.createNativeQuery("CALL show_order_logs(:order_id)");
         query.setParameter("order_id", orderId);
 
-        return (List<OrderLogDTO>) query.getResultList();
+        List<Object[]> results = query.getResultList();
+        return results.stream().map(object -> {
+            OrderLogDTO dto = new OrderLogDTO();
+            try {dto.setNewStatus((String) object[0]);} catch(Exception e) {}
+            try {dto.setDate((String) object[1]);} catch(Exception e) {}
+            return dto;
+        }).toList();
     }
 
-    public InvoiceDTO showInvoice(int orderId) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_invoice", InvoiceDTO.class);
-        query.registerStoredProcedureParameter("order_id", Integer.class, ParameterMode.IN);
 
+    // TODO: to
+    public InvoiceDTO showInvoice(int orderId) {
+        Query query = entityManager.createNativeQuery("CALL show_invoice(:order_id)");
         query.setParameter("order_id", orderId);
 
-        return (InvoiceDTO) query.getSingleResult();
+        // Object[] object = (Object[]) query.getSingleResult();
+        // InvoiceDTO result = new InvoiceDTO();
+        // try {result.setInvoiceId((Integer) object[0]);} catch(Exception e) {}
+        // try {result.setOrderId((Integer) object[1]);} catch(Exception e) {}
+        // try {result.setInvoiceDate((String) object[2]);} catch(Exception e) {}
+        // try {result.setNIP((String) object[3]);} catch(Exception e) {}
+        // try {result.setCompanyName((String) object[4]);} catch(Exception e) {}
+        // try {result.setAddress((String) object[5]);} catch(Exception e) {}
+
+        // return result;
+        return null;
     }
 
     public List<ProductDTO> showProducts(String category, String type, String color, double minPrice, double maxPrice, int orderBy) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_products", ProductDTO.class);
-        query.registerStoredProcedureParameter("category", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("type", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("color", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("min_price", Double.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("max_price", Double.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("order_by", Integer.class, ParameterMode.IN);
-
+        Query query = entityManager.createNativeQuery("CALL show_products(:category, :type, :color, :min_price, :max_price, :order_by)");
         query.setParameter("category", category);
         query.setParameter("type", type);
         query.setParameter("color", color);
@@ -91,27 +110,52 @@ public class GeneralService {
         query.setParameter("max_price", maxPrice);
         query.setParameter("order_by", orderBy);
 
-        return (List<ProductDTO>) query.getResultList();
+        List<Object[]> results = query.getResultList();
+        return results.stream().map(object -> {
+            ProductDTO dto = new ProductDTO();
+            try {dto.setProductId((Integer) object[0]);} catch(Exception e) {}
+            try {dto.setName((String) object[1]);} catch(Exception e) {}
+            try {dto.setCategory((String) object[2]);} catch(Exception e) {}
+            try {dto.setType((String) object[3]);} catch(Exception e) {}
+            try {dto.setColor((String) object[4]);} catch(Exception e) {}
+            try {dto.setPrice((Double) object[5]);} catch(Exception e) {}
+            try {dto.setDiscount((Integer) object[6]);} catch(Exception e) {}
+            return dto;
+        }).toList();
     }
 
     public List<ProductDetailDTO> showProductDetails(int productId) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_product_details", ProductDetailDTO.class);
-        query.registerStoredProcedureParameter("product_id", Integer.class, ParameterMode.IN);
-
+        Query query = entityManager.createNativeQuery("CALL show_product_details(:product_id)");
         query.setParameter("product_id", productId);
 
-        return (List<ProductDetailDTO>) query.getResultList();
+        List<Object[]> results = query.getResultList();
+        return results.stream().map(object -> {
+            ProductDetailDTO dto = new ProductDetailDTO();
+            try {dto.setSize((String) object[0]);} catch(Exception e) {}
+            try {dto.setAvailable((Integer) object[1]);} catch(Exception e) {}
+            return dto;
+        }).toList();
     }
 
     public List<PaidOrderDTO> showPaidOrders() {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_paid_orders", PaidOrderDTO.class);
+        Query query = entityManager.createNativeQuery("CALL show_paid_orders()");
 
-        return (List<PaidOrderDTO>) query.getResultList();
+        List<Object[]> results = query.getResultList();
+        return results.stream().map(object -> {
+            PaidOrderDTO dto = new PaidOrderDTO();
+            try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
+            return dto;
+        }).toList();
     }
 
     public List<ReportedReturnDTO> showReportedReturns() {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("show_reported_returns", ReportedReturnDTO.class);
+        Query query = entityManager.createNativeQuery("CALL show_reported_returns()");
 
-        return (List<ReportedReturnDTO>) query.getResultList();
+        List<Object[]> results = query.getResultList();
+        return results.stream().map(object -> {
+            ReportedReturnDTO dto = new ReportedReturnDTO();
+            try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
+            return dto;
+        }).toList();
     }
 }

@@ -1,6 +1,8 @@
 package com.shopDB.dto;
 
-public class ProductDTO {
+import java.io.Serializable;
+
+public class ProductDTO implements Serializable {
     private int productId;
     private String name;
     private String category;
