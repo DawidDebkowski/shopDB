@@ -1,9 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="main-pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.view.controllers.CartSceneController">
     <top>
         <fx:include source="header.fxml" />
     </top>
+   <center>
+      <VBox fx:id="cartBox" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <VBox fx:id="cartWrapper" prefHeight="472.0" prefWidth="1200.0" spacing="30.0" />
+            <MFXButton buttonType="RAISED" onAction="#placeOrder" styleClass="main-button" stylesheets="@../css/app.css" text="Złóż zamowienie">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </MFXButton>
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </VBox>
+   </center>
 </BorderPane>
