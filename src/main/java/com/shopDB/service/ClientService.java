@@ -14,8 +14,6 @@ import java.util.List;
 
 /**
  * Klasa zarządza procedurami gdy aplikacji używa klient.
- * 
- * 13 procedur
  */
 @Service
 public class ClientService {

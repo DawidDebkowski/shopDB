@@ -63,7 +63,7 @@ public class ClientDataSceneController implements SceneController {
 
     @Autowired
     UserService userService;
-    
+
     public void initialize() {
         ClientInfoDTO clientInfo = generalService.showClientInfo(clientService.getIdbyUser(userService.getbyId(App.userId)));
         emailField.setText(clientInfo.getEmail());
@@ -72,13 +72,13 @@ public class ClientDataSceneController implements SceneController {
         if (clientService.getTypebyUser(userService.getbyId(App.userId)).equals("individual")) {
             nameField.setVisible(true);
             nameField.setDisable(false);
-            
+
             lastNameField.setVisible(true);
             lastNameField.setDisable(false);
 
             companyNameField.setVisible(false);
             companyNameField.setDisable(true);
-            
+
             nipField.setVisible(false);
             nipField.setDisable(true);
 
@@ -87,13 +87,13 @@ public class ClientDataSceneController implements SceneController {
         } else {
             nameField.setVisible(false);
             nameField.setDisable(true);
-            
+
             lastNameField.setVisible(false);
             lastNameField.setDisable(true);
 
             companyNameField.setVisible(true);
             companyNameField.setDisable(false);
-            
+
             nipField.setVisible(true);
             nipField.setDisable(false);
 
@@ -111,5 +111,10 @@ public class ClientDataSceneController implements SceneController {
     @FXML
     void onSaveClientDataClicked(ActionEvent event) {
         // zapisanie danych klienta do bazy
+    }
+
+    @Override
+    public void refresh() {
+
     }
 }

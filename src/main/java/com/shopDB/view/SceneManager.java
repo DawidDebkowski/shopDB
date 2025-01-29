@@ -54,6 +54,7 @@ public class SceneManager {
             Scene scene = new Scene(loader.load());
             SceneController controller = loader.getController();
             stage.setScene(scene);
+            controller.refresh();
         } catch (IOException e) {
             e.printStackTrace();
         }
