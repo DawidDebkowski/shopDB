@@ -117,3 +117,9 @@
     /*-fx-border-color: #11ffff;*/
 
 }
+
+.cart-item {
+    -fx-border-color: #085d5f;
+    -fx-border-width: 2;
+
+}

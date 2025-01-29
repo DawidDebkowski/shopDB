@@ -11,6 +11,17 @@ public class OrderDetailDTO implements Serializable {
     private double priceForOne;
     private double priceForAll;
 
+    public static OrderDetailDTO getMockWithName(String mniejSuperKurtka, double v) {
+        OrderDetailDTO dto = new OrderDetailDTO();
+        dto.setName(mniejSuperKurtka);
+        dto.setSize("S");
+        dto.setPrice(v);
+        dto.setAmount(3);
+        dto.setPriceForOne(v);
+        dto.setPriceForAll(v * 3);
+        return dto;
+    }
+
     // Getters and setters
     public String getName() {
         return name;
