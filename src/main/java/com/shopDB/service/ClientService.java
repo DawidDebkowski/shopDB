@@ -10,8 +10,6 @@ import jakarta.persistence.StoredProcedureQuery;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * Klasa zarządza procedurami gdy aplikacji używa klient.
  */
@@ -98,7 +96,7 @@ public class ClientService {
         return (String) query.getOutputParameterValue("exit_msg");
     }
 
-    public String changeAddress(int clientId, String street, int houseNumber, int apartmentNumber, String city, String postalCode) {
+    public String changeAddress(int clientId, String street, Integer houseNumber, Integer apartmentNumber, String city, String postalCode) {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery("change_address");
         query.registerStoredProcedureParameter("client_id", Integer.class, ParameterMode.IN);
         query.registerStoredProcedureParameter("street", String.class, ParameterMode.IN);
