@@ -8,7 +8,7 @@ public class ProductDTO implements Serializable {
     private String category;
     private String type;
     private String color;
-    private double price;
+    private Double price;
     private Integer discount;
 
     public static ProductDTO getMockWithName(String mniejSuperKurtka, double v) {
@@ -63,11 +63,11 @@ public class ProductDTO implements Serializable {
         this.color = color;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

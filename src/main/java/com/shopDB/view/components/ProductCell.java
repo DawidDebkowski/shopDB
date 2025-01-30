@@ -27,21 +27,26 @@ public class ProductCell extends VBox {
 
     public ProductCell(ProductDTO product) {
         this.product = product;
+
         this.setPrefWidth(370);
         this.setMaxWidth(370);
         this.setSpacing(5);
         this.setPrefWidth(370);
         this.setHeight(475);
         this.setMaxHeight(475);
+
         imageBox = new ImageView();
-        priceText = new Label();
         imageBox.setFitHeight(400);
         imageBox.setFitWidth(370);
-        titleText = new Label();
-        // imageBox.setImage(new Image(String.valueOf(ProductCell.class.getResource("/kurtkasuper1.png"))));
-        this.getChildren().addAll(imageBox, titleText, priceText);
+        imageBox.setImage(new Image(String.valueOf(ProductCell.class.getResource("/kurtkasuper1.png"))));
+        
+        priceText = new Label();
         priceText.setFont(new Font("Arial", 18));
+        
+        titleText = new Label();
         titleText.setFont(new Font("Arial", 18));
+        
+        this.getChildren().addAll(imageBox, titleText, priceText);
 
         this.setOnMouseClicked(this::onMouseClicked);
         this.setOnMouseEntered(this::onMouseEnter);

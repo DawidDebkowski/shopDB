@@ -33,7 +33,7 @@ public class ProductGridController {
         int productsCount = products.size();
 
         productGridPane.setPadding(new Insets(5, 0, 0, 0));
-        productGridPane.setMinHeight(productsCount/3 * 775);
+        productGridPane.setMinHeight(productsCount/3 * 1000);
         productGridPane.setVgap(200);
 
         while (productGridPane.getRowCount() < productsCount/3+1) {

@@ -131,7 +131,7 @@ public class GeneralService {
             try {dto.setCategory((String) object[2]);} catch(Exception e) {}
             try {dto.setType((String) object[3]);} catch(Exception e) {}
             try {dto.setColor((String) object[4]);} catch(Exception e) {}
-            try {dto.setPrice((Double) object[5]);} catch(Exception e) {}
+            try {dto.setPrice(Double.parseDouble(object[5].toString()));} catch(Exception e) {}
             try {dto.setDiscount((Integer) object[6]);} catch(Exception e) {}
             return dto;
         }).toList();
