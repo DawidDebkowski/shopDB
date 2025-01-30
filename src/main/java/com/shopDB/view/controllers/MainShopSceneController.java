@@ -113,14 +113,10 @@ public class MainShopSceneController implements SceneController {
 
         // filtr cenowy
         ObservableList<MyPair<Double, Double>> prices = FXCollections.observableArrayList();
-        prices.add(new MyPair<Double, Double>(0., 25., "0 - 25"));
-        prices.add(new MyPair<Double, Double>(0., 50., "0 - 50"));
-        prices.add(new MyPair<Double, Double>(25., 75., "25 - 75"));
-        prices.add(new MyPair<Double, Double>(100., 1000., "<100"));
-        prices.add(new MyPair<Double, Double>(50., 1000., ">50"));
-        prices.add(new MyPair<Double, Double>(75., 1000., ">75"));
-        prices.add(new MyPair<Double, Double>(100., 1000., ">100"));
-
+        prices.add(new MyPair<Double, Double>(null, 25., "< 25 PLN"));
+        prices.add(new MyPair<Double, Double>(null, 50., "< 50 PLN"));
+        prices.add(new MyPair<Double, Double>(null, 75., "< 75 PLN"));
+        prices.add(new MyPair<Double, Double>(null, 100., "< 100 PLN"));
         priceComboBox.setItems(prices);
     }
 
@@ -178,7 +174,7 @@ public class MainShopSceneController implements SceneController {
 
     @FXML
     void onPriceConfirm(ActionEvent event) {
-        Pair<Double, Double> p = priceComboBox.getSelectionModel().getSelectedItem();
+        MyPair<Double, Double> p = priceComboBox.getSelectionModel().getSelectedItem();
         minPrice = p.getKey();
         maxPrice = p.getValue();
         System.out.println("Min price: " + minPrice + " Max price: " + maxPrice);

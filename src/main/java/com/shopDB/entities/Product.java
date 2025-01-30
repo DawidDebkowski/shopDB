@@ -26,7 +26,7 @@ public class Product {
     @JoinColumn(name = "color_id", nullable = false)
     private ProductColor color;
 
-    @Column(name = "price", nullable = false, precision = 4, scale = 2)
+    @Column(name = "price", nullable = false, precision = 6, scale = 2)
     private BigDecimal price;
 
     @Column(name = "discount")
