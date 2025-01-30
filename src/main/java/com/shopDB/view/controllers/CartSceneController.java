@@ -43,5 +43,7 @@ public class CartSceneController implements SceneController {
     @FXML
     private void placeOrder(ActionEvent actionEvent) {
         // zplejsuj order
+
+        //usuwanie  z   koszyka jest    w   Small   Product
     }
 }

@@ -13,7 +13,7 @@
    <center>
       <VBox fx:id="cartBox" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
          <children>
-            <VBox fx:id="cartWrapper" prefHeight="472.0" prefWidth="1200.0" spacing="30.0" />
+            <VBox fx:id="cartWrapper" prefHeight="472.0" prefWidth="1200.0" spacing="30.0" stylesheets="@../css/app.css" />
             <MFXButton buttonType="RAISED" onAction="#placeOrder" styleClass="main-button" stylesheets="@../css/app.css" text="Złóż zamowienie">
                <font>
                   <Font size="24.0" />
