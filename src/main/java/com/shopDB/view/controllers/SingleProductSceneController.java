@@ -2,6 +2,7 @@ package com.shopDB.view.controllers;
 
 import com.shopDB.SceneType;
 import com.shopDB.dto.ProductDTO;
+import com.shopDB.service.GeneralService;
 import com.shopDB.view.App;
 import com.shopDB.view.SceneManager;
 import com.shopDB.view.components.ProductCell;
@@ -17,6 +18,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -30,6 +33,9 @@ public class SingleProductSceneController implements SceneController{
     @FXML
     private VBox productWrapper;
 
+    @Autowired
+    private GeneralService generalService;
+
     private ImageView imageBox;
     private Label priceText;
     private Label titleText;
@@ -41,6 +47,7 @@ public class SingleProductSceneController implements SceneController{
     private Label discountField;
 
     private ProductDTO product;
+    private Integer productId;
     private Label amountLeftLabel;
 
     public void initialize() {
@@ -48,7 +55,9 @@ public class SingleProductSceneController implements SceneController{
     }
 
     public void initProduct(ProductDTO product) {
-        System.out.println("initProduct");
+        productId = generalService.getProductId(product.getName(), product.getCategory(), product.getType(), product.getColor());
+
+        System.out.println("initProduct, productId: " + productId);
         // główny box
         this.product = product;
         HBox productBox = new HBox();
