@@ -1,5 +1,3 @@
-source database.sql;
-
 call add_type("koszulka", @a);
 call add_type("spodnie", @a);
 call add_type("buty", @a);
@@ -16,3 +14,4 @@ call add_product("koszulka zielona meska 1", 'men', 2, 4, 29.99, @a);
 call add_product("koszulka zielona meska 2", 'men', 2, 4, 24.99, @a);
 call add_product("koszulka niebieska meska", 'men', 2, 3, 29.99, @a);
 call add_product("spodnie czerwone meski", 'men', 3, 2, 59.99, @a);
+call add_product("spodnie czerwone damskie", 'women', 3, 2, 59.99, @a);

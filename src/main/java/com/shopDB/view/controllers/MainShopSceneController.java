@@ -1,5 +1,6 @@
 package com.shopDB.view.controllers;
 
+import com.shopDB.Categories;
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.service.GeneralService;
 import com.shopDB.view.components.SelectLabel;
@@ -49,13 +50,12 @@ public class MainShopSceneController implements SceneController {
 
     private Collection<SelectLabel> selectTypeLabels;
     private Collection<SelectLabel> selectCategoryLabels;
-    private String selectedType = null;
-    private String selectedCategory = null;
-    private String selectedSize = null;
-    private String selectedColor = null;
-    private int sortingMethod = 0;
-    private Double minPrice = null;
-    private Double maxPrice = null;
+    private String selectedType;
+    private String selectedCategory;
+    private String selectedColor;
+    private int sortingMethod;
+    private Double minPrice;
+    private Double maxPrice;
 
     private ProductGridController productGridController;
 
@@ -80,12 +80,21 @@ public class MainShopSceneController implements SceneController {
     }
 
     public void initialize() {
+        selectedType = null;
+        selectedCategory = null;
+        selectedColor = null;
+        sortingMethod = 0;
+        minPrice = null;
+        maxPrice = null;
+
         //filtr kategorii
-        selectCategoryLabels = setupSelectLabels(Arrays.asList("mężczyzna", "kobieta", "chłopiec", "dziewczynka"), this::setSelectedCategory);
+        selectCategoryLabels = setupSelectLabels(Arrays.asList("wszystko", "mężczyzna", "kobieta", "chłopiec", "dziewczynka"), this::setSelectedCategory);
         displayLabels(selectCategoryLabels, categoriesWrapper);
 
         // filtr typow
-        List<String> types = generalService.getAllTypes();
+        List<String> types = FXCollections.observableArrayList();
+        types.add("wszystko");
+        types.addAll(generalService.getAllTypes());
         selectTypeLabels = setupSelectLabels(types, this::setSelectedType);
         displayLabels(selectTypeLabels, typesWrapper);
 
@@ -97,22 +106,16 @@ public class MainShopSceneController implements SceneController {
         sortMethods.add(new MyPair<String,Integer>("Cena rosnąco", 3, null));
         sortMethods.add(new MyPair<String,Integer>("Nazwa alfabetycznie", 4, null));
         sortComboBox.setItems(sortMethods);
-
-//        // filtr rozmiarow
-//        ObservableList<String> sizes = FXCollections.observableArrayList();
-//        sizes.add("XS");
-//        sizes.add("S");
-//        sizes.add("M");
-//        sizes.add("L");
-//        sizes.add("XL");
-//        sizeComboBox.setItems(sizes);
-
+        
         // filtr kolorow
-        ObservableList<String> colors = generalService.getAllColors();
+        ObservableList<String> colors = FXCollections.observableArrayList();
+        colors.add("dowolny");
+        colors.addAll(generalService.getAllColors());
         colorComboBox.setItems(colors);
 
         // filtr cenowy
         ObservableList<MyPair<Double, Double>> prices = FXCollections.observableArrayList();
+        prices.add(new MyPair<Double, Double>(null, null, "dowolna"));
         prices.add(new MyPair<Double, Double>(null, 25., "< 25 PLN"));
         prices.add(new MyPair<Double, Double>(null, 50., "< 50 PLN"));
         prices.add(new MyPair<Double, Double>(null, 75., "< 75 PLN"));
@@ -140,6 +143,8 @@ public class MainShopSceneController implements SceneController {
                     other.select(false);
                 }
                 selectLabel.select(true);
+
+                showProducts();
             });
         }
         return selectLabels;
@@ -152,11 +157,12 @@ public class MainShopSceneController implements SceneController {
     }
 
     public Void setSelectedType(String selectedType) {
-        this.selectedType = selectedType.equals("") ? null : selectedType;
+        this.selectedType = (selectedType.equals("") || selectedType.equals("wszystko")) ? null : selectedType;
         return null;
     }
+
     public Void setSelectedCategory(String selectedCategory) {
-        this.selectedCategory = selectedCategory.equals("") ? null : selectedCategory;
+        this.selectedCategory = Categories.translate(selectedCategory);
         return null;
     }
 
@@ -169,6 +175,7 @@ public class MainShopSceneController implements SceneController {
     @FXML
     void onColorConfirm(ActionEvent event) {
         selectedColor = colorComboBox.getSelectionModel().getSelectedItem();
+        selectedColor = (selectedColor.equals("dowolny")) ? null : selectedColor;
         showProducts();
     }
 
@@ -177,23 +184,17 @@ public class MainShopSceneController implements SceneController {
         MyPair<Double, Double> p = priceComboBox.getSelectionModel().getSelectedItem();
         minPrice = p.getKey();
         maxPrice = p.getValue();
-        System.out.println("Min price: " + minPrice + " Max price: " + maxPrice);
-        showProducts();
-    }
-
-    @FXML
-    void onSizeConfirm(ActionEvent event) {
-        selectedSize = sizeComboBox.getSelectionModel().getSelectedItem();
         showProducts();
     }
 
     @Override
     public void refresh() {
-        // List<ProductDTO> list = generalService.showProducts(null, null, null, null, null, 0);
-
         productGridController = ProductGridController.instance;
-        // productGridController.showProducts(list);
         showProducts();
+
+        sortComboBox.selectFirst();
+        colorComboBox.selectFirst();
+        priceComboBox.selectFirst();
     }
 
     public void showProducts() {
