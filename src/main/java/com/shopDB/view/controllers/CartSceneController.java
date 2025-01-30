@@ -12,7 +12,6 @@ import javafx.scene.layout.VBox;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import java.util.Arrays;
 import java.util.List;
 
 // lista produktów + usuwanie
@@ -50,10 +49,13 @@ public class CartSceneController implements SceneController {
         //         OrderDetailDTO.getMockWithName("taka se kutka", 18.00)
         // );
 
+        System.out.println("Wypisywanie.");
         for (OrderDetailDTO orderDetailDTO : orderDetailDTOS) {
+            System.out.println(orderDetailDTO.getName());
             SmallProduct smallProduct = new SmallProduct(orderDetailDTO);
             cartWrapper.getChildren().add(smallProduct);
         }
+        System.out.println("Koniec.");
     }
 
     @FXML

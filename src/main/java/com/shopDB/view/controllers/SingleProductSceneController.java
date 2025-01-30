@@ -1,6 +1,5 @@
 package com.shopDB.view.controllers;
 
-import com.shopDB.SceneType;
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.dto.ProductDetailDTO;
 import com.shopDB.repository.ProductRepository;
@@ -9,10 +8,8 @@ import com.shopDB.service.ClientService;
 import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
 import com.shopDB.view.App;
-import com.shopDB.view.SceneManager;
 import com.shopDB.view.components.PopUp;
 import com.shopDB.view.components.ProductCell;
-import com.shopDB.view.components.SizeComboBox;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.mfxcore.controls.Label;
@@ -115,11 +112,12 @@ public class SingleProductSceneController implements SceneController{
         HBox sizeBox = new HBox();
         sizeBox.setSpacing(20);
 
+        sizeComboBox = new MFXComboBox<String>();
         updateSizes();
 
         sizeComboBox.setOnAction(event -> {
             chosenSize = sizeComboBox.getSelectionModel().getSelectedItem();
-
+            
             for (ProductDetailDTO warehouse : available) {
                 if (warehouse.getSize().equals(chosenSize)) {
                     amountLeft = ((Integer) warehouse.getAvailable()).toString();
@@ -159,7 +157,10 @@ public class SingleProductSceneController implements SceneController{
             sizes.add(warehouse.getSize());
         }
 
-        sizeComboBox = new MFXComboBox<String>(sizes);
+        sizeComboBox.getItems().clear();
+        sizeComboBox.getItems().addAll(sizes);
+
+        try {sizeComboBox.selectItem(chosenSize);} catch (Exception e) {}
 
         if(available.size() == 0) {
             sizeComboBox.setText("Niedostępne");
@@ -193,7 +194,6 @@ public class SingleProductSceneController implements SceneController{
                 clientService.getIdbyUser(userService.getbyId(App.userId)), 
                 generalService.getWarehouseId(productId, chosenSize), 
                 1);
-            System.out.println(response);
 
             if (response.equals("Ten produkt jest juz w koszyku.")) {
                 String response2 = clientService.editOrderPos(
@@ -203,26 +203,25 @@ public class SingleProductSceneController implements SceneController{
                         warehouseRepository.getIdByData(productRepository.findById(productId).get(), chosenSize)), 
                     1);
                 
-                System.out.println(response2);
                 
                 if (response2.equals("Produkt w danej ilosci nie jest obecnie dostepny.")) {
                     new PopUp(
                         "Błąd", 
                         "Produkt niedostępny", 
-                        "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " w tej ilości nie jest obecnie dostępny.");
+                        "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " nie jest obecnie dostępny.");
                 } else if (response2.equals("Edytowno ilosc pozycji z koszyka.")) {
-                    updateSizes();
                     new PopUp(
                         "Sukces", 
                         "Dodano do koszyka", 
                         "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " został dodany do koszyka.");
+                    updateSizes();
                 }
             } else if (response.equals("Dodano nowa pozycje do koszyka.")) {
-                updateSizes();
                 new PopUp(
                     "Sukces", 
                     "Dodano do koszyka", 
                     "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " został dodany do koszyka.");
+                updateSizes();
             }
         }
     }

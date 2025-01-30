@@ -79,11 +79,11 @@ public class GeneralService {
             OrderDetailDTO dto = new OrderDetailDTO();
             try {dto.setName((String) object[0]);} catch(Exception e) {}
             try {dto.setSize((String) object[1]);} catch(Exception e) {}
-            try {dto.setPrice((Double) object[2]);} catch(Exception e) {}
-            try {dto.setDiscount((Integer) object[3]);} catch(Exception e) {}
-            try {dto.setAmount((Integer) object[4]);} catch(Exception e) {}
-            try {dto.setPriceForOne((Double) object[5]);} catch(Exception e) {}
-            try {dto.setPriceForAll((Double) object[6]);} catch(Exception e) {}
+            try {dto.setPrice(Double.parseDouble(object[2].toString()));} catch(Exception e) {}
+            try {dto.setDiscount(Integer.parseInt(object[3].toString()));} catch(Exception e) {}
+            try {dto.setAmount(Integer.parseInt(object[4].toString()));} catch(Exception e) {}
+            try {dto.setPriceForOne(Double.parseDouble(object[5].toString()));} catch(Exception e) {}
+            try {dto.setPriceForAll(Double.parseDouble(object[6].toString()));} catch(Exception e) {}
             return dto;
         }).toList();
     }

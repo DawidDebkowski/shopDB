@@ -38,15 +38,13 @@ create procedure show_order_details(
 	IN order_id int
 )
 begin
-	if (SELECT o.status FROM orders o WHERE o.order_id = order_id) not like '%cart%' then
-		prepare statement from CONCAT(
-			'SELECT name, size, price, discount, amount, price_for_one, price_for_all ',
-			'FROM order_detailed_view WHERE order_id = ?'
-		);
+	prepare statement from CONCAT(
+		'SELECT name, size, price, discount, amount, price_for_one, price_for_all ',
+		'FROM order_detailed_view WHERE order_id = ?'
+	);
 
-		execute statement using order_id;
-		deallocate prepare statement;	
-	end if;
+	execute statement using order_id;
+	deallocate prepare statement;	
 end$$
 
 create procedure show_order_logs(
