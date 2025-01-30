@@ -17,23 +17,21 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 /**
  * To nie do końca jest komponent.
  * Aby go dodać jako dziecko trzeba posłużyć się productCellWrapper.
  */
 public class SmallProduct extends VBox {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private ClientService clientService;
+    private final ClientService clientService;
 
-    @Autowired
-    private WarehouseRepository warehouseRepository;
+    private final WarehouseRepository warehouseRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     private String chosenSize;
     private ImageView imageBox;
@@ -46,7 +44,7 @@ public class SmallProduct extends VBox {
 
     private OrderDetailDTO product;
 
-    public SmallProduct(OrderDetailDTO product) {
+    public SmallProduct(OrderDetailDTO product, UserService userService, ClientService clientService, WarehouseRepository warehouseRepository, ProductRepository productRepository) {
         System.out.println("initProduct");
         // główny box
         this.product = product;
@@ -81,11 +79,11 @@ public class SmallProduct extends VBox {
         amountText = new Label();
         priceForOneText = new Label();
         priceForAllText = new Label();
-        titleText.setFont(new Font("Arial", 21));
-        priceText.setFont(new Font("Arial", 21));
-        sizeText.setFont(new Font("Arial", 21));
-        amountText.setFont(new Font("Arial", 21));
-        priceForAllText.setFont(new Font("Arial", 21));
+        titleText.setFont(new Font("Arial", 18));
+        priceText.setFont(new Font("Arial", 18));
+        sizeText.setFont(new Font("Arial", 18));
+        amountText.setFont(new Font("Arial", 18));
+        priceForAllText.setFont(new Font("Arial", 18));
 
         MFXButton removeButton = new MFXButton("Usuń z koszyka");
         removeButton.getStyleClass().add("white-button");
@@ -97,11 +95,17 @@ public class SmallProduct extends VBox {
         textBox.getChildren().addAll(titleText, priceText, sizeText,amountText,priceForAllText, removeButton);
         this.getChildren().addAll(productBox);
         updateTexts();
+        this.userService = userService;
+        this.clientService = clientService;
+        this.warehouseRepository = warehouseRepository;
+        this.productRepository = productRepository;
     }
 
     private void removeMeFromCart(ActionEvent actionEvent) {
         Integer clientId = clientService.getIdbyUser(userService.getbyId(App.userId));
-        Integer warehouseId = warehouseRepository.getIdByData(productRepository.findById(product.getProductId()), chosenSize); 
+        // w tej linijce wychodzi null \/
+        Integer warehouseId = warehouseRepository.getIdByData(productRepository.findById(product.getProductId()), chosenSize);
+        // i tutaj nie może byc nulla \/
         Integer posId = clientService.getOrderPos(clientId, warehouseId);
         System.out.println(posId);
     }

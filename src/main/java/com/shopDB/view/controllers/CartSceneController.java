@@ -1,6 +1,8 @@
 package com.shopDB.view.controllers;
 
 import com.shopDB.dto.OrderDetailDTO;
+import com.shopDB.repository.ProductRepository;
+import com.shopDB.repository.WarehouseRepository;
 import com.shopDB.service.ClientService;
 import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
@@ -22,14 +24,19 @@ public class CartSceneController implements SceneController {
     @FXML
     private VBox cartWrapper;
 
-    @Autowired
-    private GeneralService generalService;
+    private final GeneralService generalService;
+    private final ClientService clientService;
+    private final UserService userService;
+    private final WarehouseRepository warehouseRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private ClientService clientService;
-
-    @Autowired
-    private UserService userService;
+    public CartSceneController(GeneralService generalService, ClientService clientService, UserService userService, WarehouseRepository warehouseRepository, ProductRepository productRepository) {
+        this.generalService = generalService;
+        this.clientService = clientService;
+        this.userService = userService;
+        this.warehouseRepository = warehouseRepository;
+        this.productRepository = productRepository;
+    }
 
     public void initialize() {
 
@@ -45,7 +52,7 @@ public class CartSceneController implements SceneController {
                             App.userId))));
 
         for (OrderDetailDTO orderDetailDTO : orderDetailDTOS) {
-            SmallProduct smallProduct = new SmallProduct(orderDetailDTO);
+            SmallProduct smallProduct = new SmallProduct(orderDetailDTO, userService, clientService, warehouseRepository, productRepository);
             cartWrapper.getChildren().add(smallProduct);
         }
     }

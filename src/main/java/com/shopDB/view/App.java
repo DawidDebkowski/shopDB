@@ -49,7 +49,7 @@ public class App extends Application
         sceneManager.initialize(primaryStage);
 
         SceneManager.getInstance().setScene(SceneType.ADD_PRODUCT);
-        primaryStage.setTitle("Shop Application");
+//        primaryStage.setTitle("Shop Application");
         primaryStage.show();
     }
 
