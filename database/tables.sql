@@ -38,7 +38,7 @@ create table products(
 	category enum('men', 'women', 'boys', 'girls') not null,
 	type_id int not null,
 	color_id int not null,
-	price decimal(4,2) not null,
+	price decimal(6,2) not null,
 	discount int
 );
 

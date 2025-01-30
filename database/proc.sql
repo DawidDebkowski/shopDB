@@ -838,7 +838,7 @@ create procedure add_product(
 	IN category enum('men', 'women', 'boys', 'girls'),
 	IN type_id int,
 	IN color_id int,
-	IN price decimal(4, 2),
+	IN price decimal(6, 2),
 	OUT exit_msg varchar(255)
 )
 begin
@@ -972,7 +972,7 @@ end$$
 
 create procedure change_price(
 	IN product_id int,
-	IN new_price decimal(4, 2),
+	IN new_price decimal(6, 2),
 	OUT exit_msg varchar(255)
 )
 begin

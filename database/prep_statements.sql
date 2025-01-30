@@ -76,8 +76,8 @@ create procedure show_products(
 	IN category enum('men', 'women', 'boys', 'girls'),
 	IN type varchar(255),
 	IN color varchar(255),
-	IN min_price decimal(4, 2),
-	IN max_price decimal(4, 2),
+	IN min_price decimal(6, 2),
+	IN max_price decimal(6, 2),
 	IN order_by int
 )
 begin
