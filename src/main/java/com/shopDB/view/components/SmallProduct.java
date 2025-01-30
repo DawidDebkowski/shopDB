@@ -86,7 +86,7 @@ public class SmallProduct extends VBox {
         priceForAllText.setFont(new Font("Arial", 18));
 
         MFXButton removeButton = new MFXButton("Usuń z koszyka");
-        removeButton.getStyleClass().add("white-button");
+        removeButton.getStyleClass().add("secondary-button");
         removeButton.setFont(new Font("Arial", 18));
         removeButton.setAlignment(Pos.CENTER_LEFT);
         removeButton.setOnAction(this::removeMeFromCart);

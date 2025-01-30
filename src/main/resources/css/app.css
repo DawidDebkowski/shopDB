@@ -71,6 +71,15 @@
 
 }
 
+.secondary-button {
+    -fx-background-color: #e2eff1;
+    -fx-text-fill: #074a4b
+}
+
+.secondary-button:hover {
+    -fx-background-color: #cdeaec;
+}
+
 .mfx-toggle-button {
     -mfx-main: -main-color;
     /*-mfx-secondary: #a10994;*/
