@@ -3,9 +3,12 @@ package com.shopDB.view.controllers;
 import com.shopDB.SceneType;
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.dto.ProductDetailDTO;
+import com.shopDB.service.ClientService;
 import com.shopDB.service.GeneralService;
+import com.shopDB.service.UserService;
 import com.shopDB.view.App;
 import com.shopDB.view.SceneManager;
+import com.shopDB.view.components.PopUp;
 import com.shopDB.view.components.ProductCell;
 import com.shopDB.view.components.SizeComboBox;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -40,6 +43,12 @@ public class SingleProductSceneController implements SceneController{
     @Autowired
     private GeneralService generalService;
 
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private UserService userService;
+
     private ImageView imageBox;
     private Label priceText;
     private Label titleText;
@@ -53,6 +62,10 @@ public class SingleProductSceneController implements SceneController{
     private ProductDTO product;
     private Integer productId;
     private Label amountLeftLabel;
+    private MFXComboBox<String> sizeComboBox;
+
+    private ObservableList<ProductDetailDTO> available;
+    private ObservableList<String> sizes;
 
     public void initialize() {
 
@@ -60,6 +73,7 @@ public class SingleProductSceneController implements SceneController{
 
     public void initProduct(ProductDTO product) {
         productId = generalService.getProductId(product.getName(), product.getCategory(), product.getType(), product.getColor());
+        chosenSize = null;
 
         System.out.println("initProduct, productId: " + productId);
         // główny box
@@ -93,19 +107,7 @@ public class SingleProductSceneController implements SceneController{
         HBox sizeBox = new HBox();
         sizeBox.setSpacing(20);
 
-        ObservableList<ProductDetailDTO> available = FXCollections.observableArrayList(generalService.showProductDetails(productId));
-        ObservableList<String> sizes = FXCollections.observableArrayList();
-        for (ProductDetailDTO warehouse : available) {
-            sizes.add(warehouse.getSize());
-        }
-        // SizeComboBox sizeComboBox = new SizeComboBox();
-        MFXComboBox<String> sizeComboBox = new MFXComboBox<String>(sizes);
-
-        if(available.size() == 0) {
-            sizeComboBox.setText("Niedostępne");
-        } else {
-            sizeComboBox.setText("Rozmiar");
-        }
+        updateSizes();
 
         sizeComboBox.setOnAction(event -> {
             chosenSize = sizeComboBox.getSelectionModel().getSelectedItem();
@@ -142,17 +144,58 @@ public class SingleProductSceneController implements SceneController{
         titleText.setText(product.getName());
     }
 
+    public void updateSizes() {
+        available = FXCollections.observableArrayList(generalService.showProductDetails(productId));
+        sizes = FXCollections.observableArrayList();
+        for (ProductDetailDTO warehouse : available) {
+            sizes.add(warehouse.getSize());
+        }
+
+        sizeComboBox = new MFXComboBox<String>(sizes);
+
+        if(available.size() == 0) {
+            sizeComboBox.setText("Niedostępne");
+        } else {
+            sizeComboBox.setText("Rozmiar");
+        }
+    }
+
     @FXML
     void onAddToCartClicked(ActionEvent event) {
-        SceneManager.getInstance().setScene(SceneType.MAIN_SHOP);
-        // sprawdz czy ma rozmiar
-        // i dodaj do koszyka jakos
-        // moze zmien guzik na cos innego nwm
+        int amount = 0;
+        for (ProductDetailDTO warehouse : available) {
+            if (warehouse.getSize().equals(chosenSize)) {
+                amount = (Integer) warehouse.getAvailable();
+            }
+        }
+
+        if (chosenSize == null) {
+            new PopUp(
+                "Błąd", 
+                "Brak rozmiaru", 
+                    "Wybierz rozmiar przed dodaniem do koszyka.");
+        }
+        else if (amount <= 0) {
+            new PopUp(
+                "Błąd", 
+                "Produkt niedostępny", 
+                    "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " jest obecnie niedostępny.");
+        } else {
+            String response = clientService.addOrderPos(
+                clientService.getIdbyUser(userService.getbyId(App.userId)), 
+                generalService.getWarehouseId(productId, chosenSize), 
+                1);
+            System.out.println(response);
+            updateSizes();
+            new PopUp(
+                "Sukces", 
+                "Dodano do koszyka", 
+                    "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " został dodany do koszyka.");
+        }
     }
 
     @Override
     public void refresh() {
-//        App.lastChosenProduct = ProductDTO.getMockWithName("super mega kurtka", 199.99);
         initProduct(App.lastChosenProduct);
     }
 }

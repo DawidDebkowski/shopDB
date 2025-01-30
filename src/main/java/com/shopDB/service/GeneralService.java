@@ -32,6 +32,9 @@ public class GeneralService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private WarehouseRepository warehouseRepository;
+
     public ClientInfoDTO showClientInfo(int clientId) {
         Query query = entityManager.createNativeQuery("CALL show_client_info(:client_id)");
         query.setParameter("client_id", clientId);
@@ -195,5 +198,10 @@ public class GeneralService {
         Integer typeId = productTypeRepository.getIdFromName(type);
         Integer colorId = productColorRepository.getIdFromName(color);
         return productRepository.getIdFromData(name, category, typeId, colorId);
+    }
+
+    public Integer getWarehouseId(Integer productId, String size) {
+        Product product = productRepository.findById(productId).get();
+        return warehouseRepository.getIdByData(product, size);
     }
 }
