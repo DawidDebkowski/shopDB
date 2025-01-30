@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.mfxcore.controls.Label;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,12 +40,13 @@ public class SmallProduct extends VBox {
         // główny box
         this.product = product;
         VBox productBox = new VBox();
-        productBox.setPrefWidth(3000);
+//        productBox.setPrefWidth(3000);
         productBox.setSpacing(15);
-        this.setPrefWidth(3000);
+//        this.setPrefWidth(3000);
+        this.setAlignment(Pos.TOP_CENTER);
 
-        this.getStyleClass().add("cart-item");
-        productBox.getStyleClass().add("cart-item");
+//        this.getStyleClass().add("cart-item");
+//        productBox.getStyleClass().add("cart-item");
 
 //        // zdjęcie
 //        // zdjęcie
@@ -55,8 +57,11 @@ public class SmallProduct extends VBox {
 
         HBox textBox = new HBox();
         textBox.setSpacing(40);
-        textBox.getStyleClass().add("cart-item");
-        textBox.setPrefWidth(1000);
+//        textBox.getStyleClass().add("cart-item");
+        System.out.println(textBox.getStyleClass());
+        this.setStyle("-fx-border-color: #0995A1; -fx-border-width: 2");
+        this.setPadding(new Insets(8));
+//        textBox.setPrefWidth(1000);
 
         // teksty
         titleText = new Label();
@@ -67,19 +72,18 @@ public class SmallProduct extends VBox {
         priceForAllText = new Label();
         titleText.setFont(new Font("Arial", 21));
         priceText.setFont(new Font("Arial", 21));
+        sizeText.setFont(new Font("Arial", 21));
+        amountText.setFont(new Font("Arial", 21));
+        priceForAllText.setFont(new Font("Arial", 21));
 
-        HBox buttonBox = new HBox();
         MFXButton removeButton = new MFXButton("Usuń z koszyka");
         removeButton.getStyleClass().add("white-button");
         removeButton.setFont(new Font("Arial", 18));
-//        removeButton.setAlignment(Pos.CENTER_LEFT);
+        removeButton.setAlignment(Pos.CENTER_LEFT);
         removeButton.setOnAction(this::removeMeFromCart);
-        buttonBox.getChildren().add(removeButton);
-        buttonBox.setAlignment(Pos.CENTER_LEFT);
-        buttonBox.setPrefWidth(1000);
 
         productBox.getChildren().addAll(textBox);
-        textBox.getChildren().addAll(titleText, priceText, buttonBox);
+        textBox.getChildren().addAll(titleText, priceText, sizeText,amountText,priceForAllText, removeButton);
         this.getChildren().addAll(productBox);
         updateTexts();
     }
@@ -89,8 +93,8 @@ public class SmallProduct extends VBox {
     }
 
     public void updateTexts() {
-        titleText.setText(product.getName());
-        priceText.setText(Double.toString(product.getPriceForOne()));
+        titleText.setText("Nazwa: "+product.getName());
+        priceText.setText("Cena: "+Double.toString(product.getPriceForOne()));
         sizeText.setText("Rozmiar: " + product.getSize());
         amountText.setText("Sztuki: " + Integer.toString(product.getAmount()));
         priceForAllText.setText("Za wszystkie: " + Double.toString(product.getPriceForOne()));

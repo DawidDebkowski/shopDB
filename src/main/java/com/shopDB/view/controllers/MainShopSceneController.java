@@ -98,14 +98,14 @@ public class MainShopSceneController implements SceneController {
         sortMethods.add(new MyPair<String,Integer>("Nazwa alfabetycznie", 4, null));
         sortComboBox.setItems(sortMethods);
 
-        // filtr rozmiarow
-        ObservableList<String> sizes = FXCollections.observableArrayList();
-        sizes.add("XS");
-        sizes.add("S");
-        sizes.add("M");
-        sizes.add("L");
-        sizes.add("XL");
-        sizeComboBox.setItems(sizes);
+//        // filtr rozmiarow
+//        ObservableList<String> sizes = FXCollections.observableArrayList();
+//        sizes.add("XS");
+//        sizes.add("S");
+//        sizes.add("M");
+//        sizes.add("L");
+//        sizes.add("XL");
+//        sizeComboBox.setItems(sizes);
 
         // filtr kolorow
         ObservableList<String> colors = generalService.getAllColors();
