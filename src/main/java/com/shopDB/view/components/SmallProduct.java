@@ -1,29 +1,40 @@
 package com.shopDB.view.components;
-import com.shopDB.SceneType;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.shopDB.dto.OrderDetailDTO;
-import com.shopDB.entities.Product;
+import com.shopDB.repository.ProductRepository;
+import com.shopDB.repository.WarehouseRepository;
+import com.shopDB.service.ClientService;
+import com.shopDB.service.UserService;
 import com.shopDB.view.App;
-import com.shopDB.view.SceneManager;
+
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.mfxcore.controls.Label;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 /**
  * To nie do końca jest komponent.
  * Aby go dodać jako dziecko trzeba posłużyć się productCellWrapper.
  */
 public class SmallProduct extends VBox {
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
     private String chosenSize;
     private ImageView imageBox;
     private Label priceText;
@@ -89,7 +100,10 @@ public class SmallProduct extends VBox {
     }
 
     private void removeMeFromCart(ActionEvent actionEvent) {
-        // usuwanie z koszyka
+        Integer clientId = clientService.getIdbyUser(userService.getbyId(App.userId));
+        Integer warehouseId = warehouseRepository.getIdByData(productRepository.findById(product.getProductId()), chosenSize); 
+        Integer posId = clientService.getOrderPos(clientId, warehouseId);
+        System.out.println(posId);
     }
 
     public void updateTexts() {

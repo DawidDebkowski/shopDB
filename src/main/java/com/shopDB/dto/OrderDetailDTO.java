@@ -10,6 +10,7 @@ public class OrderDetailDTO implements Serializable {
     private int amount;
     private double priceForOne;
     private double priceForAll;
+    private int productId;
 
     public static OrderDetailDTO getMockWithName(String mniejSuperKurtka, double v) {
         OrderDetailDTO dto = new OrderDetailDTO();
@@ -77,5 +78,13 @@ public class OrderDetailDTO implements Serializable {
 
     public void setPriceForAll(double priceForAll) {
         this.priceForAll = priceForAll;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 }

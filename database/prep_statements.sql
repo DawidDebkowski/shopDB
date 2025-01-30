@@ -39,7 +39,7 @@ create procedure show_order_details(
 )
 begin
 	prepare statement from CONCAT(
-		'SELECT name, size, price, discount, amount, price_for_one, price_for_all ',
+		'SELECT product_id, name, size, price, discount, amount, price_for_one, price_for_all ',
 		'FROM order_detailed_view WHERE order_id = ?'
 	);
 

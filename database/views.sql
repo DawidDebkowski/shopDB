@@ -19,7 +19,7 @@ create view orders_view as (
 );
 
 create view order_detailed_view as (
-	SELECT op.order_id, p.name, w.size, p.price, p.discount, op.amount, 
+	SELECT p.product_id, op.order_id, p.name, w.size, p.price, p.discount, op.amount, 
 		CAST((p.price * (100 - COALESCE(p.discount, 0)) / 100) AS decimal(4, 2)) AS price_for_one, 
 		CAST((p.price * (100 - COALESCE(p.discount, 0)) / 100 * op.amount) AS decimal(10, 2)) AS price_for_all  
 	FROM order_pos op JOIN warehouse w ON op.warehouse_id = w.warehouse_id

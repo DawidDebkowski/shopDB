@@ -44,18 +44,10 @@ public class CartSceneController implements SceneController {
                         userService.getbyId(
                             App.userId))));
 
-        // List<OrderDetailDTO> orderDetailDTOS = Arrays.asList(
-        //         OrderDetailDTO.getMockWithName("mega kutka", 9.99),
-        //         OrderDetailDTO.getMockWithName("taka se kutka", 18.00)
-        // );
-
-        System.out.println("Wypisywanie.");
         for (OrderDetailDTO orderDetailDTO : orderDetailDTOS) {
-            System.out.println(orderDetailDTO.getName());
             SmallProduct smallProduct = new SmallProduct(orderDetailDTO);
             cartWrapper.getChildren().add(smallProduct);
         }
-        System.out.println("Koniec.");
     }
 
     @FXML
