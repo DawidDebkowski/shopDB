@@ -3,6 +3,8 @@ package com.shopDB.view.controllers;
 import com.shopDB.SceneType;
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.dto.ProductDetailDTO;
+import com.shopDB.repository.ProductRepository;
+import com.shopDB.repository.WarehouseRepository;
 import com.shopDB.service.ClientService;
 import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
@@ -48,6 +50,12 @@ public class SingleProductSceneController implements SceneController{
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     private ImageView imageBox;
     private Label priceText;
@@ -186,11 +194,36 @@ public class SingleProductSceneController implements SceneController{
                 generalService.getWarehouseId(productId, chosenSize), 
                 1);
             System.out.println(response);
-            updateSizes();
-            new PopUp(
-                "Sukces", 
-                "Dodano do koszyka", 
+
+            if (response.equals("Ten produkt jest juz w koszyku.")) {
+                String response2 = clientService.editOrderPos(
+                    clientService.getIdbyUser(userService.getbyId(App.userId)), 
+                    clientService.getOrderPos(
+                        clientService.getIdbyUser(userService.getbyId(App.userId)),
+                        warehouseRepository.getIdByData(productRepository.findById(productId).get(), chosenSize)), 
+                    1);
+                
+                System.out.println(response2);
+                
+                if (response2.equals("Produkt w danej ilosci nie jest obecnie dostepny.")) {
+                    new PopUp(
+                        "Błąd", 
+                        "Produkt niedostępny", 
+                        "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " w tej ilości nie jest obecnie dostępny.");
+                } else if (response2.equals("Edytowno ilosc pozycji z koszyka.")) {
+                    updateSizes();
+                    new PopUp(
+                        "Sukces", 
+                        "Dodano do koszyka", 
+                        "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " został dodany do koszyka.");
+                }
+            } else if (response.equals("Dodano nowa pozycje do koszyka.")) {
+                updateSizes();
+                new PopUp(
+                    "Sukces", 
+                    "Dodano do koszyka", 
                     "Produkt: " + product.getName() + " w rozmiarze " + chosenSize + " został dodany do koszyka.");
+            }
         }
     }
 

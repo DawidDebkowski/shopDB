@@ -297,6 +297,7 @@ create procedure edit_order_pos(
 begin
 	declare oid int;
 	declare wid int;
+	declare old_amount int;
 
 	declare ready_to_commit boolean default true;
 	declare error_msg varchar(255);
@@ -325,18 +326,22 @@ begin
 	FROM order_pos o
 	WHERE o.pos_id = pos_id;
 
+	SELECT o.amount INTO old_amount
+	FROM order_pos o
+	WHERE o.pos_id = pos_id;
+
 	if (
 		SELECT w.amount - w.reserved
 		FROM warehouse w
 		WHERE w.warehouse_id = wid
-	) < new_amount then	
+	) < old_amount + new_amount then	
 		SET ready_to_commit = false;
 		SET error_msg = 'Produkt w danej ilosci nie jest obecnie dostepny.';
 	end if;
 
 	start transaction;
 		UPDATE order_pos o
-		SET o.amount = new_amount
+		SET o.amount = o.amount + new_amount
 		WHERE o.pos_id = pos_id;
 	if ready_to_commit then 
 		commit;

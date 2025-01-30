@@ -1,13 +1,19 @@
 package com.shopDB.service;
 
-import com.shopDB.entities.Client;
+import com.shopDB.entities.*;
 import com.shopDB.entities.User;
+import com.shopDB.entities.Warehouse;
 import com.shopDB.repository.ClientRepository;
+import com.shopDB.repository.OrderPoRepository;
+import com.shopDB.repository.OrderRepository;
+import com.shopDB.repository.WarehouseRepository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.StoredProcedureQuery;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,6 +23,15 @@ import org.springframework.stereotype.Service;
 public class ClientService {
 
     private final ClientRepository clientRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderPoRepository orderPoRepository;
+
+    @Autowired
+    private WarehouseRepository warehouseRepository;
 
     public ClientService(ClientRepository userRepository, ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
@@ -220,5 +235,16 @@ public class ClientService {
             return client.getId();
         }
         return null;
+    }
+
+    public Integer getCartId(Integer clientId) {
+        return orderRepository.findCartId(clientRepository.findById(clientId));
+    }
+
+    public Integer getOrderPos(Integer clientId, Integer warehouseId) {
+        Client client = clientRepository.findById(clientId);
+        Order order = orderRepository.findById(orderRepository.findCartId(client)).get();
+        Warehouse warehouse = warehouseRepository.findById(warehouseId).get();
+        return orderPoRepository.findIdByData(order, warehouse);
     }
 }

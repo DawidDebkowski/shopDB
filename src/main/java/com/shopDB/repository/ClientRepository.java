@@ -11,5 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ClientRepository extends JpaRepository<Client, Long> {
 	Client findByUser(User user);
+	Client findById(Integer id);
 }
 
