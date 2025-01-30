@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="main-pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.view.controllers.CartSceneController">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: white;" styleClass="main-pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shopDB.view.controllers.CartSceneController">
     <top>
         <fx:include source="header.fxml" />
     </top>
    <center>
-      <VBox fx:id="cartBox" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+      <VBox fx:id="cartBox" alignment="TOP_CENTER" prefHeight="472.0" prefWidth="1200.0" spacing="10.0" stylesheets="@../css/app.css" BorderPane.alignment="TOP_CENTER">
          <children>
-            <VBox fx:id="cartWrapper" prefHeight="472.0" prefWidth="1200.0" spacing="30.0" stylesheets="@../css/app.css" />
-            <MFXButton buttonType="RAISED" onAction="#placeOrder" styleClass="main-button" stylesheets="@../css/app.css" text="Złóż zamowienie">
+            <MFXScrollPane prefHeight="500.0" prefWidth="1200.0">
+               <content>
+                  <VBox fx:id="cartWrapper" alignment="TOP_CENTER" prefWidth="1183.0" spacing="15.0">
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </MFXScrollPane>
+            <MFXButton buttonType="RAISED" depthLevel="LEVEL4" onAction="#placeOrder" rippleAnimateShadow="true" rippleColor="#00ffe1" styleClass="main-button" stylesheets="@../css/app.css" text="Złóż zamowienie">
                <font>
                   <Font size="24.0" />
                </font>
             </MFXButton>
          </children>
-         <padding>
-            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-         </padding>
       </VBox>
    </center>
 </BorderPane>
