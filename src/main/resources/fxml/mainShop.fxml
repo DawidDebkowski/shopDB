@@ -57,7 +57,6 @@
             <HBox alignment="BOTTOM_LEFT" prefHeight="55.0" prefWidth="500.0" spacing="20.0">
                <children>
                   <MFXComboBox fx:id="sortComboBox" floatMode="BORDER" floatingText="Sortuj" layoutX="10.0" layoutY="27.0" onAction="#displaySortMethods" prefHeight="35.0" prefWidth="160.0" />
-                  <MFXComboBox fx:id="sizeComboBox" floatMode="BORDER" floatingText="Rozmiar" onAction="#onSizeConfirm" />
                   <MFXComboBox fx:id="colorComboBox" floatMode="BORDER" floatingText="Kolor" layoutX="134.0" layoutY="27.0" onAction="#onColorConfirm" />
                   <MFXComboBox fx:id="priceComboBox" floatMode="BORDER" floatingText="Cena" layoutX="258.0" layoutY="27.0" onAction="#onPriceConfirm" />
                </children>
