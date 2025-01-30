@@ -138,15 +138,6 @@ public class GeneralService {
             try {dto.setDiscount((Integer) object[6]);} catch(Exception e) {}
             return dto;
         }).toList();
-
-        // List<ProductDTO> results  = new ArrayList<ProductDTO>();
-
-        // System.out.println("wypisz w procedurze");
-        // for (Object[] o : queryResult) {
-        //     System.out.println("A");
-        // }
-
-        // return results;
     }
 
     public List<ProductDetailDTO> showProductDetails(int productId) {
@@ -157,7 +148,7 @@ public class GeneralService {
         return results.stream().map(object -> {
             ProductDetailDTO dto = new ProductDetailDTO();
             try {dto.setSize((String) object[0]);} catch(Exception e) {}
-            try {dto.setAvailable((Integer) object[1]);} catch(Exception e) {}
+            try {dto.setAvailable(Integer.parseInt(object[1].toString()));} catch(Exception e) {}
             return dto;
         }).toList();
     }

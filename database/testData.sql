@@ -15,3 +15,11 @@ call add_product("koszulka zielona meska 2", 'men', 2, 4, 24.99, @a);
 call add_product("koszulka niebieska meska", 'men', 2, 3, 29.99, @a);
 call add_product("spodnie czerwone meski", 'men', 3, 2, 59.99, @a);
 call add_product("spodnie czerwone damskie", 'women', 3, 2, 59.99, @a);
+
+call add_warehouse(1, 'XS', 2, @a);
+call add_warehouse(1, 'S', 3, @a);
+call add_warehouse(1, 'M', 4, @a);
+call add_warehouse(1, 'XL', 5, @a);
+call add_warehouse(2, 'L', 15, @a);
+call add_warehouse(2, 'M', 10, @a);
+call add_warehouse(2, 'S', 20, @a);

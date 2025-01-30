@@ -2,13 +2,17 @@ package com.shopDB.view.controllers;
 
 import com.shopDB.SceneType;
 import com.shopDB.dto.ProductDTO;
+import com.shopDB.dto.ProductDetailDTO;
 import com.shopDB.service.GeneralService;
 import com.shopDB.view.App;
 import com.shopDB.view.SceneManager;
 import com.shopDB.view.components.ProductCell;
 import com.shopDB.view.components.SizeComboBox;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.mfxcore.controls.Label;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -89,15 +93,29 @@ public class SingleProductSceneController implements SceneController{
         HBox sizeBox = new HBox();
         sizeBox.setSpacing(20);
 
-        SizeComboBox sizeComboBox = new SizeComboBox();
-        sizeComboBox.setText("Rozmiar");
+        ObservableList<ProductDetailDTO> available = FXCollections.observableArrayList(generalService.showProductDetails(productId));
+        ObservableList<String> sizes = FXCollections.observableArrayList();
+        for (ProductDetailDTO warehouse : available) {
+            sizes.add(warehouse.getSize());
+        }
+        // SizeComboBox sizeComboBox = new SizeComboBox();
+        MFXComboBox<String> sizeComboBox = new MFXComboBox<String>(sizes);
+
+        if(available.size() == 0) {
+            sizeComboBox.setText("Niedostępne");
+        } else {
+            sizeComboBox.setText("Rozmiar");
+        }
+
         sizeComboBox.setOnAction(event -> {
             chosenSize = sizeComboBox.getSelectionModel().getSelectedItem();
 
-            //TODO wziac amountLeft z bazy danych
-            amountLeft = "2";
-
-            amountLeftLabel.setText("Pozostałe sztuki " + chosenSize + ": " + amountLeft);
+            for (ProductDetailDTO warehouse : available) {
+                if (warehouse.getSize().equals(chosenSize)) {
+                    amountLeft = ((Integer) warehouse.getAvailable()).toString();
+                    amountLeftLabel.setText("Pozostałe sztuki " + chosenSize + ": " + amountLeft);
+                }
+            }
         });
 
         amountLeftLabel = new Label();
