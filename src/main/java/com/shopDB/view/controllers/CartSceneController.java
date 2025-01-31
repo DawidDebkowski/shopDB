@@ -8,8 +8,11 @@ import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
 import com.shopDB.view.App;
 import com.shopDB.view.components.SmallProduct;
+
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +54,11 @@ public class CartSceneController implements SceneController {
                         userService.getbyId(
                             App.userId))));
 
+        ObservableList<Node> list = cartWrapper.getChildren();
+        cartWrapper.getChildren().removeAll(list);
+
         for (OrderDetailDTO orderDetailDTO : orderDetailDTOS) {
-            SmallProduct smallProduct = new SmallProduct(orderDetailDTO, userService, clientService, warehouseRepository, productRepository);
+            SmallProduct smallProduct = new SmallProduct(orderDetailDTO, userService, clientService, warehouseRepository, productRepository, this);
             cartWrapper.getChildren().add(smallProduct);
         }
     }

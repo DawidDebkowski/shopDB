@@ -1,13 +1,12 @@
 package com.shopDB.view.components;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.shopDB.dto.OrderDetailDTO;
 import com.shopDB.repository.ProductRepository;
 import com.shopDB.repository.WarehouseRepository;
 import com.shopDB.service.ClientService;
 import com.shopDB.service.UserService;
 import com.shopDB.view.App;
+import com.shopDB.view.controllers.*;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.mfxcore.controls.Label;
@@ -17,8 +16,6 @@ import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 /**
  * To nie do końca jest komponent.
@@ -26,11 +23,8 @@ import org.springframework.stereotype.Controller;
  */
 public class SmallProduct extends VBox {
     private final UserService userService;
-
     private final ClientService clientService;
-
     private final WarehouseRepository warehouseRepository;
-
     private final ProductRepository productRepository;
 
     private String chosenSize;
@@ -43,9 +37,12 @@ public class SmallProduct extends VBox {
     private Label priceForAllText;
 
     private OrderDetailDTO product;
+    
+    private CartSceneController cartSceneController;
 
-    public SmallProduct(OrderDetailDTO product, UserService userService, ClientService clientService, WarehouseRepository warehouseRepository, ProductRepository productRepository) {
-        System.out.println("initProduct");
+    public SmallProduct(OrderDetailDTO product, UserService userService, ClientService clientService, WarehouseRepository warehouseRepository, ProductRepository productRepository, CartSceneController cartSceneController) {
+        this.cartSceneController = cartSceneController;
+
         // główny box
         this.product = product;
         VBox productBox = new VBox();
@@ -103,12 +100,13 @@ public class SmallProduct extends VBox {
 
     private void removeMeFromCart(ActionEvent actionEvent) {
         Integer clientId = clientService.getIdbyUser(userService.getbyId(App.userId));
-        // w tej linijce wychodzi null \/
-        Integer warehouseId = warehouseRepository.getIdByData(productRepository.findById(product.getProductId()), chosenSize);
-        // i tutaj nie może byc nulla \/
+        Integer warehouseId = warehouseRepository.getIdByData(productRepository.findById(product.getProductId()), product.getSize());
         Integer posId = clientService.getOrderPos(clientId, warehouseId);
-        System.out.println(posId);
-    }
+        String response = clientService.removeOrderPos(clientId, posId);
+        if (response.equals("Usunieto pozycje z koszyka.")) {
+                cartSceneController.refresh();
+        }
+}
 
     public void updateTexts() {
         titleText.setText("Nazwa: "+product.getName());
