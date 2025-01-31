@@ -1,7 +1,10 @@
 package com.shopDB.view.controllers;
 
+import com.shopDB.Categories;
+import com.shopDB.dto.ProductDTO;
 import com.shopDB.service.GeneralService;
 import com.shopDB.service.SalesmanService;
+import com.shopDB.view.App;
 import com.shopDB.view.components.PopUp;
 
 import javafx.collections.FXCollections;
@@ -123,6 +126,28 @@ public class AddProductController implements SceneController {
 
     @Override
     public void refresh() {
+        ProductDTO product = App.lastChosenProduct;
+        if (product != null) {
+            nameField.setText(product.getName());
+            emailField.setText(product.getPrice().toString());
+            phoneField.setText(product.getDiscount().toString());
 
+            System.out.println(Categories.translateToPolish(product.getCategory()));
+
+            categoryComboBox.selectFirst();
+            while (!categoryComboBox.getValue().equals(Categories.translateToPolish(product.getCategory()))) {
+                categoryComboBox.selectNext();
+            }
+
+            typeComboBox.selectFirst();
+            while (!typeComboBox.getValue().equals(product.getType())) {
+                typeComboBox.selectNext();
+            }
+
+            colorComboBox.selectFirst();
+            while (!colorComboBox.getValue().equals(product.getColor())) {
+                colorComboBox.selectNext();
+            }
+        }
     }
 }

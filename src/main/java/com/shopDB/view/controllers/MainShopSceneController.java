@@ -3,6 +3,7 @@ package com.shopDB.view.controllers;
 import com.shopDB.Categories;
 import com.shopDB.dto.ProductDTO;
 import com.shopDB.service.GeneralService;
+import com.shopDB.view.App;
 import com.shopDB.view.components.SelectLabel;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
@@ -80,6 +81,7 @@ public class MainShopSceneController implements SceneController {
     }
 
     public void initialize() {
+        App.lastChosenProduct = null;
         selectedType = null;
         selectedCategory = null;
         selectedColor = null;

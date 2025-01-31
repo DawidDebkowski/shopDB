@@ -63,7 +63,18 @@ public class ProductCell extends VBox {
 
     void onMouseClicked(MouseEvent event) {
         App.lastChosenProduct = product;
-        SceneManager.getInstance().setScene(SceneType.SINGLE_PRODUCT);
+
+        switch (App.userType) {
+            case "client":
+                SceneManager.getInstance().setScene(SceneType.SINGLE_PRODUCT);
+                break;
+            case "salesman":
+                SceneManager.getInstance().setScene(SceneType.ADD_PRODUCT);
+                break;
+            case "warehouse":
+                SceneManager.getInstance().setScene(SceneType.ADD_WAREHOUSE);
+                break;
+        }
     }
 
     void onMouseEnter(MouseEvent event) {

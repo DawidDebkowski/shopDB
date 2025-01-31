@@ -23,4 +23,13 @@ public enum Categories {
 		}
 		return null;
 	}
+
+	public static String translateToPolish(String databaseValue) {
+		for (Categories c : Categories.values()) {
+			if (c.databaseValue.equals(databaseValue)) {
+				return c.polish;
+			}
+		}
+		return null;
+	}
 }
