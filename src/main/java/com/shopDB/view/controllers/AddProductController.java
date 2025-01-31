@@ -1,8 +1,13 @@
 package com.shopDB.view.controllers;
 
 import com.shopDB.service.GeneralService;
+import com.shopDB.service.SalesmanService;
+import com.shopDB.view.components.PopUp;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -45,6 +50,9 @@ public class AddProductController implements SceneController {
     @FXML
     private MFXTextField typeField;
 
+    @Autowired
+    private SalesmanService salesmanService;
+
     public AddProductController(GeneralService generalService) {
         this.generalService = generalService;
     }
@@ -71,6 +79,26 @@ public class AddProductController implements SceneController {
 
     @FXML
     void onSaveTypeClicked(ActionEvent event) {
+        String newType = typeField.getText();
+        if (newType.equals("")) {
+            new PopUp(
+                "Błąd", 
+                "Niepoprawny typ", 
+                "Podaj nazwę nowego typu");
+        } else {
+            String response = salesmanService.addType(newType);
+            if (response.startsWith("Dodano")) {
+                new PopUp(
+                    "Sukces", 
+                    "Dodano nowy typ: " + newType + " do bazy", 
+                    null);
+            } else {
+                new PopUp(
+                    "Błąd", 
+                    "Taki typ jest już w bazie", 
+                    null);
+            }
+        }
 
     }
 
