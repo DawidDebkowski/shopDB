@@ -1,18 +1,17 @@
 package com.shopDB.view.components;
 import com.shopDB.SceneType;
 import com.shopDB.dto.ProductDTO;
-import com.shopDB.entities.Product;
+import com.shopDB.service.GeneralService;
 import com.shopDB.view.App;
 import com.shopDB.view.SceneManager;
 import io.github.palexdev.mfxcore.controls.Label;
-import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
+
+import java.io.InputStream;
 
 /**
  * To nie do końca jest komponent.
@@ -25,7 +24,7 @@ public class ProductCell extends VBox {
 
     private ProductDTO product;
 
-    public ProductCell(ProductDTO product) {
+    public ProductCell(ProductDTO product, GeneralService generalService) {
         this.product = product;
 
         this.setPrefWidth(370);
@@ -38,7 +37,11 @@ public class ProductCell extends VBox {
         imageBox = new ImageView();
         imageBox.setFitHeight(400);
         imageBox.setFitWidth(370);
-        imageBox.setImage(new Image(String.valueOf(ProductCell.class.getResource("/no-image.png"))));
+
+        InputStream in = null;
+        try {in = generalService.getPhotoFromProductId(product.getProductId()).getBinaryStream();} catch (Exception e) {System.out.println(e);}
+        Image image = (in != null) ? new Image(in) : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
+        imageBox.setImage(image);
         
         priceText = new Label();
         priceText.setFont(new Font("Arial", 18));

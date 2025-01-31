@@ -1,11 +1,14 @@
 package com.shopDB.view.controllers;
 
 import com.shopDB.dto.ProductDTO;
+import com.shopDB.service.GeneralService;
 import com.shopDB.view.components.ProductCell;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.Collection;
@@ -17,6 +20,9 @@ public class ProductGridController {
 
     @FXML
     private GridPane productGridPane;
+
+    @Autowired
+    private GeneralService generalService;
 
     public static ProductGridController instance;
 
@@ -41,7 +47,7 @@ public class ProductGridController {
         }
         int i=0;
         for (ProductDTO product : products) {
-            ProductCell productCell = new ProductCell(product);
+            ProductCell productCell = new ProductCell(product, generalService);
             productGridPane.add(productCell, i%3, i/3);
             productCell.updateTexts();
             i++;
