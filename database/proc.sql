@@ -915,7 +915,7 @@ end$$
 
 create procedure add_photo(
 	IN product_id int,
-	IN path varchar(255),
+	IN photo blob,
 	OUT exit_msg varchar(255)
 )
 begin
@@ -930,8 +930,8 @@ begin
 	end;
 
 	start transaction;
-		INSERT INTO photos(product_id, path)
-		VALUES(product_id, path);
+		INSERT INTO photos(product_id, photo)
+		VALUES(product_id, photo);
 	if ready_to_commit then	
 		commit;
 	else

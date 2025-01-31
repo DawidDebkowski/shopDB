@@ -1,5 +1,7 @@
 package com.shopDB.entities;
 
+import java.sql.Blob;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,8 +16,8 @@ public class Photo {
     @JoinColumn(name = "product_id", nullable = false)
     private com.shopDB.entities.Product product;
 
-    @Column(name = "path", nullable = false)
-    private String path;
+    @Column(name = "photo", nullable = false)
+    private Blob photo;
 
     public Integer getId() {
         return id;
@@ -33,12 +35,12 @@ public class Photo {
         this.product = product;
     }
 
-    public String getPath() {
-        return path;
+    public Blob getPhoto() {
+        return photo;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setPhoto(Blob photo) {
+        this.photo = photo;
     }
 
 }

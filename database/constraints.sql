@@ -55,7 +55,6 @@ alter table product_colors
 		unique(code);
 
 alter table photos
-	add unique key photos_unique(product_id, path),
 	add constraint photos_fk_product
 		foreign key (product_id)
 		references products(product_id)

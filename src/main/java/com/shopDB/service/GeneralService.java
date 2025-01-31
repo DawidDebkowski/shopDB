@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class GeneralService {
 
     @Autowired
     private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private PhotoRepository photoRepository;
 
     public ClientInfoDTO showClientInfo(int clientId) {
         Query query = entityManager.createNativeQuery("CALL show_client_info(:client_id)");
@@ -204,5 +208,10 @@ public class GeneralService {
     public Integer getWarehouseId(Integer productId, String size) {
         Product product = productRepository.findById(productId).get();
         return warehouseRepository.getIdByData(product, size);
+    }
+
+    public Blob getPhotoFromProductId(Integer productId) {
+        Product product = productRepository.findById(productId).get();
+        return photoRepository.findByProduct(product);
     }
 }
