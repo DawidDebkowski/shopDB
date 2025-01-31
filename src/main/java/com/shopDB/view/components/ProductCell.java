@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 
 /**
  * To nie do końca jest komponent.
@@ -57,7 +58,9 @@ public class ProductCell extends VBox {
     }
 
     public void updateTexts() {
-        priceText.setText(Double.toString(product.getPrice()));
+        DecimalFormat decimalFormat = new DecimalFormat("####.##");
+        String discount = (product.getDiscount() > 0) ? (" → " + decimalFormat.format(product.getPrice() * (100 - product.getDiscount()) / 100)) : ("");
+        priceText.setText(Double.toString(product.getPrice()) + discount);
         titleText.setText(product.getName());
     }
 

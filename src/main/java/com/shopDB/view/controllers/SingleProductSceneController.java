@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,10 +62,6 @@ public class SingleProductSceneController implements SceneController{
     private Label titleText;
     private String chosenSize;
     private String amountLeft;
-
-    private Label categoryField;
-    private Label colorField;
-    private Label discountField;
 
     private ProductDTO product;
     private Integer productId;
@@ -137,14 +134,6 @@ public class SingleProductSceneController implements SceneController{
 
         sizeBox.getChildren().addAll(sizeComboBox, amountLeftLabel);
 
-        if("salesman".equals(App.userType)) {
-            Label categoryField = new Label("Kategoria " + product.getCategory());
-            Label colorField = new Label("Kolor " + product.getColor());
-            Label discountField = new Label("Zniżka " + product.getDiscount().toString());
-            textBox.getChildren().addAll(categoryField, colorField, discountField);
-        }
-
-
         productBox.getChildren().addAll(imageBox, textBox);
         textBox.getChildren().addAll(titleText, priceText, sizeBox, cartButton);
         productWrapper.getChildren().add(productBox);
@@ -152,7 +141,9 @@ public class SingleProductSceneController implements SceneController{
     }
 
     public void updateTexts() {
-        priceText.setText(Double.toString(product.getPrice()));
+        DecimalFormat decimalFormat = new DecimalFormat("####.##");
+        String discount = (product.getDiscount() > 0) ? (" → " + decimalFormat.format(product.getPrice() * (100 - product.getDiscount()) / 100)) : ("");
+        priceText.setText(Double.toString(product.getPrice()) + discount);
         titleText.setText(product.getName());
     }
 
