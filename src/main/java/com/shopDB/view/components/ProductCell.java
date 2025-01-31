@@ -38,7 +38,7 @@ public class ProductCell extends VBox {
         imageBox = new ImageView();
         imageBox.setFitHeight(400);
         imageBox.setFitWidth(370);
-        imageBox.setImage(new Image(String.valueOf(ProductCell.class.getResource("/kurtkasuper1.png"))));
+        imageBox.setImage(new Image(String.valueOf(ProductCell.class.getResource("/no-image.png"))));
         
         priceText = new Label();
         priceText.setFont(new Font("Arial", 18));

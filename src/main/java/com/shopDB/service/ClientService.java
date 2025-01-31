@@ -247,4 +247,9 @@ public class ClientService {
         Warehouse warehouse = warehouseRepository.findById(warehouseId).get();
         return orderPoRepository.findIdByData(order, warehouse);
     }
+
+    public String getTypeFromId(Integer clientId) {
+        Client client = clientRepository.findById(clientId);
+        return client.getType();
+    }
 }
