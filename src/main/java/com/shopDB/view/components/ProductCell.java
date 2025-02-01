@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
 
 /**
@@ -39,9 +39,8 @@ public class ProductCell extends VBox {
         imageBox.setFitHeight(400);
         imageBox.setFitWidth(370);
 
-        InputStream in = null;
-        try {in = generalService.getPhotoFromProductId(product.getProductId()).getBinaryStream();} catch (Exception e) {}
-        Image image = (in != null) ? new Image(in) : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
+        Image in = new Image(new ByteArrayInputStream(generalService.getPhotoFromProductId(product.getProductId())));
+        Image image = (in != null) ? in : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
         imageBox.setImage(image);
         
         priceText = new Label();

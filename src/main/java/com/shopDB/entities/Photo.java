@@ -1,7 +1,5 @@
 package com.shopDB.entities;
 
-import java.sql.Blob;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -14,10 +12,10 @@ public class Photo {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
-    private com.shopDB.entities.Product product;
+    private Product product;
 
     @Column(name = "photo", nullable = false)
-    private Blob photo;
+    private byte[] photo;
 
     public Integer getId() {
         return id;
@@ -35,11 +33,11 @@ public class Photo {
         this.product = product;
     }
 
-    public Blob getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Blob photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 

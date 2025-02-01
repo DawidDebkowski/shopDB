@@ -29,7 +29,7 @@ import javafx.scene.text.Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
 
 @Controller
@@ -97,9 +97,8 @@ public class AddWarehouseSceneController implements SceneController {
         imageBox.setFitHeight(450);
         imageBox.setFitWidth(400);
 
-        InputStream in = null;
-        try {in = generalService.getPhotoFromProductId(productId).getBinaryStream();} catch (Exception e) {}
-        Image image = (in != null) ? new Image(in) : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
+        Image in = new Image(new ByteArrayInputStream(generalService.getPhotoFromProductId(product.getProductId())));
+        Image image = (in != null) ? in : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
         imageBox.setImage(image);
 
         VBox textBox = new VBox();

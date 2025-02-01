@@ -13,7 +13,6 @@ import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -214,8 +213,12 @@ public class GeneralService {
         return warehouseRepository.getIdByData(product, size);
     }
 
-    public Blob getPhotoFromProductId(Integer productId) {
-        Product product = productRepository.findById(productId).get();
-        return photoRepository.findByProduct(product);
+    public byte[] getPhotoFromProductId(Integer productId) {
+        System.out.println(productId);
+        if (productId == null) {
+            return null;
+        }
+        // Product product = productRepository.findById(productId).get();
+        return photoRepository.findByProduct(productId).get(0);
     }
 }
