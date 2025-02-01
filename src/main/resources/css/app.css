@@ -24,9 +24,9 @@
     -fx-background-color: transparent;
 }
 
-.mfx-text-field {
-    -mfx-purple: white;
-}
+/*.mfx-text-field {*/
+/*    -mfx-purple: #0995A1;*/
+/*}*/
 
 .mfx-text-field:default {
     -fx-border-color: -main-color;
@@ -98,8 +98,8 @@
     -mfx-main: -main-color;
 }
 
-.mfx-checkbox:hover {
-    -fx-border-color: -secondary-color;
+.mfx-button .mfx-ripple-generator{
+    -mfx-ripple-color: -main-color;
 }
 
 .mfx-checkbox .mfx-ripple-generator{
@@ -116,10 +116,6 @@
     -fx-text-fill: #0904B0
 }
 
-.success-label {
-
-}
-
 .danger-label {
     -fx-background-color: #d0210d;
     -fx-text-fill: white;
@@ -129,11 +125,6 @@
 
 .main-text {
     -fx-text-fill: #0904B0
-}
-
-.base-text-field {
-    /*-fx-border-color: #11ffff;*/
-
 }
 
 .cart-item {

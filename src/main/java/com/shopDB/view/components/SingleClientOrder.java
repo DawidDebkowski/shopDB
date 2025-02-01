@@ -3,6 +3,8 @@ package com.shopDB.view.components;
 import com.shopDB.OrderStatus;
 import com.shopDB.SceneType;
 import com.shopDB.dto.ClientOrderDTO;
+import com.shopDB.service.ClientService;
+import com.shopDB.service.WarehouseService;
 import com.shopDB.view.App;
 import com.shopDB.view.SceneManager;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -27,8 +29,13 @@ public class SingleClientOrder extends HBox {
     private final boolean warehouse;
     private final OrderStatus orderStatus;
 
-    public SingleClientOrder(ClientOrderDTO clientOrder) {
+    private final WarehouseService warehouseService;
+    private final ClientService clientService;
+
+    public SingleClientOrder(ClientOrderDTO clientOrder, ClientService clientService, WarehouseService warehouseService) {
         this.clientOrder = clientOrder;
+        this.warehouseService = warehouseService;
+        this.clientService = clientService;
         orderStatus = OrderStatus.getOrderStatus(clientOrder.getStatus());
 
         warehouse = "warehouse".equals(App.userType);
@@ -73,7 +80,7 @@ public class SingleClientOrder extends HBox {
         EventHandler<ActionEvent> secHandler = null;
 
         if(warehouse){
-            if(orderStatus==OrderStatus.placed){
+            if(orderStatus==OrderStatus.paid){
                 mainText = "Oznacz jako kompletne";
                 handler = this::completeButton;
                 secondaryText = "Anuluj";
@@ -123,27 +130,41 @@ public class SingleClientOrder extends HBox {
     }
 
     void payButton(ActionEvent event) {
-
+        String respone = clientService.payOrder(clientOrder.getOrderId());
+        new PopUp("Udało się", "Status:", respone);
+        SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);
     }
 
     void completeButton(ActionEvent event) {
-
+        String respone = warehouseService.completeOrder(clientOrder.getOrderId());
+        new PopUp("Udało się", "Status:", respone);
+        SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);
     }
 
     void cancelButton(ActionEvent event) {
-
+        String respone = clientService.cancelOrder(clientOrder.getOrderId());
+        new PopUp("Udało się", "Status:", respone);
+        SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);
     }
 
     void askReturnButton(ActionEvent event) {
-
+        String respone = clientService.reportReturn(clientOrder.getOrderId());
+        if(!"Zamowienie wykonane.".equals(respone)){
+            new PopUp("Błąd", "Źle", respone);
+        }
+        SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);
     }
 
     void acceptReturnButton(ActionEvent event) {
-
+        String respone = warehouseService.considerReturn(clientOrder.getOrderId(), true);
+        new PopUp("Udało się", "Status:", respone);
+        SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);
     }
 
     void denyReturnButton(ActionEvent event) {
-
+        String respone = warehouseService.considerReturn(clientOrder.getOrderId(), false);
+        new PopUp("Udało się", "Status:", respone);
+        SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);
     }
 
     void onMouseClicked(MouseEvent event) {

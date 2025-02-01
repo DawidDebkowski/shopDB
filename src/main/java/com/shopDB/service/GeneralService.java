@@ -182,7 +182,7 @@ public class GeneralService {
         return results.stream().map(object -> {
             ClientOrderDTO dto = new ClientOrderDTO();
             try {dto.setOrderId(Integer.parseInt(object[0].toString()));} catch(Exception e) {}
-            dto.setStatus("reported return");
+            dto.setStatus("return reported");
             return dto;
         }).toList();
     }

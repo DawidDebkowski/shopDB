@@ -215,6 +215,11 @@ public class AddProductController implements SceneController {
         typeComboBox.setItems(types);
     }
 
+    @FXML
+    void onPhotoAdd(ActionEvent event) {
+        // dodawanie fotosa
+    }
+
     @Override
     public void refresh() {
         categoryComboBox.selectFirst();

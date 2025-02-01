@@ -23,3 +23,54 @@ call add_warehouse(1, 'XL', 5, @a);
 call add_warehouse(2, 'L', 15, @a);
 call add_warehouse(2, 'M', 10, @a);
 call add_warehouse(2, 'S', 20, @a);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES ( 1, 'paid', 90.0);
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (1, 'cancelled', 91.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES ( 1, 'placed', 92.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (1, 'return reported', 91.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (1, 'returned', 92.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (1, 'completed', 92.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES ( 2, 'paid', 97.0);
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (2, 'cancelled', 91.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES ( 2, 'placed', 92.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (1, 'return reported', 94.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (1, 'returned', 92.0);
+
+INSERT INTO shop.orders (client_id, status, value)
+VALUES (1, 'completed', 92.0);
+
+# INSERT INTO shop.orders (order_id, client_id, status, value)
+# VALUES (1, 2, 'paid', 90.0);
+# INSERT INTO shop.orders (order_id, client_id, status, value)
+# VALUES (2, 2, 'cancelled', 91.0);
+#
+# INSERT INTO shop.orders (order_id, client_id, status, value)
+# VALUES (4, 2, 'placed', 92.0);
+#
+# INSERT INTO shop.orders (order_id, client_id, status, value)
+# VALUES (5, 2, 'reported return', 91.0);
+#
+# INSERT INTO shop.orders (order_id, client_id, status, value)
+# VALUES (6, 2, 'returned', 92.0);
+#
+# INSERT INTO shop.orders (order_id, client_id, status, value)
+# VALUES (7, 2, 'completed', 92.0);
