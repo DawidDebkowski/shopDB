@@ -915,7 +915,7 @@ end$$
 
 create procedure add_photo(
 	IN product_id int,
-	IN photo blob,
+	IN photo longblob,
 	OUT exit_msg varchar(255)
 )
 begin

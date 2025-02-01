@@ -12,6 +12,7 @@ import com.shopDB.view.components.PopUp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Connection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
@@ -19,8 +20,15 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Blob;
 import java.util.Arrays;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 @Controller
 public class AddProductController implements SceneController {
@@ -217,7 +225,23 @@ public class AddProductController implements SceneController {
 
     @FXML
     void onPhotoAdd(ActionEvent event) {
-        // dodawanie fotosa
+        FileChooser photoDialog = new FileChooser();
+        photoDialog.setTitle("Dodawanie zdjęcia");
+        photoDialog.getExtensionFilters().add(new ExtensionFilter(".png files", "*.png"));
+        File file = photoDialog.showOpenDialog(null);
+        
+        byte[] fileData = null;
+        Blob photo = null;
+        try (FileInputStream fis = new FileInputStream(file)) {
+            fileData = new byte[(int) file.length()];
+            fis.read(fileData);
+            
+            photo = new SerialBlob(fileData);
+        } catch (Exception e) {System.out.println(e);}
+        Integer productId = App.lastChosenProduct.getProductId();
+
+        String response = salesmanService.addPhoto(productId, photo);
+        System.out.println(response);
     }
 
     @Override

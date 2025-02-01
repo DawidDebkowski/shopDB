@@ -62,7 +62,7 @@ VALUES('inny');
 create table photos(
 	photo_id int not null primary key auto_increment,
 	product_id int not null,
-	photo blob not null
+	photo longblob not null
 );
 
 create table warehouse(

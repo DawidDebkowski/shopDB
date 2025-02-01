@@ -4,6 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.StoredProcedureQuery;
+
+import java.sql.Blob;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -129,14 +132,14 @@ public class SalesmanService {
         return (String) query.getOutputParameterValue("exit_msg");
     }
 
-    public String addPhoto(int productId, String path) {
+    public String addPhoto(int productId, Blob photo) {
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery("add_photo");
         query.registerStoredProcedureParameter("product_id", Integer.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("path", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("path", Blob.class, ParameterMode.IN);
         query.registerStoredProcedureParameter("exit_msg", String.class, ParameterMode.OUT);
 
         query.setParameter("product_id", productId);
-        query.setParameter("path", path);
+        query.setParameter("path", photo);
 
         query.execute();
         return (String) query.getOutputParameterValue("exit_msg");
