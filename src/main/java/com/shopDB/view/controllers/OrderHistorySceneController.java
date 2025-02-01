@@ -4,6 +4,7 @@ import com.shopDB.dto.ClientOrderDTO;
 import com.shopDB.service.ClientService;
 import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
+import com.shopDB.service.WarehouseService;
 import com.shopDB.view.App;
 import com.shopDB.view.components.SingleClientOrder;
 
@@ -24,7 +25,8 @@ public class OrderHistorySceneController implements SceneController {
     private final GeneralService generalService;
     private final ClientService clientService;
     private final UserService userService;
-    private final boolean warehouse;
+    private final WarehouseService warehouseService;
+    private boolean warehouse;
 
     private boolean paidFilter = true;
     @FXML
@@ -36,15 +38,15 @@ public class OrderHistorySceneController implements SceneController {
     @FXML
     private VBox orderWrapper;
 
-    public OrderHistorySceneController(GeneralService generalService, ClientService clientService, UserService userService) {
+    public OrderHistorySceneController(GeneralService generalService, ClientService clientService, UserService userService, WarehouseService warehouseService) {
         this.generalService = generalService;
         this.clientService = clientService;
         this.userService = userService;
-        warehouse = "warehouse".equals(App.userType);
+        this.warehouseService = warehouseService;
     }
 
-
     public void initialize() {
+        warehouse = "warehouse".equals(App.userType);
         if(!warehouse) {
             warehouseFilterCombo.setMinHeight(0);
             warehouseFilterCombo.setPrefHeight(0);
@@ -83,7 +85,7 @@ public class OrderHistorySceneController implements SceneController {
         ObservableList<Node> list = orderWrapper.getChildren();
         orderWrapper.getChildren().removeAll(list);
         for (ClientOrderDTO orderDetailDTO : clientOrderDTOs) {
-            SingleClientOrder smallProduct = new SingleClientOrder(orderDetailDTO);
+            SingleClientOrder smallProduct = new SingleClientOrder(orderDetailDTO, clientService, warehouseService);
             orderWrapper.getChildren().add(smallProduct);
         }
     }
