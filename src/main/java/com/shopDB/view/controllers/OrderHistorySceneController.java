@@ -9,6 +9,7 @@ import com.shopDB.view.components.SingleClientOrder;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -37,8 +38,11 @@ public class OrderHistorySceneController implements SceneController {
         this.generalService = generalService;
         this.clientService = clientService;
         this.userService = userService;
-
         warehouse = "warehouse".equals(App.userType);
+    }
+
+
+    public void initialize() {
         if(!warehouse) {
             warehouseFilterCombo.setMinHeight(0);
             warehouseFilterCombo.setPrefHeight(0);
@@ -47,11 +51,6 @@ public class OrderHistorySceneController implements SceneController {
             ObservableList<String> filters = FXCollections.observableArrayList("Opłacone", "Prośba o zwrot");
             warehouseFilterCombo.setItems(filters);
         }
-    }
-
-
-    public void initialize() {
-
     }
 
     @Override
@@ -71,7 +70,7 @@ public class OrderHistorySceneController implements SceneController {
     }
 
     @FXML
-    public void onFilterChange() {
+    void onFilterChange(ActionEvent event) {
         paidFilter = warehouseFilterCombo.getSelectionModel().getSelectedItem().equals("Opłacone");
         refresh();
     }
