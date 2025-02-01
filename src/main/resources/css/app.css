@@ -80,6 +80,15 @@
     -fx-background-color: #cdeaec;
 }
 
+.cancel-button {
+    -fx-background-color: #d90c0c;
+    -fx-text-fill: #ffffff
+}
+
+.cancel-button:hover {
+    -fx-background-color: #b00a0a;
+}
+
 .mfx-toggle-button {
     -mfx-main: -main-color;
     /*-mfx-secondary: #a10994;*/

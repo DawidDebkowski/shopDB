@@ -7,6 +7,11 @@ public class ClientOrderDTO implements Serializable {
     private String status;
     private double value;
 
+    @Override
+    public String toString() {
+        return "id: " + orderId + ", status: " + status + ", value: " + value;
+    }
+
     // Getters and setters
     public int getOrderId() {
         return orderId;

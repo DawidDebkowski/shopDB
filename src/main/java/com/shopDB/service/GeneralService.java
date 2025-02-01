@@ -67,9 +67,9 @@ public class GeneralService {
         List<Object[]> results = query.getResultList();
         return results.stream().map(object -> {
             ClientOrderDTO dto = new ClientOrderDTO();
-            try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
+            try {dto.setOrderId(Integer.parseInt(object[0].toString()));} catch(Exception e) {}
             try {dto.setStatus((String) object[1]);} catch(Exception e) {}
-            try {dto.setValue((Double) object[2]);} catch(Exception e) {}
+            try {dto.setValue(Double.parseDouble(object[2].toString()));} catch(Exception e) {}
             return dto;
         }).toList();
     }
