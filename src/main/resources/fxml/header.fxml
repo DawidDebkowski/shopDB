@@ -19,17 +19,22 @@
                   <Font size="24.0" />
                </font>
             </MFXButton>
-            <MFXButton contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="355.0" layoutY="10.0" onAction="#goToCart" prefHeight="92.0" prefWidth="111.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Koszyk" textFill="WHITE">
+            <MFXButton fx:id="addProductButton" contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="127.0" layoutY="15.0" onAction="#goToAddProduct" prefHeight="92.0" prefWidth="111.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Dodaj" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </MFXButton>
-            <MFXButton contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="449.0" layoutY="10.0" onAction="#goToClientData" prefHeight="92.0" prefWidth="94.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Dane" textFill="WHITE">
+            <MFXButton fx:id="cartButton" contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="355.0" layoutY="10.0" onAction="#goToCart" prefHeight="92.0" prefWidth="111.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Koszyk" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </MFXButton>
-            <MFXButton contentDisplay="BOTTOM" graphicTextGap="8.0" onAction="#goToOrderHistory" prefHeight="92.0" prefWidth="176.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Zamówienia" textFill="WHITE">
+            <MFXButton fx:id="dataButton" contentDisplay="BOTTOM" graphicTextGap="8.0" layoutX="449.0" layoutY="10.0" onAction="#goToClientData" prefHeight="92.0" prefWidth="94.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Dane" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </MFXButton>
+            <MFXButton fx:id="ordersButton" contentDisplay="BOTTOM" graphicTextGap="8.0" onAction="#goToOrderHistory" prefHeight="92.0" prefWidth="176.0" styleClass="header-linker" stylesheets="@../css/app.css" text="Zamówienia" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
