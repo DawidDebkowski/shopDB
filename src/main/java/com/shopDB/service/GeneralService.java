@@ -67,9 +67,9 @@ public class GeneralService {
         List<Object[]> results = query.getResultList();
         return results.stream().map(object -> {
             ClientOrderDTO dto = new ClientOrderDTO();
-            try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
+            try {dto.setOrderId(Integer.parseInt(object[0].toString()));} catch(Exception e) {}
             try {dto.setStatus((String) object[1]);} catch(Exception e) {}
-            try {dto.setValue((Double) object[2]);} catch(Exception e) {}
+            try {dto.setValue(Double.parseDouble(object[2].toString()));} catch(Exception e) {}
             return dto;
         }).toList();
     }
@@ -161,24 +161,26 @@ public class GeneralService {
         }).toList();
     }
 
-    public List<PaidOrderDTO> showPaidOrders() {
+    public List<ClientOrderDTO> showPaidOrders() {
         Query query = entityManager.createNativeQuery("CALL show_paid_orders()");
 
         List<Object[]> results = query.getResultList();
         return results.stream().map(object -> {
-            PaidOrderDTO dto = new PaidOrderDTO();
-            try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
+            ClientOrderDTO dto = new ClientOrderDTO();
+            try {dto.setOrderId(Integer.parseInt(object[0].toString()));} catch(Exception e) {}
+            dto.setStatus("paid");
             return dto;
         }).toList();
     }
 
-    public List<ReportedReturnDTO> showReportedReturns() {
+    public List<ClientOrderDTO> showReportedReturns() {
         Query query = entityManager.createNativeQuery("CALL show_reported_returns()");
 
         List<Object[]> results = query.getResultList();
         return results.stream().map(object -> {
-            ReportedReturnDTO dto = new ReportedReturnDTO();
-            try {dto.setOrderId((Integer) object[0]);} catch(Exception e) {}
+            ClientOrderDTO dto = new ClientOrderDTO();
+            try {dto.setOrderId(Integer.parseInt(object[0].toString()));} catch(Exception e) {}
+            dto.setStatus("reported return");
             return dto;
         }).toList();
     }
