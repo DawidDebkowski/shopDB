@@ -24,7 +24,7 @@ public class OrderHistorySceneController implements SceneController {
     private final UserService userService;
     private final boolean warehouse;
 
-    private boolean paidFilter = false;
+    private boolean paidFilter = true;
     @FXML
     private MFXComboBox<String> warehouseFilterCombo;
 
@@ -50,6 +50,7 @@ public class OrderHistorySceneController implements SceneController {
         } else {
             ObservableList<String> filters = FXCollections.observableArrayList("Opłacone", "Prośba o zwrot");
             warehouseFilterCombo.setItems(filters);
+            warehouseFilterCombo.getSelectionModel().selectFirst();
         }
     }
 
@@ -58,7 +59,7 @@ public class OrderHistorySceneController implements SceneController {
         List<ClientOrderDTO> clientOrderDTOs = null;
         if(warehouse) {
             if(paidFilter) {
-                clientOrderDTOs = generalService.showReportedReturns();
+                clientOrderDTOs = generalService.showPaidOrders();
             } else {
                 clientOrderDTOs = generalService.showReportedReturns();
             }
