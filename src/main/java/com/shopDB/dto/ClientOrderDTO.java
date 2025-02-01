@@ -3,7 +3,7 @@ package com.shopDB.dto;
 import java.io.Serializable;
 
 public class ClientOrderDTO implements Serializable {
-    private int orderId;
+    private Integer orderId;
     private String status;
     private double value;
 
@@ -13,11 +13,11 @@ public class ClientOrderDTO implements Serializable {
     }
 
     // Getters and setters
-    public int getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 

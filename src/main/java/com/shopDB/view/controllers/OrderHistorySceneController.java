@@ -6,11 +6,13 @@ import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
 import com.shopDB.view.App;
 import com.shopDB.view.components.SingleClientOrder;
+
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Controller;
@@ -50,7 +52,7 @@ public class OrderHistorySceneController implements SceneController {
         } else {
             ObservableList<String> filters = FXCollections.observableArrayList("Opłacone", "Prośba o zwrot");
             warehouseFilterCombo.setItems(filters);
-            warehouseFilterCombo.getSelectionModel().selectFirst();
+            warehouseFilterCombo.selectFirst();
         }
     }
 
@@ -78,6 +80,8 @@ public class OrderHistorySceneController implements SceneController {
 
     private void displayOrders(List<ClientOrderDTO> clientOrderDTOs) {
         System.out.println("clientOrderDTOs: " + clientOrderDTOs);
+        ObservableList<Node> list = orderWrapper.getChildren();
+        orderWrapper.getChildren().removeAll(list);
         for (ClientOrderDTO orderDetailDTO : clientOrderDTOs) {
             SingleClientOrder smallProduct = new SingleClientOrder(orderDetailDTO);
             orderWrapper.getChildren().add(smallProduct);
