@@ -129,14 +129,14 @@ end$$
 
 create procedure show_paid_orders()
 begin
-	SELECT order_id
+	SELECT order_id, status, value
 	FROM orders
 	WHERE status LIKE '%paid%';
 end$$
 
 create procedure show_reported_returns()
 begin
-	SELECT order_id
+	SELECT order_id, status, value
 	FROM orders
 	WHERE status LIKE '%return reported%';
 end$$

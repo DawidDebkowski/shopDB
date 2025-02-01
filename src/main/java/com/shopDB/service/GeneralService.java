@@ -168,6 +168,8 @@ public class GeneralService {
         return results.stream().map(object -> {
             ClientOrderDTO dto = new ClientOrderDTO();
             try {dto.setOrderId(Integer.parseInt(object[0].toString()));} catch(Exception e) {}
+            try {dto.setStatus(object[1].toString());} catch(Exception e) {}
+            try {dto.setValue(Integer.parseInt(object[2].toString()));} catch(Exception e) {}
             dto.setStatus("paid");
             return dto;
         }).toList();
