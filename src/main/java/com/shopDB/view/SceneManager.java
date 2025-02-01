@@ -42,6 +42,7 @@ public class SceneManager {
         scenes.put(SceneType.ORDER_HISTORY, "/fxml/orderHistory.fxml");
         scenes.put(SceneType.ADD_PRODUCT, "/fxml/addProduct.fxml");
         scenes.put(SceneType.SINGLE_ORDER, "/fxml/singleOrder.fxml");
+        scenes.put(SceneType.ADD_WAREHOUSE, "/fxml/addWarehouse.fxml");
 
         stage.setTitle("Trylma Chinesisches Dame von Ćmolud (TM)");
         stage.show();

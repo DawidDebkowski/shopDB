@@ -41,9 +41,6 @@ public class MainShopSceneController implements SceneController {
     private MFXComboBox<MyPair<Double, Double>> priceComboBox;
 
     @FXML
-    private MFXComboBox<String> sizeComboBox;
-
-    @FXML
     private MFXComboBox<Pair<String, Integer>> sortComboBox;
 
     @Autowired
