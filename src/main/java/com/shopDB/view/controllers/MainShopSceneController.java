@@ -104,8 +104,8 @@ public class MainShopSceneController implements SceneController {
         ObservableList<Pair<String, Integer>> sortMethods = FXCollections.observableArrayList();
         sortMethods.add(new MyPair<String,Integer>("Od najstarszego", 0,null));
         sortMethods.add(new MyPair<String,Integer>("Od najnowszego", 1,null));
-        sortMethods.add(new MyPair<String,Integer>("Cena malejąco", 2, null));
-        sortMethods.add(new MyPair<String,Integer>("Cena rosnąco", 3, null));
+        sortMethods.add(new MyPair<String,Integer>("Cena malejąco", 3, null));
+        sortMethods.add(new MyPair<String,Integer>("Cena rosnąco", 2, null));
         sortMethods.add(new MyPair<String,Integer>("Nazwa alfabetycznie", 4, null));
         sortComboBox.setItems(sortMethods);
         

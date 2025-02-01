@@ -80,7 +80,19 @@ public class AddProductController implements SceneController {
 
     @FXML
     void onSaveColorClicked(ActionEvent event) {
+        String name = colorNameField.getText();
+        String code = hexColorField.getText();
 
+        if (name.equals("") || code.equals("")) {
+            new PopUp("Błąd", "Niepoprawne dane koloru.", "Pola nazwa i kod nie mogą być puste.");
+        } else {
+            String response = salesmanService.addColor(name, code);
+            if (response.equals("Dodano nowy kolor.")) {
+                new PopUp("Sukces", "Dodano nowy kolor.", "Kolor " + name + " o kodzie " + code + " został dodany do bazy.");
+            } else {
+                new PopUp("Błąd", "Problem przy dodawaniu koloru do bazy", response);
+            }
+        }
     }
 
     @FXML
