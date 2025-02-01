@@ -1114,7 +1114,7 @@ begin
 		rollback;
 	end if;
 
-	SET error_msg = case
+	SET exit_msg = case
 		when error_msg is not null then error_msg
 		else 'Dodano produkty do magazynu.'
 	end;
@@ -1146,7 +1146,7 @@ begin
 		rollback;
 	end if;
 
-	SET error_msg = case
+	SET exit_msg = case
 		when locate('warehouse_amount_check', error_msg) > 0 then 'Nieprawidlowa ilosc koncowa.'
 		when error_msg is not null then error_msg
 		else 'Dodano produkty do magazynu.'

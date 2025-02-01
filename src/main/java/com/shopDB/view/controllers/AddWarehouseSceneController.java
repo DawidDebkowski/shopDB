@@ -7,6 +7,7 @@ import com.shopDB.repository.WarehouseRepository;
 import com.shopDB.service.ClientService;
 import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
+import com.shopDB.service.WarehouseService;
 import com.shopDB.view.App;
 import com.shopDB.view.components.PopUp;
 import com.shopDB.view.components.ProductCell;
@@ -50,6 +51,9 @@ public class AddWarehouseSceneController implements SceneController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WarehouseService warehouseService;
 
     @Autowired
     private WarehouseRepository warehouseRepository;
@@ -170,15 +174,22 @@ public class AddWarehouseSceneController implements SceneController {
         int delta = 0;
         try {
             delta = Integer.parseInt(addField.getText());
+            if (chosenSize == null || chosenSize.equals("")) {
+                new PopUp("Błąd", "rozmiar", "musi być wybrany");
+            } else if (delta < 0) {
+                Integer warehouseId = generalService.getWarehouseId(productId, chosenSize);
+                if (warehouseId == null) {
+                    System.out.println("Nie da się dodać ujemnej ilości dla produktu, którego nie było nigdy w bazie.");
+                } else {
+                    String response = warehouseService.editWarehouse(warehouseId, delta);
+                    System.out.println(response);
+                }
+            } else {
+                String response = warehouseService.addWarehouse(productId, chosenSize, delta);
+                System.out.println(response);
+            }
         } catch (NumberFormatException e) {
-            new PopUp("zła", "wartość", "musi być liczba");
-        }
-        if(delta < 0) {
-            System.out.println("edit" + delta);
-            // edit
-        } else {
-            System.out.println("add" + delta);
-            // add
+            new PopUp("Błąd", "wartość", "musi być liczba");
         }
     }
 
