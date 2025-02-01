@@ -49,7 +49,7 @@ public class SmallProduct extends VBox {
 //        productBox.setPrefWidth(3000);
         productBox.setSpacing(15);
 //        this.setPrefWidth(3000);
-        this.setAlignment(Pos.TOP_CENTER);
+        this.setAlignment(Pos.CENTER);
 
 //        this.getStyleClass().add("cart-item");
 //        productBox.getStyleClass().add("cart-item");
@@ -68,6 +68,7 @@ public class SmallProduct extends VBox {
         this.setStyle("-fx-border-color: #0995A1; -fx-border-width: 2");
         this.setPadding(new Insets(8));
 //        textBox.setPrefWidth(1000);
+        textBox.setAlignment(Pos.CENTER);
 
         // teksty
         titleText = new Label();
