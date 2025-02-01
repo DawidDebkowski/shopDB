@@ -214,11 +214,8 @@ public class GeneralService {
     }
 
     public byte[] getPhotoFromProductId(Integer productId) {
-        System.out.println(productId);
-        if (productId == null) {
-            return null;
-        }
-        // Product product = productRepository.findById(productId).get();
-        return photoRepository.findByProduct(productId).get(0);
+        try {
+            return photoRepository.findByProduct(productId).get(0);
+        } catch (Exception e) {return null;}
     }
 }

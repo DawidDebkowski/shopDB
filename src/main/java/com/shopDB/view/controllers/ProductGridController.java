@@ -6,6 +6,7 @@ import com.shopDB.view.components.ProductCell;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.layout.GridPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +38,22 @@ public class ProductGridController {
     public void showProducts(Collection<ProductDTO> products) {
         productGridPane.getChildren().clear();
         int productsCount = products.size();
-
+        System.out.println(productsCount);
+        
         productGridPane.setPadding(new Insets(5, 0, 0, 0));
-        productGridPane.setMinHeight((productsCount/3 + ((productsCount%3==0) ? 0 : 1)) * 500);
-        productGridPane.setVgap(200);
+        // productGridPane.setMinHeight((productsCount/3 + ((productsCount%3==0) ? 0 : 1)) * 550);
+        // productGridPane.setMaxHeight((productsCount/3 + ((productsCount%3==0) ? 0 : 1)) * 550);
+        productGridPane.setVgap(25);
 
-        while (productGridPane.getRowCount() < productsCount/3+1) {
-            productGridPane.addRow(productGridPane.getRowCount()-1);
+        for (int i = 0; i < productsCount; i += 3) {
+            productGridPane.addRow(i/3);
+            try {
+                productGridPane.getRowConstraints().get(i/3).setMinHeight(500);
+                productGridPane.getRowConstraints().get(i/3).setMaxHeight(500);
+                productGridPane.getRowConstraints().get(i/3).setValignment(VPos.TOP);
+            } catch (Exception e) {}
         }
+
         int i=0;
         for (ProductDTO product : products) {
             ProductCell productCell = new ProductCell(product, generalService);

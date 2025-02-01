@@ -39,7 +39,10 @@ public class ProductCell extends VBox {
         imageBox.setFitHeight(400);
         imageBox.setFitWidth(370);
 
-        Image in = new Image(new ByteArrayInputStream(generalService.getPhotoFromProductId(product.getProductId())));
+        Image in = null;
+        try {
+            in = new Image(new ByteArrayInputStream(generalService.getPhotoFromProductId(product.getProductId())));
+        } catch (Exception e) {}
         Image image = (in != null) ? in : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
         imageBox.setImage(image);
         

@@ -92,7 +92,10 @@ public class SingleProductSceneController implements SceneController{
         imageBox.setFitHeight(450);
         imageBox.setFitWidth(400);
 
-        Image in = new Image(new ByteArrayInputStream(generalService.getPhotoFromProductId(product.getProductId())));
+        Image in = null;
+        try {
+            in = new Image(new ByteArrayInputStream(generalService.getPhotoFromProductId(product.getProductId())));
+        } catch (Exception e) {}
         Image image = (in != null) ? in : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
         imageBox.setImage(image);
 
