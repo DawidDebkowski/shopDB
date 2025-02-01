@@ -6,6 +6,9 @@ import com.shopDB.service.GeneralService;
 import com.shopDB.service.UserService;
 import com.shopDB.view.App;
 import com.shopDB.view.components.SingleClientOrder;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -18,6 +21,12 @@ public class OrderHistorySceneController implements SceneController {
     private final GeneralService generalService;
     private final ClientService clientService;
     private final UserService userService;
+    private final boolean warehouse;
+
+    private boolean paidFilter = false;
+    @FXML
+    private MFXComboBox<String> warehouseFilterCombo;
+
     @FXML
     private BorderPane mainPane;
 
@@ -28,6 +37,16 @@ public class OrderHistorySceneController implements SceneController {
         this.generalService = generalService;
         this.clientService = clientService;
         this.userService = userService;
+
+        warehouse = "warehouse".equals(App.userType);
+        if(!warehouse) {
+            warehouseFilterCombo.setMinHeight(0);
+            warehouseFilterCombo.setPrefHeight(0);
+            warehouseFilterCombo.setVisible(false);
+        } else {
+            ObservableList<String> filters = FXCollections.observableArrayList("Opłacone", "Prośba o zwrot");
+            warehouseFilterCombo.setItems(filters);
+        }
     }
 
 
@@ -37,8 +56,27 @@ public class OrderHistorySceneController implements SceneController {
 
     @Override
     public void refresh() {
-        List<ClientOrderDTO> clientOrderDTOs = generalService.showClientOrders(clientService.getIdbyUser(userService.getbyId(App.userId)));
+        List<ClientOrderDTO> clientOrderDTOs = null;
+        if(warehouse) {
+            if(paidFilter) {
+                clientOrderDTOs = generalService.showReportedReturns();
+            } else {
+                clientOrderDTOs = generalService.showReportedReturns();
+            }
+        } else {
+            clientOrderDTOs = generalService.showClientOrders(clientService.getIdbyUser(userService.getbyId(App.userId)));
+        }
 
+        displayOrders(clientOrderDTOs);
+    }
+
+    @FXML
+    public void onFilterChange() {
+        paidFilter = warehouseFilterCombo.getSelectionModel().getSelectedItem().equals("Opłacone");
+        refresh();
+    }
+
+    private void displayOrders(List<ClientOrderDTO> clientOrderDTOs) {
         System.out.println("clientOrderDTOs: " + clientOrderDTOs);
         for (ClientOrderDTO orderDetailDTO : clientOrderDTOs) {
             SingleClientOrder smallProduct = new SingleClientOrder(orderDetailDTO);

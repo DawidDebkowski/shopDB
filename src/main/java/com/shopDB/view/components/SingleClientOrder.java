@@ -116,9 +116,10 @@ public class SingleClientOrder extends HBox {
     private void updateTexts() {
         if(warehouse) {
             orderIdLabel.setText("ID: " + clientOrder.getOrderId());
+        } else {
+            valueLabel.setText("Wartość: " + clientOrder.getValue());
         }
         statusLabel.setText("Status: " + orderStatus.polish);
-        valueLabel.setText("Wartość: " + clientOrder.getValue());
     }
 
     void payButton(ActionEvent event) {
