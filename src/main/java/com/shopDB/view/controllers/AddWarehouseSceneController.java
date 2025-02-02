@@ -183,14 +183,14 @@ public class AddWarehouseSceneController implements SceneController {
             } else if (delta < 0) {
                 Integer warehouseId = generalService.getWarehouseId(productId, chosenSize);
                 if (warehouseId == null) {
-                    System.out.println("Nie da się dodać ujemnej ilości dla produktu, którego nie było nigdy w bazie.");
+                    new PopUp("Błąd", "Brak w bazie", "Nie da się dodać ujemnej ilości dla produktu, którego nie było nigdy w bazie.");
                 } else {
                     String response = warehouseService.editWarehouse(warehouseId, delta);
-                    System.out.println(response);
+                    new PopUp("Zmiana powiodła się", "Dodano produkt", response);
                 }
             } else {
                 String response = warehouseService.addWarehouse(productId, chosenSize, delta);
-                System.out.println(response);
+                new PopUp("Zmiana powiodła się", "Dodano produkt", response);
             }
         } catch (NumberFormatException e) {
             new PopUp("Błąd", "wartość", "musi być liczba");

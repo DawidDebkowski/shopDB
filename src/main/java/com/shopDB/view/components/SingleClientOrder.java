@@ -137,6 +137,9 @@ public class SingleClientOrder extends HBox {
 
     void completeButton(ActionEvent event) {
         String respone = warehouseService.completeOrder(clientOrder.getOrderId());
+        if(!"Zamowienie wykonane.".equals(respone)){
+            new PopUp("Błąd", "Źle", respone);
+        }
         new PopUp("Udało się", "Status:", respone);
         SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);
     }
@@ -149,7 +152,7 @@ public class SingleClientOrder extends HBox {
 
     void askReturnButton(ActionEvent event) {
         String respone = clientService.reportReturn(clientOrder.getOrderId());
-        if(!"Zamowienie wykonane.".equals(respone)){
+        if(!"Zgloszono zwrot.".equals(respone)){
             new PopUp("Błąd", "Źle", respone);
         }
         SceneManager.getInstance().setScene(SceneType.ORDER_HISTORY);

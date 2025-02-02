@@ -19,7 +19,7 @@ import org.springframework.context.ApplicationContext;
 public class App extends Application
 {
     public static int userId = 1;
-    public static String userType = "warehouse";
+    public static String userType;
     public static ProductDTO lastChosenProduct = null;
     public static Integer lastSelectedOrderId = null;
 
@@ -49,8 +49,8 @@ public class App extends Application
         SceneManager sceneManager = springContext.getBean(SceneManager.class);
         sceneManager.initialize(primaryStage);
 
-        SceneManager.getInstance().setScene(SceneType.ADD_PRODUCT);
-//        primaryStage.setTitle("Shop Application");
+        SceneManager.getInstance().setScene(SceneType.LOGIN);
+        primaryStage.setTitle("Szop DB");
         primaryStage.show();
     }
 
