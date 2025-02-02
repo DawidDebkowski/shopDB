@@ -1,5 +1,7 @@
 package com.shopDB.entities;
 
+import java.sql.Blob;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -15,7 +17,7 @@ public class Photo {
     private Product product;
 
     @Column(name = "photo", nullable = false)
-    private byte[] photo;
+    private Blob photo;
 
     public Integer getId() {
         return id;
@@ -33,11 +35,11 @@ public class Photo {
         this.product = product;
     }
 
-    public byte[] getPhoto() {
+    public Blob getPhoto() {
         return photo;
     }
 
-    public void setPhoto(byte[] photo) {
+    public void setPhoto(Blob photo) {
         this.photo = photo;
     }
 

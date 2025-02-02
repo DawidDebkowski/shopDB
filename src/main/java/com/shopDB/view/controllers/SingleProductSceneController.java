@@ -25,7 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +94,9 @@ public class SingleProductSceneController implements SceneController{
 
         Image in = null;
         try {
-            in = new Image(new ByteArrayInputStream(generalService.getPhotoFromProductId(product.getProductId())));
+            InputStream is = generalService.getPhotoFromProductId(product.getProductId()).getBinaryStream();
+            in = new Image(is);
+            is.close();
         } catch (Exception e) {}
         Image image = (in != null) ? in : new Image(String.valueOf(ProductCell.class.getResource("/no-image.png")));
         imageBox.setImage(image);

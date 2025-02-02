@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -213,7 +214,7 @@ public class GeneralService {
         return warehouseRepository.getIdByData(product, size);
     }
 
-    public byte[] getPhotoFromProductId(Integer productId) {
+    public Blob getPhotoFromProductId(Integer productId) {
         try {
             return photoRepository.findByProduct(productId).get(0);
         } catch (Exception e) {return null;}
