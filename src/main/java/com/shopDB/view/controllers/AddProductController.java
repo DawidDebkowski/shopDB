@@ -12,7 +12,6 @@ import com.shopDB.view.components.PopUp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import io.github.palexdev.materialfx.controls.MFXComboBox;

@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationContext;
  */
 public class App extends Application
 {
-    public static int userId = 1;
+    public static int userId;
     public static String userType;
     public static ProductDTO lastChosenProduct = null;
     public static Integer lastSelectedOrderId = null;
