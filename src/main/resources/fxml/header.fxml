@@ -16,7 +16,7 @@
       </ImageView>
       <HBox prefHeight="101.0" prefWidth="1101.0">
          <children>
-            <MFXButton contentDisplay="TEXT_ONLY" depthLevel="LEVEL0" maxHeight="101.0" onAction="#goToTitle" prefHeight="101.0" prefWidth="309.0" styleClass="header-linker" text="SHOP DB ">
+            <MFXButton contentDisplay="TEXT_ONLY" depthLevel="LEVEL0" maxHeight="101.0" onAction="#goToTitle" prefHeight="101.0" prefWidth="309.0" styleClass="header-linker" text="SZOP DB ">
                <font>
                   <Font size="48.0" />
                </font>

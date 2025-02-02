@@ -7,6 +7,7 @@ import io.github.palexdev.materialfx.theming.JavaFXThemes;
 import io.github.palexdev.materialfx.theming.MaterialFXStylesheets;
 import io.github.palexdev.materialfx.theming.UserAgentBuilder;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -51,6 +52,10 @@ public class App extends Application
 
         SceneManager.getInstance().setScene(SceneType.LOGIN);
         primaryStage.setTitle("Szop DB");
+
+        Image icon = new Image(App.class.getResourceAsStream("/racoon-transparent.png"));
+        primaryStage.getIcons().add(icon);
+
         primaryStage.show();
     }
 
