@@ -1,3 +1,8 @@
+DROP USER IF EXISTS 'warehouse_manager'@'localhost';
+DROP USER IF EXISTS 'client'@'localhost';
+DROP USER IF EXISTS 'salesman'@'localhost';
+DROP USER IF EXISTS 'app'@'localhost';
+
 CREATE USER 'warehouse_manager'@'localhost' IDENTIFIED BY 'manager123';
 
 GRANT INSERT ON shop.warehouse TO 'warehouse_manager'@'localhost';
@@ -54,8 +59,5 @@ CREATE USER 'app'@'localhost' IDENTIFIED BY 'App123';
 GRANT EXECUTE ON shop.* TO 'app'@'localhost';
  
 GRANT SELECT ON shop.* TO 'app'@'localhost';
-GRANT SELECT ON shop.* TO 'app'@'localhost';
--- REVOKE SELECT ON shop.users TO 'app'@'localhost';
--- REVOKE SELECT ON shop.clients from 'app'@'localhost';
 
 FLUSH PRIVILEGES;
