@@ -7,3 +7,4 @@ source triggers.sql;
 source proc.sql;
 source views.sql;
 source prep_statements.sql;
+source users.sql;

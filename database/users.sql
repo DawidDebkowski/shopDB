@@ -6,7 +6,7 @@ GRANT UPDATE ON shop.orders TO 'warehouse_manager'@'localhost';
 GRANT DELETE ON shop.warehouse TO 'warehouse_manager'@'localhost';
 GRANT SELECT ON shop.warehouse TO 'warehouse_manager'@'localhost';
 GRANT SELECT ON shop.orders TO 'warehouse_manager'@'localhost';
--- #1F0DDE - my color
+
 FLUSH PRIVILEGES;
 
 CREATE USER 'client'@'localhost' IDENTIFIED BY 'client123';
@@ -35,15 +35,27 @@ FLUSH PRIVILEGES;
 
 CREATE USER 'salesman'@'localhost' IDENTIFIED BY 'seller123';
 
-GRANT INSERT ON shop.products TO 'seller'@'localhost';
-GRANT INSERT ON shop.product_types TO 'seller'@'localhost';
-GRANT INSERT ON shop.product_colors TO 'seller'@'localhost';
+GRANT INSERT ON shop.products TO 'salesman'@'localhost';
+GRANT INSERT ON shop.product_types TO 'salesman'@'localhost';
+GRANT INSERT ON shop.product_colors TO 'salesman'@'localhost';
 
-GRANT UPDATE ON shop.products TO 'seller'@'localhost';
+GRANT UPDATE ON shop.products TO 'salesman'@'localhost';
 
-GRANT SELECT ON shop.products TO 'seller'@'localhost';
-GRANT SELECT ON shop.product_types TO 'seller'@'localhost';
-GRANT SELECT ON shop.product_colors TO 'seller'@'localhost';
-GRANT SELECT ON shop.warehouse TO 'seller'@'localhost';
+GRANT SELECT ON shop.products TO 'salesman'@'localhost';
+GRANT SELECT ON shop.product_types TO 'salesman'@'localhost';
+GRANT SELECT ON shop.product_colors TO 'salesman'@'localhost';
+GRANT SELECT ON shop.warehouse TO 'salesman'@'localhost';
+
+FLUSH PRIVILEGES;
+
+CREATE USER 'app'@'localhost' IDENTIFIED BY 'App123';
+
+
+GRANT EXECUTE ON shop.* TO 'app'@'localhost';
+ 
+GRANT SELECT ON shop.* TO 'app'@'localhost';
+GRANT SELECT ON shop.* TO 'app'@'localhost';
+-- REVOKE SELECT ON shop.users TO 'app'@'localhost';
+-- REVOKE SELECT ON shop.clients from 'app'@'localhost';
 
 FLUSH PRIVILEGES;
